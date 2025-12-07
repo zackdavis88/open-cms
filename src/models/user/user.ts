@@ -21,7 +21,12 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare deletedOn: CreationOptional<Date | null>;
 
   static generateHash(password: string): NonAttribute<string> {
-    return bcrypt.hashSync(password, process.env.SALT_ROUNDS);
+    let saltRounds: number | undefined;
+    if (process.env.SALT_ROUNDS && !isNaN(Number(process.env.SALT_ROUNDS))) {
+      saltRounds = Number(process.env.SALT_ROUNDS);
+    }
+
+    return bcrypt.hashSync(password, saltRounds);
   }
 
   compareHash(password: string): NonAttribute<boolean> {
