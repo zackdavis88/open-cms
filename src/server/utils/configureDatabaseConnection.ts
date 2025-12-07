@@ -17,7 +17,6 @@ const configureDatabaseConnection = async (app: Express) => {
     logging: false,
   });
 
-  // TODO: Initialize models here and associations here, once they exist.
   await initializeModelsAndSync(sequelize);
 
   app.use((req, _res, next) => {
