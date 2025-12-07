@@ -13,6 +13,9 @@
   "license": "GPL-3.0",
   "author": "Zack Davis",
   "main": "dist/server/server.js",
+  "engines": {
+    "node": ">= 25"
+  },
   "scripts": {
     "build": "rm -rf dist && tsc && babel dist --out-dir dist",
     "prestart:prod": "npm run build",
