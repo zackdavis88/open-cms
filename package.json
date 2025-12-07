@@ -1,0 +1,53 @@
+{
+  "name": "open-cms",
+  "version": "0.0.1",
+  "description": "open source content management system",
+  "homepage": "https://github.com/zackdavis88/open-cms#readme",
+  "bugs": {
+    "url": "https://github.com/zackdavis88/open-cms/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zackdavis88/open-cms.git"
+  },
+  "license": "GPL-3.0",
+  "author": "Zack Davis",
+  "main": "dist/server/server.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc && babel dist --out-dir dist",
+    "prestart:prod": "npm run build",
+    "start:prod": "NODE_ENV=production node .",
+    "start:dev": "NODE_ENV=development node --watch-path=./src -r tsconfig-paths/register -r ts-node/register src/server/server.ts",
+    "pretest": "npm run build",
+    "test": "jest --verbose --watchAll --detectOpenHandles"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^9.39.1",
+    "@types/express": "^5.0.6",
+    "@types/method-override": "^3.0.0",
+    "@types/morgan": "^1.9.10",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.7.4",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.1"
+  }
+}
