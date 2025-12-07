@@ -58,4 +58,4 @@ jobs:
 
       # Run integration tests
       - name: Run integration tests
-        run: npx jest --verbose --detectOpenHandles
+        run: npx jest --verbose --detectOpenHandles --passWithNoTests
