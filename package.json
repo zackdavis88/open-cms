@@ -17,11 +17,12 @@
     "node": ">= 25"
   },
   "scripts": {
+    "linter": "eslint .",
     "build": "rm -rf dist && tsc && babel dist --out-dir dist",
     "prestart:prod": "npm run build",
     "start:prod": "NODE_ENV=production node .",
     "start:dev": "NODE_ENV=development node --watch-path=./src -r tsconfig-paths/register -r ts-node/register src/server/server.ts",
-    "test": "jest --verbose --watchAll --detectOpenHandles"
+    "test": "jest --verbose --detectOpenHandles"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
