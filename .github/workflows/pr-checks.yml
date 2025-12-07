@@ -46,6 +46,11 @@ jobs:
         run: |
           touch .env && echo "
           SERVER_PORT=3000
+          DATABASE_USERNAME=postgres
+          DATABASE_PASSWORD=postgres
+          DATABASE_HOSTNAME=localhost
+          DATABASE_PORT=5432
+          DATABASE_NAME=postgres
           " > .env
 
       # Ensure the app can be built
