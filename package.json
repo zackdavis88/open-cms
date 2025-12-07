@@ -13,12 +13,14 @@
   "license": "GPL-3.0",
   "author": "Zack Davis",
   "main": "dist/server/server.js",
+  "engines": {
+    "node": ">= 25"
+  },
   "scripts": {
     "build": "rm -rf dist && tsc && babel dist --out-dir dist",
     "prestart:prod": "npm run build",
     "start:prod": "NODE_ENV=production node .",
     "start:dev": "NODE_ENV=development node --watch-path=./src -r tsconfig-paths/register -r ts-node/register src/server/server.ts",
-    "pretest": "npm run build",
     "test": "jest --verbose --watchAll --detectOpenHandles"
   },
   "devDependencies": {
@@ -29,8 +31,10 @@
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.1",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/method-override": "^3.0.0",
     "@types/morgan": "^1.9.10",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "babel-plugin-module-resolver": "^5.0.2",
@@ -40,6 +44,7 @@
     "globals": "^16.5.0",
     "jest": "^30.2.0",
     "prettier": "^3.7.4",
+    "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
@@ -48,6 +53,9 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "method-override": "^3.0.0",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7"
   }
 }

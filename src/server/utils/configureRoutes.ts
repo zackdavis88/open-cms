@@ -17,10 +17,12 @@ const configureRoutes = (app: Express) => {
   });
 
   return Promise.all(routeFilePromises).then(() => {
-    app.route('/{*splat}').all((_req, res) => {
+    const catchAllRouter = express.Router();
+    catchAllRouter.route('/{*splat}').all((_req, res) => {
       const routeNotFoundError = new NotFoundError('API route not found');
       res.sendError(routeNotFoundError);
     });
+    app.use(catchAllRouter);
   });
 };
 
