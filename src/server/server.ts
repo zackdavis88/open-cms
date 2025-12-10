@@ -7,6 +7,7 @@ import {
   configureResponseHandlers,
   configureDatabaseConnection,
 } from './utils';
+import cors from 'cors';
 
 const app = express();
 
@@ -18,6 +19,13 @@ app.use(
 app.use(express.json());
 app.use(methodOverride());
 app.use(morgan('dev'));
+app.use(
+  cors({
+    origin: [`http://localhost:${process.env.DOC_SERVER_PORT || 3001}`],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  }),
+);
 
 app.use(configureResponseHandlers);
 configureDatabaseConnection(app).then(() => {

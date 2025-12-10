@@ -22,6 +22,7 @@
     "prestart:prod": "npm run build",
     "start:prod": "NODE_ENV=production node .",
     "start:dev": "NODE_ENV=development node --watch-path=./src -r tsconfig-paths/register -r ts-node/register src/server/server.ts",
+    "start:docs": "node --watch-path=./src/routes -r ts-node/register docs/doc-server.ts",
     "test": "jest --verbose --detectOpenHandles"
   },
   "devDependencies": {
@@ -31,12 +32,14 @@
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.1",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/method-override": "^3.0.0",
     "@types/morgan": "^1.9.10",
     "@types/supertest": "^6.0.3",
     "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "babel-plugin-module-resolver": "^5.0.2",
@@ -47,12 +50,14 @@
     "jest": "^30.2.0",
     "prettier": "^3.7.4",
     "supertest": "^7.1.4",
+    "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "method-override": "^3.0.0",

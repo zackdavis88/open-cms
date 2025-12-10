@@ -11,8 +11,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://www.open-cms.com',
+        url: 'https://www.open-cms.com',
         description: 'API server',
+      },
+      {
+        url: `http://localhost:${process.env.SERVER_PORT}`,
+        description: 'Local development server',
       },
     ],
     components: {
@@ -103,7 +107,7 @@ const options = {
   apis: ['./src/routes/**/*.openapi.ts'],
 };
 
-const swaggerSpec = swaggerJsdoc(options);
+export const swaggerSpec = swaggerJsdoc(options);
 
 const configureDiscoveryRoutes = (router: Router) => {
   router.route('/discovery/swagger.json').get((_req, res) => {

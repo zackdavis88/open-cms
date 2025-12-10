@@ -111,5 +111,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "exclude": ["test/**/*.ts", "src/routes/**/*.openapi.ts"]
+  "exclude": ["test/**/*.ts", "src/routes/**/*.openapi.ts", "docs/**/*.ts"]
 }
