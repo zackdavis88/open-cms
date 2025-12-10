@@ -36,6 +36,7 @@
     "@types/method-override": "^3.0.0",
     "@types/morgan": "^1.9.10",
     "@types/supertest": "^6.0.3",
+    "@types/swagger-jsdoc": "^6.0.4",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "babel-plugin-module-resolver": "^5.0.2",
@@ -58,6 +59,7 @@
     "morgan": "^1.10.1",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8"
   }
 }
