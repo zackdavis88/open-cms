@@ -8,7 +8,10 @@ import {
   configureDatabaseConnection,
 } from './utils';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from 'src/routes/discovery';
 
+const SERVER_PORT = process.env.SERVER_PORT || 3000;
 const app = express();
 
 app.use(
@@ -21,17 +24,22 @@ app.use(methodOverride());
 app.use(morgan('dev'));
 app.use(
   cors({
-    origin: [`http://localhost:${process.env.DOC_SERVER_PORT || 3001}`],
+    origin: [
+      `http://localhost:${SERVER_PORT}`,
+      'https://open-cms.com',
+      'https://www.open-cms.com',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   }),
 );
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(configureResponseHandlers);
 configureDatabaseConnection(app).then(() => {
   configureRoutes(app).then(() => {
-    app.listen(process.env.SERVER_PORT);
+    app.listen(SERVER_PORT);
   });
 });
 
-console.log(`Open CMS running on port ${process.env.SERVER_PORT}`);
+console.log(`Open CMS running on port ${SERVER_PORT}`);
