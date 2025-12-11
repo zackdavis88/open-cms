@@ -34,23 +34,24 @@ jobs:
           node-version: 25
 
       # Install node_modules
-      - name: Install node_modules
+      - name: Install module dependencies
         run: npm ci
 
       # Ensure linter passes
-      - name: Run eslint
-        run: npx eslint src
+      - name: Run linter
+        run: npm run linter
 
       # Inject configs that are not tracked in git
-      - name: Create .env file
+      - name: Create config file
         run: |
           touch .env && echo "
-          SERVER_PORT=3000
           DATABASE_USERNAME=postgres
           DATABASE_PASSWORD=postgres
           DATABASE_HOSTNAME=localhost
           DATABASE_PORT=5432
           DATABASE_NAME=postgres
+          SALT_ROUNDS=10
+          SERVER_PORT=3000
           " > .env
 
       # Ensure the app can be built
@@ -63,4 +64,4 @@ jobs:
 
       # Run integration tests
       - name: Run integration tests
-        run: npx jest --verbose --detectOpenHandles --passWithNoTests
+        run: npm run test --passWithNoTests

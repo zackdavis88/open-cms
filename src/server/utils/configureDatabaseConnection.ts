@@ -1,5 +1,6 @@
 import { Express } from 'express';
 import { Sequelize } from 'sequelize';
+import { initializeModelsAndSync } from 'src/models';
 
 const configureDatabaseConnection = async (app: Express) => {
   const {
@@ -16,7 +17,7 @@ const configureDatabaseConnection = async (app: Express) => {
     logging: false,
   });
 
-  // TODO: Initialize models here and associations here, once they exist.
+  await initializeModelsAndSync(sequelize);
 
   app.use((req, _res, next) => {
     req.sequelize = sequelize;

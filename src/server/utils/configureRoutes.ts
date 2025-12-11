@@ -5,7 +5,8 @@ import { NotFoundError } from './errors';
 
 const configureRoutes = (app: Express) => {
   const rootPath = process.env.NODE_ENV === 'production' ? 'dist' : 'src';
-  const routeFiles = fs.globSync(`./${rootPath}/routes/**/*`);
+  const fileExtension = process.env.NODE_ENV === 'production' ? 'js' : 'ts';
+  const routeFiles = fs.globSync(`./${rootPath}/routes/**/index.${fileExtension}`);
 
   const routeFilePromises = routeFiles.map(async (file) => {
     const routeModule = await import(path.resolve(file));
