@@ -111,7 +111,7 @@ export const swaggerSpec = swaggerJsdoc(options);
 
 const configureDiscoveryRoutes = (router: Router) => {
   router.route('/discovery/swagger.json').get((_req, res) => {
-    res.json(swaggerSpec);
+    return res.json(swaggerSpec);
   });
 };
 
