@@ -60,8 +60,9 @@
  * /api/users:
  *   post:
  *     tags:
- *       - Create User
- *     description: Creates a new user
+ *       - User
+ *     summary: Create User
+ *     description: Creates a new user with provided username and password
  *     requestBody:
  *       content:
  *         application/json:
