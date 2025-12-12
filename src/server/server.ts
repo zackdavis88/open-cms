@@ -8,8 +8,6 @@ import {
   configureDatabaseConnection,
 } from './utils';
 import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from 'src/routes/discovery';
 
 const SERVER_PORT = process.env.SERVER_PORT || 3000;
 const app = express();
@@ -33,7 +31,6 @@ app.use(
     credentials: true,
   }),
 );
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(configureResponseHandlers);
 configureDatabaseConnection(app).then(() => {

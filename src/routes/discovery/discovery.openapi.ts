@@ -3,10 +3,11 @@
  *******************************************/
 /**
  * @openapi
- * /api/discovery/swagger.json:
+ * /api/discovery:
  *   get:
  *     tags:
  *       - Discovery
+ *     summary: Get OpenAPI JSON
  *     description: Returns OpenAPI specs in JSON format
  *     responses:
  *       200:
