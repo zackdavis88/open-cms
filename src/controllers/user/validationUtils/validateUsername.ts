@@ -31,6 +31,8 @@ const validateUsername = async (username: unknown) => {
   if (existingUser) {
     throw new ValidationError('username is already taken');
   }
+
+  return username;
 };
 
 export default validateUsername;

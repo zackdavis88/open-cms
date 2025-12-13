@@ -12,7 +12,7 @@ type GenerateAuthTokenResponseBody = {
 const generateAuthTokenFlow = async (req: Request, res: Response) => {
   try {
     const user = await validateBasicAuthHeader(req);
-    const authToken = await generateAuthToken(user);
+    const authToken = generateAuthToken(user);
 
     const responseBody: GenerateAuthTokenResponseBody = {
       authToken,
