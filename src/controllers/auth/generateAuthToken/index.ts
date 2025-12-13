@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import validateBasicAuthHeader from './validateBasicAuthHeader';
 import generateAuthToken from './generateAuthToken';
-import { UserData } from 'src/server/types';
+import { UserData } from 'src/types';
 import { AuthenticationError } from 'src/server/utils/errors';
 
 type GenerateAuthTokenResponseBody = {

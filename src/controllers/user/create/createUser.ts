@@ -1,5 +1,5 @@
 import { User } from 'src/models';
-import { UserData } from 'src/server/types';
+import { UserData } from 'src/types';
 
 type CreateUser = (username: string, password: string) => Promise<UserData>;
 

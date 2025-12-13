@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import createUserValidation from './createUserValidation';
 import createUser from './createUser';
-import { UserData } from 'src/server/types';
+import { UserData } from 'src/types';
 
 type CreateUserRequestBody = {
   username: unknown;
