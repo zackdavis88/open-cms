@@ -4,10 +4,6 @@
 /**
  * @openapi
  * components:
- *   securitySchemes:
- *     basicAuth:
- *       type: http
- *       scheme: basic
  *   schemas:
  *     GenerateAuthTokenResponse:
  *       type: object

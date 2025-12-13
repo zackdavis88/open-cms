@@ -20,6 +20,12 @@ const options = {
       },
     ],
     components: {
+      securitySchemes: {
+        basicAuth: {
+          type: 'http',
+          scheme: 'basic',
+        },
+      },
       schemas: {
         FatalError: {
           type: 'object',

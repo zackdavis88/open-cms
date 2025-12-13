@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import validateBasicAuthHeader from './validateBasicAuthHeader';
 import generateAuthToken from './generateAuthToken';
 import { UserData } from 'src/server/types';
+import { AuthenticationError } from 'src/server/utils/errors';
 
 type GenerateAuthTokenResponseBody = {
   authToken: string;
@@ -25,6 +26,11 @@ const generateAuthTokenFlow = async (req: Request, res: Response) => {
 
     return res.success('user successfully authenticated', responseBody);
   } catch (error) {
+    if (error instanceof AuthenticationError) {
+      const realm = req.host;
+      res.setHeader('WWW-Authenticate', `Basic realm="${realm}"`);
+    }
+
     return res.sendError(error);
   }
 };
