@@ -45,13 +45,14 @@ jobs:
       - name: Create config file
         run: |
           touch .env && echo "
+          AUTH_SECRET=G!tHub@cti0nRunn3r
+          AUTH_TOKEN_EXPIRATION=36000
           DATABASE_USERNAME=postgres
           DATABASE_PASSWORD=postgres
           DATABASE_HOSTNAME=localhost
           DATABASE_PORT=5432
           DATABASE_NAME=postgres
           SALT_ROUNDS=10
-          SECRET=G!tHub@cti0nRunn3r
           SERVER_PORT=3000
           " > .env
 

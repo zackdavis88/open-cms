@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
-import validateBasicAuthHeader from './validateBasicAuthHeader';
+import validateRefreshAuthToken from './validateRefreshAuthToken';
 import { UserData } from 'src/types';
 import { AuthenticationError } from 'src/server/utils/errors';
 import { signJwtToken } from 'src/controllers/auth/utils';
 
-type GenerateAuthTokenResponseBody = {
+type RefreshAuthTokenResponseBody = {
   authToken: string;
   user: UserData;
 };
 
-const generateAuthTokenFlow = async (req: Request, res: Response) => {
+const refreshAuthTokenFlow = async (req: Request, res: Response) => {
   try {
-    const user = await validateBasicAuthHeader(req);
+    const user = await validateRefreshAuthToken(req);
     const authToken = signJwtToken(user);
 
-    const responseBody: GenerateAuthTokenResponseBody = {
+    const responseBody: RefreshAuthTokenResponseBody = {
       authToken,
       user: {
         username: user.username,
@@ -24,15 +24,15 @@ const generateAuthTokenFlow = async (req: Request, res: Response) => {
       },
     };
 
-    return res.success('user successfully authenticated', responseBody);
+    return res.success('authToken successfully refreshed', responseBody);
   } catch (error) {
     if (error instanceof AuthenticationError) {
       const realm = req.host;
-      res.setHeader('WWW-Authenticate', `Basic realm="${realm}"`);
+      res.setHeader('WWW-Authenticate', `Bearer realm="${realm}"`);
     }
 
     return res.sendError(error);
   }
 };
 
-export default generateAuthTokenFlow;
+export default refreshAuthTokenFlow;

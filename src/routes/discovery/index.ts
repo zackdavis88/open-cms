@@ -25,6 +25,11 @@ const options = {
           type: 'http',
           scheme: 'basic',
         },
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          format: 'JWT',
+        },
       },
       schemas: {
         FatalError: {

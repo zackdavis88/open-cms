@@ -27,6 +27,18 @@ describe('Generate Auth Token', () => {
       );
     });
 
+    it('should reject requests when the header does not use the Basic auth-scheme', (done) => {
+      const encodedCreds = Buffer.from('username:password').toString('base64');
+      request.get(apiRoute).set('Authorization', encodedCreds).expect(
+        401,
+        {
+          error: 'username and password combination is invalid',
+          errorType: ERROR_TYPES.AUTHENTICATION,
+        },
+        done,
+      );
+    });
+
     it('should reject requests when the header cannot be parsed', (done) => {
       const encodedCreds = Buffer.from('username/password').toString('base64');
       const basicAuthHeader = `Basic ${encodedCreds}`;

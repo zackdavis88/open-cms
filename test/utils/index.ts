@@ -3,7 +3,9 @@ import { Sequelize, Utils, UUIDV4 } from 'sequelize';
 import { User, initializeModels } from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
+import jwt from 'jsonwebtoken';
 const {
+  AUTH_SECRET,
   SERVER_PORT,
   DATABASE_USERNAME,
   DATABASE_PASSWORD,
@@ -11,6 +13,13 @@ const {
   DATABASE_PORT,
   DATABASE_NAME,
 } = process.env;
+
+interface TokenDataOverride {
+  id?: string;
+  apiKey?: string;
+  iat?: number;
+  exp?: number;
+}
 
 export class TestHelper {
   sequelize: Sequelize;
@@ -57,6 +66,29 @@ export class TestHelper {
 
     this.addTestUsername(testUser.username);
     return testUser;
+  }
+
+  generateAuthToken(
+    user: User,
+    dataOverride?: TokenDataOverride | string,
+    secretOverride?: string,
+  ) {
+    const tokenData = {
+      id: user.id,
+      apiKey: user.apiKey,
+    };
+
+    let token: string;
+    if (typeof dataOverride === 'string') {
+      token = jwt.sign(dataOverride, secretOverride || AUTH_SECRET || '');
+    } else {
+      token = jwt.sign(
+        { ...tokenData, ...(dataOverride ?? {}) },
+        secretOverride || AUTH_SECRET || '',
+      );
+    }
+
+    return token;
   }
 }
 

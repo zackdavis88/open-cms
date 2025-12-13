@@ -1,4 +1,4 @@
-import { validateUsername, validatePassword } from 'src/controllers/user/validationUtils';
+import { validateUsername, validatePassword } from 'src/controllers/user/utils';
 
 type CreateUserValidation = ({
   usernameInput,
