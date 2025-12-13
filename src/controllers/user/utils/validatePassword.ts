@@ -19,6 +19,8 @@ const validatePassword = (password: unknown) => {
       'password must have 1 uppercase, lowercase, and number character',
     );
   }
+
+  return password;
 };
 
 export default validatePassword;

@@ -20,6 +20,17 @@ const options = {
       },
     ],
     components: {
+      securitySchemes: {
+        basicAuth: {
+          type: 'http',
+          scheme: 'basic',
+        },
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          format: 'JWT',
+        },
+      },
       schemas: {
         FatalError: {
           type: 'object',

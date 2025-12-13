@@ -45,6 +45,8 @@ jobs:
       - name: Create config file
         run: |
           touch .env && echo "
+          AUTH_SECRET=G!tHub@cti0nRunn3r
+          AUTH_TOKEN_EXPIRATION=36000
           DATABASE_USERNAME=postgres
           DATABASE_PASSWORD=postgres
           DATABASE_HOSTNAME=localhost
