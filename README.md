@@ -91,3 +91,11 @@ server {
 **_Note:_** Restart nginx after adding this config.
 
 After completing these steps you should be able to start sending requests to the server at: `https://www.open-cms.com` or `https://open-cms.com`
+
+
+### API Documentation
+Open CMS uses OpenAPI specs for endpoint documentation. You can access this data in a couple of ways:
+
+* The discovery endpoint can be called at `GET /api/discovery`. This will return OpenAPI specs in JSON format for the Open CMS API.
+* SwaggerUI can be reached by opening https://www.open-cms.com/docs or http://localhost:3000/docs.
+<img width="1577" height="763" alt="image" src="https://github.com/user-attachments/assets/131e289b-373b-4440-bb55-49142eb43c0c" />
