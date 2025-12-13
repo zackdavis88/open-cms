@@ -51,6 +51,7 @@ jobs:
           DATABASE_PORT=5432
           DATABASE_NAME=postgres
           SALT_ROUNDS=10
+          SECRET=G!tHub@cti0nRunn3r
           SERVER_PORT=3000
           " > .env
 

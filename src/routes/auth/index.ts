@@ -1,9 +1,8 @@
 import { Router } from 'express';
+import { AuthController } from 'src/controllers';
 
 const configureAuthRoutes = (router: Router) => {
-  router.get('/auth', (_req, res) => {
-    return res.success('Hello, Auth!');
-  });
+  router.route('/auth').get(AuthController.generateAuthToken);
 };
 
 export default configureAuthRoutes;
