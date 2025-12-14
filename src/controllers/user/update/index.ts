@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import validateUpdatePassword from './validateUpdatePassword';
 import { User } from 'src/models';
 import { UserData } from 'src/types';
+import { getPublicUserData } from 'src/controllers/utils';
 
 interface UpdatePasswordRequestBody {
   currentPassword?: unknown;
@@ -30,12 +31,7 @@ const updatePasswordFlow = async (
     await user.save();
 
     const responseBody: UpdatePasswordResponseBody = {
-      user: {
-        username: user.username,
-        displayName: user.displayName,
-        createdOn: user.createdOn,
-        updatedOn: user.updatedOn,
-      },
+      user: getPublicUserData(user),
     };
 
     return res.success('user password successfully updated', responseBody);
