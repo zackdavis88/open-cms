@@ -5,7 +5,7 @@
  * @openapi
  * components:
  *   schemas:
- *     AuthenticateAuthTokenResponse:
+ *     GetMeResponse:
  *       type: object
  *       properties:
  *         message:
@@ -48,21 +48,21 @@
  *******************************************/
 /**
  * @openapi
- * /api/auth/token:
+ * /api/auth/me:
  *   get:
  *     tags:
  *       - Authentication
- *     summary: Authenticate AuthToken
- *     description: Authenticates an authentication token for a user
+ *     summary: Get Authenticated User Details
+ *     description: Returns details of the authenticated user
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: AuthToken successfully authenticated
+ *         description: User successfully authenticated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/AuthenticateAuthTokenResponse"
+ *               $ref: "#/components/schemas/GetMeResponse"
  *       401:
  *         description: Authentication Error
  *         content:

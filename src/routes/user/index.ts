@@ -6,7 +6,7 @@ const configureUserRoutes = (router: Router) => {
 
   router
     .route('/users/password')
-    .patch(AuthController.authenticateAuthTokenMiddleware, UserController.update);
+    .patch(AuthController.authenticateAuthToken, UserController.update);
 };
 
 export default configureUserRoutes;

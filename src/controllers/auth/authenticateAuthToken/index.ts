@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import validateAuthToken from './validateAuthToken';
 import { UserData } from 'src/types';
 
-export const authenticateAuthTokenMiddleware = async (
+export const authenticateAuthToken = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -18,13 +18,13 @@ export const authenticateAuthTokenMiddleware = async (
   }
 };
 
-type AuthenticateAuthTokenResponseBody = {
+type GetMeResponseBody = {
   user: UserData;
 };
 
-const authenticateAuthTokenFlow = (req: Request, res: Response) => {
+const getMeFlow = (req: Request, res: Response) => {
   const { user } = req;
-  const responseBody: AuthenticateAuthTokenResponseBody = {
+  const responseBody: GetMeResponseBody = {
     user: {
       username: user.username,
       displayName: user.displayName,
@@ -35,4 +35,4 @@ const authenticateAuthTokenFlow = (req: Request, res: Response) => {
   return res.success('user successfully authenticated', responseBody);
 };
 
-export default authenticateAuthTokenFlow;
+export default getMeFlow;

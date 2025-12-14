@@ -7,11 +7,8 @@ const configureAuthRoutes = (router: Router) => {
   router.route('/auth/refresh').get(AuthController.refreshAuthToken);
 
   router
-    .route('/auth/token')
-    .get(
-      AuthController.authenticateAuthTokenMiddleware,
-      AuthController.authenticateAuthToken,
-    );
+    .route('/auth/me')
+    .get(AuthController.authenticateAuthToken, AuthController.getMe);
 };
 
 export default configureAuthRoutes;
