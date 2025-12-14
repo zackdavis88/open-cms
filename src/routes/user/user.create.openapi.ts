@@ -27,7 +27,12 @@
  *           description: Successful message
  *           examples: ["user created successfully"]
  *         user:
- *           $ref: "#/components/schemas/UserData"
+ *           allOf:
+ *             - type: object
+ *               properties:
+ *                 updatedOn:
+ *                   examples: [null]
+ *             - $ref: "#/components/schemas/UserData"
  *       required:
  *         - message
  *         - user

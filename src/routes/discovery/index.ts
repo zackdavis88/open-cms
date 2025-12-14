@@ -52,7 +52,7 @@ const options = {
               examples: ['2023-10-05T14:48:00.000Z'],
             },
             updatedOn: {
-              type: 'string',
+              type: ['string', 'null'],
               format: 'date-time',
               description: 'Timestamp of when the user was last updated',
               examples: ['2023-11-05T15:00:00.000Z'],

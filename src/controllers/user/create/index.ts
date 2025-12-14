@@ -33,6 +33,7 @@ const createUserFlow = async (
         displayName: newUser.displayName,
         username: newUser.username,
         createdOn: newUser.createdOn,
+        updatedOn: newUser.updatedOn,
       },
     };
     return res.success('user has been successfully created', responseBody);
