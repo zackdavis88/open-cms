@@ -22,7 +22,7 @@ type AuthenticateAuthTokenResponseBody = {
   user: UserData;
 };
 
-const authenticateAuthToken = (req: Request, res: Response) => {
+const authenticateAuthTokenFlow = (req: Request, res: Response) => {
   const { user } = req;
   const responseBody: AuthenticateAuthTokenResponseBody = {
     user: {
@@ -35,4 +35,4 @@ const authenticateAuthToken = (req: Request, res: Response) => {
   return res.success('user successfully authenticated', responseBody);
 };
 
-export default authenticateAuthToken;
+export default authenticateAuthTokenFlow;

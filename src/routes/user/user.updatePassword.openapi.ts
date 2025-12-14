@@ -5,7 +5,7 @@
  * @openapi
  * components:
  *   schemas:
- *     UserUpdatePasswordRequest:
+ *     UpdatePasswordRequest:
  *       type: object
  *       properties:
  *         currentPassword:
@@ -19,7 +19,7 @@
  *       required:
  *         - currentPassword
  *         - newPassword
- *     UserUpdatePasswordResponse:
+ *     UpdatePasswordResponse:
  *       type: object
  *       properties:
  *         message:
