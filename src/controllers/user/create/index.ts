@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import createUserValidation from './createUserValidation';
-import createUser from './createUser';
+import { User } from 'src/models';
 import { UserData } from 'src/types';
 
 type CreateUserRequestBody = {
@@ -22,12 +22,19 @@ const createUserFlow = async (
       passwordInput: req.body.password,
     });
 
-    const userData = await createUser({
-      username,
-      password,
+    const newUser = await User.create({
+      username: username.toLowerCase(),
+      displayName: username,
+      hash: User.generateHash(password),
     });
 
-    const responseBody: CreateUserResponseBody = { user: userData };
+    const responseBody: CreateUserResponseBody = {
+      user: {
+        displayName: newUser.displayName,
+        username: newUser.username,
+        createdOn: newUser.createdOn,
+      },
+    };
     return res.success('user has been successfully created', responseBody);
   } catch (error) {
     return res.sendError(error);

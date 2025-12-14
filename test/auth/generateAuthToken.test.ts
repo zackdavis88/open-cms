@@ -3,7 +3,7 @@ const testHelper = new TestHelper();
 const apiRoute = '/api/auth';
 const request = testHelper.request;
 
-describe('Generate Auth Token', () => {
+describe('Generate AuthToken', () => {
   describe(`GET ${apiRoute}`, () => {
     let testUser: User;
     const testUserPassword = ':w3!rD:::::p@s$word';
