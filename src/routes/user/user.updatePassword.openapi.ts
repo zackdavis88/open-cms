@@ -75,14 +75,14 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: "#/components/schemas/UserUpdatePasswordRequest"
+ *             $ref: "#/components/schemas/UpdatePasswordRequest"
  *     responses:
  *       200:
  *         description: User password successfully updated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/UserUpdatePasswordResponse"
+ *               $ref: "#/components/schemas/UpdatePasswordResponse"
  *       422:
  *         description: Validation Error
  *         content:
