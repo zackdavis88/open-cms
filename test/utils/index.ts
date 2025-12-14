@@ -88,7 +88,7 @@ export class TestHelper {
       );
     }
 
-    return token;
+    return `Bearer ${token}`;
   }
 }
 

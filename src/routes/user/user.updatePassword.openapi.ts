@@ -5,20 +5,30 @@
  * @openapi
  * components:
  *   schemas:
- *     GenerateAuthTokenResponse:
+ *     UserUpdatePasswordRequest:
+ *       type: object
+ *       properties:
+ *         currentPassword:
+ *           type: string
+ *           description: Your current password
+ *           examples: ["SecureP@ssw0rd!"]
+ *         newPassword:
+ *           type: string
+ *           description: Your new password
+ *           examples: ["SecureP@ssw0rd!Updated!"]
+ *       required:
+ *         - currentPassword
+ *         - newPassword
+ *     UserUpdatePasswordResponse:
  *       type: object
  *       properties:
  *         message:
  *           type: string
  *           description: Successful message
- *           examples: ["user successfully authenticated"]
- *         authToken:
- *           type: string
- *           description: Authentication token for a user
- *           examples: ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0NGMwMGRiLWE5ZGUtNDM1ZC1hYWJmLTg4YTRkNzIzNjEzMCIsImFwaUtleSI6IjIxOWY4MzQ0LTBhNmYtNDIyYi05NWNmLWFjOTczMzQxMGU0NSIsImlhdCI6MTc2NTU5MTUwNCwiZXhwIjoxNzY1NjI3NTA0fQ.Hz1-oPiRvVrV2osqURioXygH-d3q3YJV0D4znnaOY3U"]
+ *           examples: ["user password successfully updated"]
  *         user:
  *           type: object
- *           description: Authenticated user's details
+ *           description: Updated user's details
  *           properties:
  *             username:
  *               type: string
@@ -42,38 +52,43 @@
  *             - username
  *             - displayName
  *             - createdOn
+ *             - updatedOn
  *       required:
  *         - message
  *         - user
- *         - authToken
  */
 
 /*******************************************
- * GENERATE AUTH TOKEN ENDPOINT            *
+ * UPDATE PASSWORD ENDPOINT                *
  *******************************************/
 /**
  * @openapi
- * /api/auth:
- *   get:
+ * /api/users/password:
+ *   patch:
  *     tags:
- *       - Authentication
- *     summary: Generate AuthToken
- *     description: Generates an authentication token for a user
+ *       - User
+ *     summary: Update User Password
+ *     description: Updates a user's password
  *     security:
- *       - basicAuth: []
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/components/schemas/UserUpdatePasswordRequest"
  *     responses:
  *       200:
- *         description: AuthToken successfully generated
+ *         description: User password successfully updated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/GenerateAuthTokenResponse"
- *       401:
- *         description: Authentication Error
+ *               $ref: "#/components/schemas/UserUpdatePasswordResponse"
+ *       422:
+ *         description: Validation Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/AuthenticationError"
+ *               $ref: "#/components/schemas/ValidationError"
  *       500:
  *         description: Internal Server Error
  *         content:

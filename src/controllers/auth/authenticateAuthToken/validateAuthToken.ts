@@ -1,13 +1,13 @@
 import { Request } from 'express';
 import { User } from 'src/models';
 import { AuthenticationError } from 'src/server/utils/errors';
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
+import jwt, { TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken';
 
 const AUTH_SECRET = process.env.AUTH_SECRET || '';
 
-type ValidateRefreshAuthToken = (req: Request) => Promise<User>;
+type ValidateAuthToken = (req: Request) => Promise<User>;
 
-const validateRefreshAuthToken: ValidateRefreshAuthToken = async (req: Request) => {
+const validateAuthToken: ValidateAuthToken = async (req) => {
   const authorizationHeader = req.headers['authorization'];
 
   if (!authorizationHeader) {
@@ -21,7 +21,7 @@ const validateRefreshAuthToken: ValidateRefreshAuthToken = async (req: Request) 
   const authToken = authorizationHeader.split(' ')[1];
 
   try {
-    const tokenData = jwt.verify(authToken, AUTH_SECRET, { ignoreExpiration: true });
+    const tokenData = jwt.verify(authToken, AUTH_SECRET);
 
     if (typeof tokenData === 'string' || !tokenData.id || !tokenData.apiKey) {
       throw new AuthenticationError('authorization header is invalid');
@@ -50,6 +50,10 @@ const validateRefreshAuthToken: ValidateRefreshAuthToken = async (req: Request) 
 
     return user;
   } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      throw new AuthenticationError('authorization header is expired');
+    }
+
     if (error instanceof JsonWebTokenError) {
       throw new AuthenticationError('authorization header could not be verified');
     }
@@ -58,4 +62,4 @@ const validateRefreshAuthToken: ValidateRefreshAuthToken = async (req: Request) 
   }
 };
 
-export default validateRefreshAuthToken;
+export default validateAuthToken;

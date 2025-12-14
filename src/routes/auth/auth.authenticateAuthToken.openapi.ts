@@ -5,17 +5,13 @@
  * @openapi
  * components:
  *   schemas:
- *     GenerateAuthTokenResponse:
+ *     AuthenticateAuthTokenResponse:
  *       type: object
  *       properties:
  *         message:
  *           type: string
  *           description: Successful message
  *           examples: ["user successfully authenticated"]
- *         authToken:
- *           type: string
- *           description: Authentication token for a user
- *           examples: ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0NGMwMGRiLWE5ZGUtNDM1ZC1hYWJmLTg4YTRkNzIzNjEzMCIsImFwaUtleSI6IjIxOWY4MzQ0LTBhNmYtNDIyYi05NWNmLWFjOTczMzQxMGU0NSIsImlhdCI6MTc2NTU5MTUwNCwiZXhwIjoxNzY1NjI3NTA0fQ.Hz1-oPiRvVrV2osqURioXygH-d3q3YJV0D4znnaOY3U"]
  *         user:
  *           type: object
  *           description: Authenticated user's details
@@ -45,29 +41,28 @@
  *       required:
  *         - message
  *         - user
- *         - authToken
  */
 
 /*******************************************
- * GENERATE AUTH TOKEN ENDPOINT            *
+ * AUTHENTICATE AUTH TOKEN ENDPOINT        *
  *******************************************/
 /**
  * @openapi
- * /api/auth:
+ * /api/auth/token:
  *   get:
  *     tags:
  *       - Authentication
- *     summary: Generate AuthToken
- *     description: Generates an authentication token for a user
+ *     summary: Authenticate AuthToken
+ *     description: Authenticates an authentication token for a user
  *     security:
- *       - basicAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: AuthToken successfully generated
+ *         description: AuthToken successfully authenticated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/GenerateAuthTokenResponse"
+ *               $ref: "#/components/schemas/AuthenticateAuthTokenResponse"
  *       401:
  *         description: Authentication Error
  *         content:
