@@ -1,21 +1,48 @@
 import { Request } from 'express';
 import { User } from 'src/models';
-import { validatePagination, validateOrder } from 'src/controllers/utils';
+import {
+  validatePagination,
+  validateOrder,
+  validateFilters,
+} from 'src/controllers/utils';
 import { PaginationData } from 'src/types';
-import { Order } from 'sequelize';
+import { Order, WhereOptions } from 'sequelize';
 
 type GetUsersValidation = (
   query: Request['query'],
-) => Promise<PaginationData & { order: Order }>;
+) => Promise<PaginationData & { order: Order; whereQuery: WhereOptions }>;
 
 const getUsersValidation: GetUsersValidation = async (query) => {
-  const userCount = await User.count({ where: { isActive: true } });
+  const filters = validateFilters({
+    query,
+    allowedColumns: {
+      stringColumns: ['username'],
+      dateColumns: ['createdOn'],
+    },
+  });
+
+  const whereQuery: WhereOptions = {
+    where: {
+      isActive: true,
+    },
+  };
+
+  if (filters) {
+    whereQuery.where = {
+      ...whereQuery.where,
+      ...filters,
+    };
+  }
+
+  const userCount = await User.count(whereQuery);
+  const paginationData = validatePagination(query, userCount);
   const order = validateOrder({
     query,
     defaultOrderColumn: 'createdOn',
     allowedColumns: ['createdOn', 'username'],
   });
-  return { ...validatePagination(query, userCount), order: order };
+
+  return { ...paginationData, order, whereQuery };
 };
 
 export default getUsersValidation;

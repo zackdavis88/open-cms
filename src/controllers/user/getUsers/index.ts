@@ -10,12 +10,12 @@ type GetUsersResponseBody = {
 
 const getUsersFlow = async (req: Request, res: Response) => {
   try {
-    const { order, ...paginationData } = await getUsersValidation(req.query);
+    const { order, whereQuery, ...paginationData } = await getUsersValidation(req.query);
 
     const { itemsPerPage, pageOffset } = paginationData;
 
     const users = await User.scope('publicAttributes').findAll({
-      where: { isActive: true },
+      ...whereQuery,
       limit: itemsPerPage,
       offset: pageOffset,
       order,
