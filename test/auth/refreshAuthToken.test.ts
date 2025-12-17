@@ -165,7 +165,7 @@ describe('Refresh AuthToken', () => {
             username: testUser.username,
             displayName: testUser.displayName,
             createdOn: testUser.createdOn.toISOString(),
-            updatedOn: testUser.updatedOn,
+            updatedOn: testUser.updatedOn?.toISOString() || null,
           });
           done();
         });

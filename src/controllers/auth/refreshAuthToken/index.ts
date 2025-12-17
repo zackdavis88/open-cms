@@ -17,7 +17,7 @@ const refreshAuthTokenFlow = async (req: Request, res: Response) => {
 
     const responseBody: RefreshAuthTokenResponseBody = {
       authToken,
-      user: getPublicUserData(user),
+      user: { ...getPublicUserData(user), updatedOn: user.updatedOn || null },
     };
 
     return res.success('authToken successfully refreshed', responseBody);

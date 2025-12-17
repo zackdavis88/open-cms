@@ -17,7 +17,7 @@ const generateAuthTokenFlow = async (req: Request, res: Response) => {
 
     const responseBody: GenerateAuthTokenResponseBody = {
       authToken,
-      user: getPublicUserData(user),
+      user: { ...getPublicUserData(user), updatedOn: user.updatedOn || null },
     };
 
     return res.success('user successfully authenticated', responseBody);

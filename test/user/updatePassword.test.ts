@@ -192,7 +192,7 @@ describe('Update Password', () => {
             username: testUser.username,
             displayName: testUser.displayName,
             createdOn: testUser.createdOn.toISOString(),
-            updatedOn: testUser.updatedOn?.toISOString(),
+            updatedOn: testUser.updatedOn?.toISOString() || null,
           });
 
           // Ensure the new password is valid.

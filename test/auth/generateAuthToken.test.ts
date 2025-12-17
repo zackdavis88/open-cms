@@ -101,7 +101,7 @@ describe('Generate AuthToken', () => {
             username: testUser.username,
             displayName: testUser.displayName,
             createdOn: testUser.createdOn.toISOString(),
-            updatedOn: null,
+            updatedOn: testUser.updatedOn?.toISOString() || null,
           });
           done();
         });

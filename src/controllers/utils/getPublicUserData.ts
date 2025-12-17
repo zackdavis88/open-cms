@@ -5,7 +5,6 @@ const getPublicUserData = (user: User) => {
     username: user.username,
     displayName: user.displayName,
     createdOn: user.createdOn,
-    updatedOn: user.updatedOn,
   };
 };
 

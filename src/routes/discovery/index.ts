@@ -32,7 +32,7 @@ const options = {
         },
       },
       schemas: {
-        UserData: {
+        PublicUserData: {
           type: 'object',
           properties: {
             username: {
@@ -51,14 +51,25 @@ const options = {
               description: 'Timestamp of when the user was created',
               examples: ['2023-10-05T14:48:00.000Z'],
             },
-            updatedOn: {
-              type: ['string', 'null'],
-              format: 'date-time',
-              description: 'Timestamp of when the user was last updated',
-              examples: ['2023-11-05T15:00:00.000Z'],
-            },
           },
           required: ['username', 'displayName', 'createdOn'],
+        },
+        UserData: {
+          allOf: [
+            { $ref: '#/components/schemas/PublicUserData' },
+            {
+              type: 'object',
+              properties: {
+                updatedOn: {
+                  type: ['string', 'null'],
+                  format: 'date-time',
+                  description: 'Timestamp of when the user was last updated',
+                  examples: ['2023-11-05T15:00:00.000Z', null],
+                },
+              },
+            },
+          ],
+          required: ['username', 'displayName', 'createdOn', 'updatedOn'],
         },
         FatalError: {
           type: 'object',

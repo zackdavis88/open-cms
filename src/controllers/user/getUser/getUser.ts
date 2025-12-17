@@ -4,7 +4,7 @@ import { NotFoundError } from 'src/server/utils/errors';
 type GetUser = (username: string) => Promise<User>;
 
 const getUser: GetUser = async (username: string) => {
-  const user = await User.findOne({
+  const user = await User.scope('publicAttributes').findOne({
     where: {
       username: username.toLowerCase(),
       isActive: true,

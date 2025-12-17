@@ -199,7 +199,6 @@ describe('User Create', () => {
             username: String(payload.username).toLowerCase(),
             displayName: payload.username,
             createdOn: createdUser.createdOn.toISOString(),
-            updatedOn: null,
           });
 
           // Ensure the password is valid.

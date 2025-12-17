@@ -26,7 +26,7 @@ type GetMeResponseBody = {
 const getMeFlow = (req: Request, res: Response) => {
   const { user } = req;
   const responseBody: GetMeResponseBody = {
-    user: getPublicUserData(user),
+    user: { ...getPublicUserData(user), updatedOn: user.updatedOn || null },
   };
   return res.success('user successfully authenticated', responseBody);
 };

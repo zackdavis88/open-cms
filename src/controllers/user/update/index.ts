@@ -31,7 +31,7 @@ const updatePasswordFlow = async (
     await user.save();
 
     const responseBody: UpdatePasswordResponseBody = {
-      user: getPublicUserData(user),
+      user: { ...getPublicUserData(user), updatedOn: user.updatedOn },
     };
 
     return res.success('user password successfully updated', responseBody);

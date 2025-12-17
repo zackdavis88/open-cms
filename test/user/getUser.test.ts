@@ -56,7 +56,6 @@ describe('Get User', () => {
             username: testUser.username,
             displayName: testUser.displayName,
             createdOn: testUser.createdOn.toISOString(),
-            updatedOn: testUser.updatedOn?.toISOString() || null,
           });
 
           done();
