@@ -13,8 +13,7 @@ const configureUserRoutes = (router: Router) => {
 
   router
     .route('/users/:username')
-    .all(AuthController.authenticateAuthToken)
-    .get(UserController.getUser);
+    .get(AuthController.authenticateAuthToken, UserController.getUser);
 };
 
 export default configureUserRoutes;

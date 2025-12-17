@@ -49,5 +49,6 @@ const validatePagination: ValidatePagination = (queryString, count) => {
   };
 };
 
-export type PaginationData = ReturnType<typeof validatePagination>;
+export type AllPaginationData = ReturnType<typeof validatePagination>;
+export type PublicPaginationData = Omit<AllPaginationData, 'pageOffset'>;
 export default validatePagination;

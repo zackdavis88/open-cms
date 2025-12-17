@@ -2,28 +2,28 @@ import { Request, Response } from 'express';
 import getUsersValidation from './getUsersValidation';
 import { User } from 'src/models';
 import { getPublicUserData } from 'src/controllers/utils';
-import { UserData, PaginationData } from 'src/types';
+import { UserData, PublicPaginationData } from 'src/types';
 
 type GetUsersResponseBody = {
   users: UserData[];
-} & PaginationData;
+} & PublicPaginationData;
 
 const getUsersFlow = async (req: Request, res: Response) => {
   try {
     const { order, whereQuery, ...paginationData } = await getUsersValidation(req.query);
 
-    const { itemsPerPage, pageOffset } = paginationData;
+    const { pageOffset, ...publicPaginationData } = paginationData;
 
     const users = await User.scope('publicAttributes').findAll({
       ...whereQuery,
-      limit: itemsPerPage,
+      limit: publicPaginationData.itemsPerPage,
       offset: pageOffset,
       order,
     });
 
     const responseBody: GetUsersResponseBody = {
       users: users.map((user) => getPublicUserData(user)),
-      ...paginationData,
+      ...publicPaginationData,
     };
 
     return res.success('user list has been successfully retrieved', responseBody);

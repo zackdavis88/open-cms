@@ -5,12 +5,12 @@ import {
   validateOrder,
   validateFilters,
 } from 'src/controllers/utils';
-import { PaginationData } from 'src/types';
+import { AllPaginationData } from 'src/types';
 import { Order, WhereOptions } from 'sequelize';
 
 type GetUsersValidation = (
   query: Request['query'],
-) => Promise<PaginationData & { order: Order; whereQuery: WhereOptions }>;
+) => Promise<AllPaginationData & { order: Order; whereQuery: WhereOptions }>;
 
 const getUsersValidation: GetUsersValidation = async (query) => {
   const filters = validateFilters({

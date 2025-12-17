@@ -25,9 +25,9 @@ const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumn
     orderColumn = defaultOrderColumn;
   }
 
-  let orderBy = 'ASC';
-  if (typeof query.orderBy === 'string' && query.orderBy.toUpperCase() === 'DESC') {
-    orderBy = 'DESC';
+  let orderBy = 'DESC';
+  if (typeof query.orderBy === 'string' && query.orderBy.toUpperCase() === 'ASC') {
+    orderBy = 'ASC';
   }
 
   const order = [[fn('LOWER', cast(col(orderColumn), 'text')), orderBy]] satisfies Order;
@@ -35,5 +35,4 @@ const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumn
   return order;
 };
 
-export type OrderData = ReturnType<typeof validateOrder>;
 export default validateOrder;

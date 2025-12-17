@@ -71,6 +71,108 @@ const options = {
           ],
           required: ['username', 'displayName', 'createdOn', 'updatedOn'],
         },
+        PageParam: {
+          name: 'page',
+          in: 'query',
+          schema: {
+            type: 'integer',
+          },
+          description: 'Requested page of results',
+        },
+        ItemsPerPageParam: {
+          name: 'itemsPerPage',
+          in: 'query',
+          schema: {
+            type: 'integer',
+          },
+          description: 'Number of results per page',
+        },
+        OrderColumnParam: {
+          name: 'orderColumn',
+          in: 'query',
+          schema: {
+            type: 'string',
+          },
+          description: 'Column to order results by',
+        },
+        OrderByParam: {
+          name: 'orderBy',
+          in: 'query',
+          schema: {
+            type: 'string',
+            enum: ['asc', 'desc'],
+            default: 'desc',
+          },
+          description: 'Direction to order results by',
+        },
+        FilterStringColumnParam: {
+          name: 'filterStringColumn',
+          in: 'query',
+          schema: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+          style: 'form',
+          explode: true,
+        },
+        FilterStringValueParam: {
+          name: 'filterStringValue',
+          in: 'query',
+          schema: {
+            type: 'string',
+          },
+        },
+        FilterDateColumnParam: {
+          name: 'filterDateColumn',
+          in: 'query',
+          schema: {
+            type: 'string',
+          },
+        },
+        FilterDateValueParam: {
+          name: 'filterDateValue',
+          in: 'query',
+          schema: {
+            type: 'date',
+            format: 'date-time',
+          },
+        },
+        FilterDateOpParam: {
+          name: 'filterDateOp',
+          in: 'query',
+          schema: {
+            type: 'string',
+            enum: ['eq', 'gt', 'lt', 'gte', 'lte'],
+          },
+        },
+        PaginationData: {
+          type: 'object',
+          properties: {
+            page: {
+              type: 'integer',
+              description: 'the current page of the results',
+              examples: [1],
+            },
+            totalPages: {
+              type: 'integer',
+              description: 'the total number of pages',
+              examples: [7],
+            },
+            itemsPerPage: {
+              type: 'integer',
+              description: 'the total number of items per page',
+              examples: [10],
+            },
+            totalItems: {
+              type: 'integer',
+              description: 'the total number of results',
+              examples: [70],
+            },
+          },
+          required: ['page', 'totalPages', 'itemsPerPage', 'totalItems'],
+        },
         FatalError: {
           type: 'object',
           properties: {

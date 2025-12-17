@@ -12,11 +12,8 @@ describe('Refresh AuthToken', () => {
 
     beforeAll(async () => {
       testUser = await testHelper.createTestUser();
-      inactiveUser = await testHelper.createTestUser('Password1', false);
-      // Create a user and set an updatedOn date for them.
-      recentlyUpdatedUser = await testHelper.createTestUser();
-      recentlyUpdatedUser.updatedOn = new Date();
-      await recentlyUpdatedUser.save();
+      inactiveUser = await testHelper.createTestUser({ isActive: false });
+      recentlyUpdatedUser = await testHelper.createTestUser({ updatedOn: new Date() });
     });
 
     beforeEach(() => {

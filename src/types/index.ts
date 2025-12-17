@@ -6,5 +6,5 @@ export interface UserData {
   deletedOn?: Date | null;
 }
 
-export { type PaginationData } from 'src/controllers/utils/validatePagination';
-export { type OrderData } from 'src/controllers/utils/validateOrder';
+export { type AllPaginationData } from 'src/controllers/utils/validatePagination';
+export { type PublicPaginationData } from 'src/controllers/utils/validatePagination';
