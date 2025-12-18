@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import validateAuthToken from './validateAuthToken';
 import { UserData } from 'src/types';
+import { getPublicUserData } from 'src/controllers/utils';
 
 export const authenticateAuthToken = async (
   req: Request,
@@ -25,12 +26,7 @@ type GetMeResponseBody = {
 const getMeFlow = (req: Request, res: Response) => {
   const { user } = req;
   const responseBody: GetMeResponseBody = {
-    user: {
-      username: user.username,
-      displayName: user.displayName,
-      createdOn: user.createdOn,
-      updatedOn: user.updatedOn,
-    },
+    user: { ...getPublicUserData(user), updatedOn: user.updatedOn || null },
   };
   return res.success('user successfully authenticated', responseBody);
 };

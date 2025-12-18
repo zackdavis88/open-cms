@@ -9,7 +9,7 @@ describe('Generate AuthToken', () => {
     const testUserPassword = ':w3!rD:::::p@s$word';
 
     beforeAll(async () => {
-      testUser = await testHelper.createTestUser(testUserPassword);
+      testUser = await testHelper.createTestUser({ password: testUserPassword });
     });
 
     afterAll(async () => {
@@ -101,7 +101,7 @@ describe('Generate AuthToken', () => {
             username: testUser.username,
             displayName: testUser.displayName,
             createdOn: testUser.createdOn.toISOString(),
-            updatedOn: null,
+            updatedOn: testUser.updatedOn?.toISOString() || null,
           });
           done();
         });

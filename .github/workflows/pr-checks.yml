@@ -52,6 +52,7 @@ jobs:
           DATABASE_HOSTNAME=localhost
           DATABASE_PORT=5432
           DATABASE_NAME=postgres
+          DEFAULT_ITEMS_PER_PAGE=10
           SALT_ROUNDS=10
           SERVER_PORT=3000
           " > .env

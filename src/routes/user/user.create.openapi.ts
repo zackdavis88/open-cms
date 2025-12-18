@@ -27,7 +27,7 @@
  *           description: Successful message
  *           examples: ["user created successfully"]
  *         user:
- *           $ref: "#/components/schemas/UserData"
+ *           $ref: "#/components/schemas/PublicUserData"
  *       required:
  *         - message
  *         - user

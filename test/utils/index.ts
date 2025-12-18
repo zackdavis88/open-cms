@@ -53,15 +53,29 @@ export class TestHelper {
     this.testUsernames = [];
   }
 
-  async createTestUser(password = 'Password1', isActive = true) {
+  async createTestUser({
+    username,
+    password = 'Password1',
+    isActive = true,
+    createdOn,
+    updatedOn,
+  }: {
+    username?: string;
+    password?: string;
+    isActive?: boolean;
+    createdOn?: Date;
+    updatedOn?: Date;
+  } = {}) {
     const uuid = this.generateUUID();
-    const username = uuid.slice(0, 11);
+    const displayName = username || uuid.slice(0, 11).toUpperCase();
 
     const testUser = await User.create({
-      username: username.toLowerCase(),
-      displayName: username.toUpperCase(),
+      username: displayName.toLowerCase(),
+      displayName,
       hash: User.generateHash(password),
       isActive,
+      createdOn,
+      updatedOn,
     });
 
     this.addTestUsername(testUser.username);
@@ -96,3 +110,4 @@ export { default as request } from 'supertest';
 export { ERROR_TYPES } from '../../src/server/utils/errors';
 export { User } from '../../src/models';
 export { swaggerSpec } from '../../src/routes/discovery';
+export { UserData } from '../../src/types';

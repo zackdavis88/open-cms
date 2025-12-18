@@ -3,7 +3,7 @@ const testHelper = new TestHelper();
 const apiRoute = '/api/users';
 const request = testHelper.request;
 
-describe('User Create', () => {
+describe('Create User', () => {
   describe(`POST ${apiRoute}`, () => {
     let existingUsername: string;
     let payload: {

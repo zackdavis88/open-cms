@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import createUserValidation from './createUserValidation';
 import { User } from 'src/models';
 import { UserData } from 'src/types';
+import { getPublicUserData } from 'src/controllers/utils';
 
 type CreateUserRequestBody = {
   username: unknown;
@@ -29,11 +30,7 @@ const createUserFlow = async (
     });
 
     const responseBody: CreateUserResponseBody = {
-      user: {
-        displayName: newUser.displayName,
-        username: newUser.username,
-        createdOn: newUser.createdOn,
-      },
+      user: getPublicUserData(newUser),
     };
     return res.success('user has been successfully created', responseBody);
   } catch (error) {
