@@ -7,7 +7,12 @@ import {
   CreationOptional,
   DataTypes,
   NonAttribute,
+  HasManyGetAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasOneGetAssociationMixin,
 } from 'sequelize';
+import Project from 'src/models/project/project';
+import Membership from 'src/models/membership/membership';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<string>;
@@ -19,6 +24,32 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare createdOn: CreationOptional<Date>;
   declare updatedOn: CreationOptional<Date | null>;
   declare deletedOn: CreationOptional<Date | null>;
+
+  // Project associations - HasMany
+  declare getCreatedProjects: HasManyGetAssociationsMixin<Project>;
+  declare countCreatedProjects: HasManyCountAssociationsMixin;
+  declare getUpdatedProjects: HasManyGetAssociationsMixin<Project>;
+  declare countUpdatedProjects: HasManyCountAssociationsMixin;
+  declare getDeletedProjects: HasManyGetAssociationsMixin<Project>;
+  declare countDeletedProjects: HasManyCountAssociationsMixin;
+
+  // Project associations - HasOne
+  declare getCreatedProject: HasOneGetAssociationMixin<Project>;
+  declare getUpdatedProject: HasOneGetAssociationMixin<Project>;
+  declare getDeletedProject: HasOneGetAssociationMixin<Project>;
+
+  // Membership associations - HasMany
+  declare getCreatedMemberships: HasManyGetAssociationsMixin<Membership>;
+  declare countCreatedMemberships: HasManyCountAssociationsMixin;
+  declare getUpdatedMemberships: HasManyGetAssociationsMixin<Membership>;
+  declare countUpdatedMemberships: HasManyCountAssociationsMixin;
+  declare getMemberships: HasManyGetAssociationsMixin<Membership>;
+  declare countMemberships: HasManyCountAssociationsMixin;
+
+  // Membership associations - HasOne
+  declare getCreatedMembership: HasOneGetAssociationMixin<Membership>;
+  declare getUpdatedMembership: HasOneGetAssociationMixin<Membership>;
+  declare getMembership: HasOneGetAssociationMixin<Membership>;
 
   static generateHash(password: string): NonAttribute<string> {
     let saltRounds: number | undefined;
