@@ -14,6 +14,10 @@ const configureUserRoutes = (router: Router) => {
   router
     .route('/users/:username')
     .get(AuthController.authenticateAuthToken, UserController.getUser);
+
+  router
+    .route('/users/me')
+    .delete(AuthController.authenticateAuthToken, UserController.remove);
 };
 
 export default configureUserRoutes;
