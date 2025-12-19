@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { NotFoundError } from './errors';
 import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from 'src/routes/discovery';
+import { swaggerSpec } from 'src/openapi';
 
 const configureRoutes = (app: Express) => {
   const rootPath = process.env.NODE_ENV === 'production' ? 'dist' : 'src';

@@ -120,5 +120,5 @@ export class TestHelper {
 export { default as request } from 'supertest';
 export { ERROR_TYPES } from '../../src/server/utils/errors';
 export { User } from '../../src/models';
-export { swaggerSpec } from '../../src/routes/discovery';
+export { swaggerSpec } from '../../src/openapi';
 export { UserData, ProjectData, MembershipData } from '../../src/types';

@@ -7,7 +7,7 @@
  *   schemas:
  *     GetUsersOrderColumnParam:
  *       allOf:
- *         - $ref: "#/components/schemas/OrderColumnParam"
+ *         - $ref: "#/components/schemas/OrderByColumnParam"
  *         - schema:
  *             type: string
  *             enum:
@@ -60,7 +60,7 @@
  *       - $ref: "#/components/schemas/PageParam"
  *       - $ref: "#/components/schemas/ItemsPerPageParam"
  *       - $ref: "#/components/schemas/GetUsersOrderColumnParam"
- *       - $ref: "#/components/schemas/OrderByParam"
+ *       - $ref: "#/components/schemas/OrderByValueParam"
  *       - $ref: "#/components/schemas/GetUsersFilterStringColumnParam"
  *       - $ref: "#/components/schemas/FilterStringValueParam"
  *       - $ref: "#/components/schemas/GetUsersFilterDateColumnParam"

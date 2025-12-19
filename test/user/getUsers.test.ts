@@ -201,7 +201,7 @@ describe('Get Users', () => {
     it('should allow filtering by createdOn', (done) => {
       request
         .get(
-          `${apiRoute}?filterDateColumn=createdOn&filterDateValue=${createdOnTimestamp}&filterDateOp=gte`,
+          `${apiRoute}?filterDateColumn=createdOn&filterDateValue=${createdOnTimestamp.toISOString()}&filterDateOp=gte`,
         )
         .set('authorization', authToken)
         .expect(200)
