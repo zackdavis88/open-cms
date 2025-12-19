@@ -17,9 +17,5 @@
  *             properties:
  *               {}
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/FatalError"
+ *         $ref: "#/components/responses/FatalError"
  */
