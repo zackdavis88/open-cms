@@ -24,6 +24,7 @@
  *         user:
  *           allOf:
  *             - $ref: "#/components/schemas/UserData"
+ *               description: Removed user details
  *             - type: object
  *               properties:
  *                 deletedOn:

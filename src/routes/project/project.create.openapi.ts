@@ -26,8 +26,10 @@
  *           description: Successful message
  *           examples: ["project has been successfully created"]
  *         project:
+ *           description: Created project details
  *           $ref: "#/components/schemas/ProjectData"
  *         membership:
+ *           description: Admin membership details
  *           $ref: "#/components/schemas/MembershipData"
  *       required:
  *         - message
