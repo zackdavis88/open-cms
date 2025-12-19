@@ -1,40 +1,58 @@
 /*******************************************
- * COMPONENTS                              *
+ * REQUEST BODY                            *
  *******************************************/
 /**
  * @openapi
  * components:
- *   schemas:
- *     CreateProjectRequest:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Name of the project
- *           examples: ["MyFancyProject"]
- *         description:
- *           type: string
- *           description: Description of the project
- *           examples: ["Super fancy, Super cool"]
- *       required:
- *         - name
+ *   requestBodies:
+ *     CreateProjectBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the project
+ *                 examples: ["MyFancyProject"]
+ *               description:
+ *                 type: string
+ *                 description: Description of the project
+ *                 examples: ["Super fancy, Super cool"]
+ *             required:
+ *                - name
+ */
+
+/*******************************************
+ * RESPONSE                                *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   responses:
  *     CreateProjectResponse:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *           description: Successful message
- *           examples: ["project has been successfully created"]
- *         project:
- *           description: Created project details
- *           $ref: "#/components/schemas/ProjectData"
- *         membership:
- *           description: Admin membership details
- *           $ref: "#/components/schemas/MembershipData"
- *       required:
- *         - message
- *         - project
- *         - membership
+ *       description: Project successfully created
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: New project and membership data
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: Successful message
+ *                 examples: ["project has been successfully created"]
+ *               project:
+ *                 description: Created project details
+ *                 $ref: "#/components/schemas/ProjectData"
+ *               membership:
+ *                 description: Admin membership details
+ *                 $ref: "#/components/schemas/MembershipData"
+ *             required:
+ *               - message
+ *               - project
+ *               - membership
  */
 
 /*******************************************
@@ -51,33 +69,14 @@
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/components/schemas/CreateProjectRequest"
+ *       $ref: "#/components/requestBodies/CreateProjectBody"
  *     responses:
  *       200:
- *         description: Project created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/CreateProjectResponse"
+ *         $ref: "#/components/responses/CreateProjectResponse"
  *       401:
- *         description: Authentication Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/AuthenticationError"
+ *         $ref: "#/components/responses/AuthenticationError"
  *       422:
- *         description: Validation Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/ValidationError"
+ *         $ref: "#/components/responses/ValidationError"
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/FatalError"
+ *         $ref: "#/components/responses/FatalError"
  */

@@ -1,41 +1,59 @@
 /*******************************************
- * COMPONENTS                              *
+ * REQUEST BODY                            *
  *******************************************/
 /**
  * @openapi
  * components:
- *   schemas:
- *     UpdatePasswordRequest:
- *       type: object
- *       properties:
- *         currentPassword:
- *           type: string
- *           description: Your current password
- *           examples: ["SecureP@ssw0rd!"]
- *         newPassword:
- *           type: string
- *           description: Your new password
- *           examples: ["SecureP@ssw0rd!Updated!"]
- *       required:
- *         - currentPassword
- *         - newPassword
- *     UpdatePasswordResponse:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *           description: Successful message
- *           examples: ["user password successfully updated"]
- *         user:
- *           description: Updated user details
- *           $ref: "#/components/schemas/UserData"
- *       required:
- *         - message
- *         - user
+ *   requestBodies:
+ *     UpdatePasswordBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 description: Your current password
+ *                 examples: ["SecureP@ssw0rd!"]
+ *               newPassword:
+ *                 type: string
+ *                 description: Your new password
+ *                 examples: ["SecureP@ssw0rd!Updated!"]
+ *             required:
+ *               - currentPassword
+ *               - newPassword
  */
 
 /*******************************************
- * UPDATE PASSWORD ENDPOINT                *
+ * RESPONSE                                *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   responses:
+ *     UpdatePasswordResponse:
+ *       description: User password successfully updated
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: Updated user data
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: Successful message
+ *                 examples: ["user password successfully updated"]
+ *               user:
+ *                 description: Updated user details
+ *                 $ref: "#/components/schemas/UserData"
+ *             required:
+ *               - message
+ *               - user
+ */
+
+/*******************************************
+ * UPDATE PASSWORD                         *
  *******************************************/
 /**
  * @openapi
@@ -48,33 +66,14 @@
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/components/schemas/UpdatePasswordRequest"
+ *       $ref: "#/components/requestBodies/UpdatePasswordBody"
  *     responses:
  *       200:
- *         description: User password successfully updated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/UpdatePasswordResponse"
+ *         $ref: "#/components/responses/UpdatePasswordResponse"
  *       401:
- *         description: Authentication Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/AuthenticationError"
+ *         $ref: "#/components/responses/AuthenticationError"
  *       422:
- *         description: Validation Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/ValidationError"
+ *         $ref: "#/components/responses/ValidationError"
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/FatalError"
+ *         $ref: "#/components/responses/FatalError"
  */

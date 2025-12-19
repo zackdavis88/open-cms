@@ -1,27 +1,48 @@
 /*******************************************
- * COMPONENTS                              *
+ * PARAMETERS                              *
  *******************************************/
 /**
  * @openapi
  * components:
- *   schemas:
+ *   parameters:
+ *     UsernameParam:
+ *       name: username
+ *       description: Case insensitive username of a user
+ *       required: true
+ *       in: path
+ *       schema:
+ *         type: string
+ */
+
+/*******************************************
+ * RESPONSE                                *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   responses:
  *     GetUserResponse:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *           description: Successful message
- *           examples: ["user has been successfully retrieved"]
- *         user:
- *           description: Requested user details
- *           $ref: "#/components/schemas/PublicUserData"
+ *       description: User retrieved successfully
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: Requested user data
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: Successful message
+ *                 examples: ["user has been successfully retrieved"]
+ *               user:
+ *                 description: Requested user details
+ *                 $ref: "#/components/schemas/PublicUserData"
  *       required:
  *         - message
  *         - user
  */
 
 /*******************************************
- * GET USER ENDPOINT                       *
+ * GET USER                                *
  *******************************************/
 /**
  * @openapi
@@ -30,39 +51,18 @@
  *     tags:
  *       - User
  *     parameters:
- *       - in: path
- *         name: username
- *         schema:
- *           type: string
- *         required: true
- *         description: Case insensitive username of a user
+ *       - $ref: "#/components/parameters/UsernameParam"
  *     summary: Get User Details
  *     description: Gets user data
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: User successfully retrieved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/GetUserResponse"
+ *         $ref: "#/components/responses/GetUserResponse"
  *       401:
- *         description: Authentication Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/AuthenticationError"
+ *         $ref: "#/components/responses/AuthenticationError"
  *       404:
- *         description: Not Found Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/NotFoundError"
+ *         $ref: "#/components/responses/NotFoundError"
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/FatalError"
+ *         $ref: "#/components/responses/FatalError"
  */

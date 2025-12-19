@@ -2,22 +2,22 @@ import fs from 'fs';
 import path from 'path';
 import swaggerJsdoc from 'swagger-jsdoc';
 
-const buildComponentSchemas = () => {
+const buildComponents = (componentGroup: 'schemas' | 'parameters' | 'responses') => {
   const rootPath = process.env.NODE_ENV === 'production' ? 'dist' : 'src';
   const fileExtension = process.env.NODE_ENV === 'production' ? 'js' : 'ts';
-  const schemaFiles = fs.globSync([
-    `./${rootPath}/openapi/components/schemas/**/*.${fileExtension}`,
+  const componentFiles = fs.globSync([
+    `./${rootPath}/openapi/components/${componentGroup}/**/*.${fileExtension}`,
   ]);
 
-  return schemaFiles.reduce((prev, fullPath) => {
+  return componentFiles.reduce((prev, fullPath) => {
     const file = path.resolve(fullPath);
     const filenameWithoutExt = path.basename(fullPath, path.extname(fullPath));
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const schema = require(path.resolve(file)).default;
-    if (typeof schema === 'object') {
+    const component = require(path.resolve(file)).default;
+    if (typeof component === 'object') {
       return {
         ...prev,
-        [filenameWithoutExt]: schema,
+        [filenameWithoutExt]: component,
       };
     }
 
@@ -30,7 +30,7 @@ const options = {
     openapi: '3.1.0',
     info: {
       title: 'Open CMS',
-      version: '0.0.1',
+      version: '1.0.0',
       description: 'Endpoint documentation for Open CMS API',
     },
     servers: [
@@ -55,7 +55,9 @@ const options = {
           format: 'JWT',
         },
       },
-      schemas: buildComponentSchemas(),
+      schemas: buildComponents('schemas'),
+      parameters: buildComponents('parameters'),
+      responses: buildComponents('responses'),
     },
   },
   apis: ['./src/openapi/apis/**/*.openapi.ts'],

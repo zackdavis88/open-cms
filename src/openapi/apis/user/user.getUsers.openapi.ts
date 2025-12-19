@@ -1,54 +1,67 @@
 /*******************************************
- * COMPONENTS                              *
+ * PARAMETERS                              *
  *******************************************/
 /**
  * @openapi
  * components:
- *   schemas:
+ *   parameters:
  *     GetUsersOrderColumnParam:
- *       allOf:
- *         - $ref: "#/components/schemas/OrderByColumnParam"
- *         - schema:
- *             type: string
- *             enum:
- *               - username
- *               - createdOn
+ *       name: orderColumn
+ *       description: Column to order results by
+ *       in: query
+ *       schema:
+ *         type: string
+ *         enum: [username, createdOn]
  *     GetUsersFilterStringColumnParam:
- *       allOf:
- *         - $ref: "#/components/schemas/FilterStringColumnParam"
- *         - schema:
- *             type: string
- *             enum:
- *               - username
+ *       name: filterStringColumn
+ *       description: String column to filter results with
+ *       in: query
+ *       schema:
+ *         type: array
+ *         items:
+ *           type: string
+ *           enum: [username]
+ *       style: form
+ *       explode: true
  *     GetUsersFilterDateColumnParam:
- *       allOf:
- *         - $ref: "#/components/schemas/FilterDateColumnParam"
- *         - schema:
- *             type: string
- *             enum:
- *               - createdOn
- *     GetUsersResponse:
- *       allOf:
- *         - type: object
- *           properties:
- *             message:
- *               type: string
- *               description: Successful message
- *               examples: ["user list has been successfully retrieved"]
- *             users:
- *               type: array
- *               description: A list of users
- *               items:
- *                 $ref: "#/components/schemas/PublicUserData"
- *           required:
- *             - message
- *             - users
- *         - $ref: "#/components/schemas/PaginationData"
- *
+ *       name: filterDateColumn
+ *       description: Date column to filter with
+ *       in: query
+ *       schema:
+ *         type: string
+ *         enum: [createdOn]
  */
 
 /*******************************************
- * GET USERS ENDPOINT                       *
+ * RESPONSE                                *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   responses:
+ *     GetUsersResponse:
+ *       description: User list retrieved successfully
+ *       content:
+ *         application/json:
+ *           schema:
+ *             allOf:
+ *               - type: object
+ *                 description: Requested user list data
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     description: Successful message
+ *                     examples: ["user list has been successfully retrieved"]
+ *                   users:
+ *                     description: Paginated list of users
+ *                     type: array
+ *                     items:
+ *                       $ref: "#/components/schemas/PublicUserData"
+ *               - $ref: "#/components/schemas/PaginationData"
+ */
+
+/*******************************************
+ * GET USERS                               *
  *******************************************/
 /**
  * @openapi
@@ -57,36 +70,24 @@
  *     tags:
  *       - User
  *     parameters:
- *       - $ref: "#/components/schemas/PageParam"
- *       - $ref: "#/components/schemas/ItemsPerPageParam"
- *       - $ref: "#/components/schemas/GetUsersOrderColumnParam"
- *       - $ref: "#/components/schemas/OrderByValueParam"
- *       - $ref: "#/components/schemas/GetUsersFilterStringColumnParam"
- *       - $ref: "#/components/schemas/FilterStringValueParam"
- *       - $ref: "#/components/schemas/GetUsersFilterDateColumnParam"
- *       - $ref: "#/components/schemas/FilterDateValueParam"
- *       - $ref: "#/components/schemas/FilterDateOpParam"
+ *       - $ref: "#/components/parameters/PageParam"
+ *       - $ref: "#/components/parameters/ItemsPerPageParam"
+ *       - $ref: "#/components/parameters/GetUsersOrderColumnParam"
+ *       - $ref: "#/components/parameters/OrderByValueParam"
+ *       - $ref: "#/components/parameters/GetUsersFilterStringColumnParam"
+ *       - $ref: "#/components/parameters/FilterStringValueParam"
+ *       - $ref: "#/components/parameters/GetUsersFilterDateColumnParam"
+ *       - $ref: "#/components/parameters/FilterDateValueParam"
+ *       - $ref: "#/components/parameters/FilterDateOpParam"
  *     summary: Get User List
  *     description: Gets a pagintated list of users
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: User list successfully retrieved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/GetUsersResponse"
+ *         $ref: "#/components/responses/GetUsersResponse"
  *       401:
- *         description: Authentication Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/AuthenticationError"
+ *         $ref: "#/components/responses/AuthenticationError"
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/FatalError"
+ *         $ref: "#/components/responses/FatalError"
  */

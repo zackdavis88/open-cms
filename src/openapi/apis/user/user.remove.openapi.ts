@@ -1,46 +1,58 @@
 /*******************************************
- * COMPONENTS                              *
+ * REQUEST BODY                            *
  *******************************************/
 /**
  * @openapi
  * components:
- *   schemas:
- *     RemoveUserRequest:
- *       type: object
- *       properties:
- *         confirm:
- *           type: string
- *           description: Your account's displayName value
- *           examples: ["JohnDoe"]
- *       required:
- *         - confirm
- *     RemoveUserResponse:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *           description: Successful message
- *           examples: ["user has been successfully removed"]
- *         user:
- *           allOf:
- *             - $ref: "#/components/schemas/UserData"
- *               description: Removed user details
- *             - type: object
- *               properties:
- *                 deletedOn:
- *                   type: string
- *                   format: date-time
- *                   description: Timestamp of when the user was deleted
- *                   examples: ['2023-11-11T15:00:00.000Z']
- *               required:
- *                 - deletedOn
- *       required:
- *         - message
- *         - user
+ *   requestBodies:
+ *     RemoveUserBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               confirm:
+ *                 type: string
+ *                 description: Your account's displayName value
+ *                 examples: ["JohnDoe"]
+ *             required:
+ *                - confirm
  */
 
 /*******************************************
- * DELETE USER ENDPOINT                    *
+ * RESPONSE                                *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   responses:
+ *     RemoveUserResponse:
+ *       description: User successfully deleted
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: Deleted user's data
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: Successful message
+ *                 examples: ["user has been successfully removed"]
+ *               user:
+ *                 description: User that was deleted
+ *                 allOf:
+ *                   - $ref: "#/components/schemas/UserData"
+ *                   - type: object
+ *                     properties:
+ *                       deletedOn:
+ *                         type: string
+ *                         format: date-time
+ *                         examples: [2023-11-11T05:32:01.250Z]
+ */
+
+/*******************************************
+ * DELETE USER                             *
  *******************************************/
 /**
  * @openapi
@@ -53,33 +65,14 @@
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: "#/components/schemas/RemoveUserRequest"
+ *       $ref: "#/components/requestBodies/RemoveUserBody"
  *     responses:
  *       200:
- *         description: User password successfully updated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/RemoveUserResponse"
+ *         $ref: "#/components/responses/RemoveUserResponse"
  *       401:
- *         description: Authentication Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/AuthenticationError"
+ *         $ref: "#/components/responses/AuthenticationError"
  *       422:
- *         description: Validation Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/ValidationError"
+ *         $ref: "#/components/responses/ValidationError"
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: "#/components/schemas/FatalError"
+ *         $ref: "#/components/responses/FatalError"
  */
