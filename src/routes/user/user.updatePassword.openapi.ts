@@ -27,6 +27,7 @@
  *           description: Successful message
  *           examples: ["user password successfully updated"]
  *         user:
+ *           description: Updated user details
  *           $ref: "#/components/schemas/UserData"
  *       required:
  *         - message

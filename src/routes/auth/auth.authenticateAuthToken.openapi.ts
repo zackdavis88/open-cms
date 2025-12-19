@@ -13,6 +13,7 @@
  *           description: Successful message
  *           examples: ["user successfully authenticated"]
  *         user:
+ *           description: Authenticated user details
  *           $ref: "#/components/schemas/UserData"
  *       required:
  *         - message

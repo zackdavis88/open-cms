@@ -5,65 +5,63 @@
  * @openapi
  * components:
  *   schemas:
- *     RemoveUserRequest:
+ *     CreateProjectRequest:
  *       type: object
  *       properties:
- *         confirm:
+ *         name:
  *           type: string
- *           description: Your account's displayName value
- *           examples: ["JohnDoe"]
+ *           description: Name of the project
+ *           examples: ["MyFancyProject"]
+ *         description:
+ *           type: string
+ *           description: Description of the project
+ *           examples: ["Super fancy, Super cool"]
  *       required:
- *         - confirm
- *     RemoveUserResponse:
+ *         - name
+ *     CreateProjectResponse:
  *       type: object
  *       properties:
  *         message:
  *           type: string
  *           description: Successful message
- *           examples: ["user has been successfully removed"]
- *         user:
- *           allOf:
- *             - $ref: "#/components/schemas/UserData"
- *               description: Removed user details
- *             - type: object
- *               properties:
- *                 deletedOn:
- *                   type: string
- *                   format: date-time
- *                   description: Timestamp of when the user was deleted
- *                   examples: ['2023-11-11T15:00:00.000Z']
- *               required:
- *                 - deletedOn
+ *           examples: ["project has been successfully created"]
+ *         project:
+ *           description: Created project details
+ *           $ref: "#/components/schemas/ProjectData"
+ *         membership:
+ *           description: Admin membership details
+ *           $ref: "#/components/schemas/MembershipData"
  *       required:
  *         - message
- *         - user
+ *         - project
+ *         - membership
  */
 
 /*******************************************
- * DELETE USER ENDPOINT                    *
+ * CREATE PROJECT ENDPOINT                 *
  *******************************************/
 /**
  * @openapi
- * /api/users/me:
- *   delete:
+ * /api/projects:
+ *   post:
  *     tags:
- *       - User
- *     summary: Delete User
- *     description: Deletes a user
+ *       - Project
+ *     summary: Create Project
+ *     description: Creates a new project with provided name and description
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
- *             $ref: "#/components/schemas/RemoveUserRequest"
+ *             $ref: "#/components/schemas/CreateProjectRequest"
  *     responses:
  *       200:
- *         description: User password successfully updated
+ *         description: Project created successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/RemoveUserResponse"
+ *               $ref: "#/components/schemas/CreateProjectResponse"
  *       401:
  *         description: Authentication Error
  *         content:

@@ -25,8 +25,9 @@
  *         message:
  *           type: string
  *           description: Successful message
- *           examples: ["user created successfully"]
+ *           examples: ["user has been successfully created"]
  *         user:
+ *           description: Created user details
  *           $ref: "#/components/schemas/PublicUserData"
  *       required:
  *         - message

@@ -13,6 +13,7 @@
  *           description: Successful message
  *           examples: ["user has been successfully retrieved"]
  *         user:
+ *           description: Requested user details
  *           $ref: "#/components/schemas/PublicUserData"
  *       required:
  *         - message
