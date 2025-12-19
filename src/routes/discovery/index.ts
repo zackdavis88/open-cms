@@ -71,6 +71,85 @@ const options = {
           ],
           required: ['username', 'displayName', 'createdOn', 'updatedOn'],
         },
+        ProjectData: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              format: 'uuid',
+              description: 'Unique id of the project',
+              examples: ['80d9afe5-f979-428c-887a-fe3f8fa2f21f'],
+            },
+            name: {
+              type: 'string',
+              description: 'Name of the project',
+              examples: ['MyFancyProject'],
+            },
+            description: {
+              type: 'string',
+              description: 'Description of the project',
+              examples: ['A super fancy project'],
+            },
+            createdOn: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Timestamp of when the project was created',
+              examples: ['2023-11-10T16:30:00.000Z', null],
+            },
+            createdBy: {
+              $ref: '#/components/schemas/PublicUserData',
+            },
+          },
+        },
+        MembershipData: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'string',
+              format: 'uuid',
+              description: 'Unique id of the membership',
+              examples: ['091a3998-26e5-41de-87e7-b36afbe777a9'],
+            },
+            user: {
+              $ref: '#/components/schemas/PublicUserData',
+            },
+            project: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'string',
+                  format: 'uuid',
+                  description: 'Unique id of the project',
+                  examples: ['80d9afe5-f979-428c-887a-fe3f8fa2f21f'],
+                },
+                name: {
+                  type: 'string',
+                  description: 'Name of the project',
+                  examples: ['MyFancyProject'],
+                },
+              },
+            },
+            createdOn: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Timestamp of when the membership was created',
+              examples: ['2023-11-10T16:46:00.093Z', null],
+            },
+            createdBy: {
+              $ref: '#/components/schemas/PublicUserData',
+            },
+            isAdmin: {
+              type: 'boolean',
+              description: 'Admin level authorization for the project',
+              examples: [true],
+            },
+            isWriter: {
+              type: 'boolean',
+              description: 'Write level authorization for the project',
+              examples: [false],
+            },
+          },
+        },
         PageParam: {
           name: 'page',
           in: 'query',

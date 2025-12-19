@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Sequelize, Utils, UUIDV4 } from 'sequelize';
-import { User, initializeModels } from '../../src/models';
+import { Project, User, initializeModels } from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import jwt from 'jsonwebtoken';
@@ -24,6 +24,7 @@ interface TokenDataOverride {
 export class TestHelper {
   sequelize: Sequelize;
   testUsernames: string[];
+  testProjectIds: string[];
   request: TestAgent;
 
   constructor() {
@@ -33,6 +34,7 @@ export class TestHelper {
     });
     initializeModels(this.sequelize);
     this.testUsernames = [];
+    this.testProjectIds = [];
     this.request = request(`http://localhost:${SERVER_PORT}`);
   }
 
@@ -44,13 +46,22 @@ export class TestHelper {
     this.testUsernames = this.testUsernames.concat(testUsername);
   }
 
+  addTestProjectId(projectId: string) {
+    this.testProjectIds = this.testProjectIds.concat(projectId);
+  }
+
   async removeTestData() {
     if (this.testUsernames.length) {
       await User.destroy({ where: { username: this.testUsernames } });
     }
 
+    if (this.testProjectIds.length) {
+      await Project.destroy({ where: { id: this.testProjectIds } });
+    }
+
     await this.sequelize.close();
     this.testUsernames = [];
+    this.testProjectIds = [];
   }
 
   async createTestUser({
@@ -110,4 +121,4 @@ export { default as request } from 'supertest';
 export { ERROR_TYPES } from '../../src/server/utils/errors';
 export { User } from '../../src/models';
 export { swaggerSpec } from '../../src/routes/discovery';
-export { UserData } from '../../src/types';
+export { UserData, ProjectData, MembershipData } from '../../src/types';

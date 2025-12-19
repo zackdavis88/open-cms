@@ -65,10 +65,12 @@ export const initializeProject = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null,
       },
       apiKey: {
-        type: DataTypes.UUIDV4,
+        type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
       createdOn: {
