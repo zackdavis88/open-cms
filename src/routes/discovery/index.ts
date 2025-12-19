@@ -86,7 +86,7 @@ const options = {
               examples: ['MyFancyProject'],
             },
             description: {
-              type: 'string',
+              type: ['string', 'null'],
               description: 'Description of the project',
               examples: ['A super fancy project'],
             },
@@ -97,9 +97,11 @@ const options = {
               examples: ['2023-11-10T16:30:00.000Z', null],
             },
             createdBy: {
+              description: 'User details of the project creator',
               $ref: '#/components/schemas/PublicUserData',
             },
           },
+          required: ['id', 'name', 'createdOn', 'createdBy'],
         },
         MembershipData: {
           type: 'object',
@@ -111,10 +113,12 @@ const options = {
               examples: ['091a3998-26e5-41de-87e7-b36afbe777a9'],
             },
             user: {
+              description: 'User details of the membership',
               $ref: '#/components/schemas/PublicUserData',
             },
             project: {
               type: 'object',
+              description: 'Project details of the membership',
               properties: {
                 id: {
                   type: 'string',
@@ -128,6 +132,7 @@ const options = {
                   examples: ['MyFancyProject'],
                 },
               },
+              required: ['id', 'name'],
             },
             createdOn: {
               type: 'string',
@@ -136,6 +141,7 @@ const options = {
               examples: ['2023-11-10T16:46:00.093Z', null],
             },
             createdBy: {
+              description: 'User details of the membership creator',
               $ref: '#/components/schemas/PublicUserData',
             },
             isAdmin: {
@@ -149,6 +155,15 @@ const options = {
               examples: [false],
             },
           },
+          required: [
+            'id',
+            'user',
+            'project',
+            'createdOn',
+            'createdBy',
+            'isAdmin',
+            'isWriter',
+          ],
         },
         PageParam: {
           name: 'page',

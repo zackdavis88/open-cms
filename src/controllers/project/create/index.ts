@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { Project } from 'src/models';
 import createProjectValidation from './createProjectValidation';
 import { ProjectData, MembershipData } from 'src/types';
 import { getProjectData, getMembershipData } from 'src/controllers/utils';
@@ -17,10 +16,9 @@ const createProjectFlow = async (req: Request, res: Response) => {
       descriptionInput: req.body.description,
     });
 
-    const newProject = await Project.create({
+    const newProject = await user.createProject({
       name,
       description,
-      createdById: user.id,
     });
     newProject.createdBy = user;
 

@@ -10,6 +10,7 @@ import {
   HasManyGetAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasOneGetAssociationMixin,
+  HasManyCreateAssociationMixin,
 } from 'sequelize';
 import Project from 'src/models/project/project';
 import Membership from 'src/models/membership/membership';
@@ -32,6 +33,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare countUpdatedProjects: HasManyCountAssociationsMixin;
   declare getDeletedProjects: HasManyGetAssociationsMixin<Project>;
   declare countDeletedProjects: HasManyCountAssociationsMixin;
+  declare createProject: HasManyCreateAssociationMixin<Project>;
 
   // Project associations - HasOne
   declare getCreatedProject: HasOneGetAssociationMixin<Project>;

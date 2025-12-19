@@ -24,6 +24,7 @@ export const initializeModels = (sequelize: Sequelize) => {
 
   // Project -> User associations: createdBy
   User.hasMany(Project, { as: 'createdProjects', foreignKey: 'createdById' });
+  User.hasMany(Project, { as: 'projects', foreignKey: 'createdById' });
   User.hasOne(Project, { as: 'createdProject', foreignKey: 'createdById' });
   Project.belongsTo(User, { as: 'createdBy' });
 
