@@ -2,7 +2,7 @@ import { User } from 'src/models';
 import { ValidationError } from 'src/server/utils/errors';
 import { validatePassword } from '../utils';
 
-type ValidateUpdatePassword = ({
+type UpdatePasswordValidation = ({
   user,
   currentPasswordInput,
   newPasswordInput,
@@ -12,7 +12,7 @@ type ValidateUpdatePassword = ({
   newPasswordInput?: unknown;
 }) => { newPassword: string };
 
-const validateUpdatePassword: ValidateUpdatePassword = ({
+const updatePasswordValidation: UpdatePasswordValidation = ({
   user,
   currentPasswordInput,
   newPasswordInput,
@@ -39,4 +39,4 @@ const validateUpdatePassword: ValidateUpdatePassword = ({
   };
 };
 
-export default validateUpdatePassword;
+export default updatePasswordValidation;
