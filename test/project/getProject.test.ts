@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/users/:projectId';
+let apiRoute = '/api/projects/:projectId';
 const request = testHelper.request;
 
 describe('Get Project', () => {
