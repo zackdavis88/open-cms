@@ -382,6 +382,7 @@ describe('Get Projects', () => {
               createdOn: testUser.createdOn.toISOString(),
             },
             updatedOn: testProject.updatedOn?.toISOString() || null,
+            updatedBy: null,
           });
           done();
         });
@@ -415,6 +416,7 @@ describe('Get Projects', () => {
               createdOn: testUser.createdOn.toISOString(),
             },
             updatedOn: testProject.updatedOn?.toISOString() || null,
+            updatedBy: null,
           });
           done();
         });
@@ -448,6 +450,7 @@ describe('Get Projects', () => {
               createdOn: testUser.createdOn.toISOString(),
             },
             updatedOn: testProject.updatedOn?.toISOString() || null,
+            updatedBy: null,
           });
 
           done();
@@ -482,6 +485,7 @@ describe('Get Projects', () => {
               createdOn: testUser.createdOn.toISOString(),
             },
             updatedOn: testProject.updatedOn?.toISOString() || null,
+            updatedBy: null,
           });
 
           done();

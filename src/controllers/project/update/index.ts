@@ -27,6 +27,7 @@ const updateProjectFlow = async (req: Request, res: Response) => {
 
     project.updatedOn = new Date();
     project.updatedBy = user;
+    project.updatedById = user.id;
     await project.save();
 
     const responseBody: UpdateProjectResponseBody = {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import getProjectsValidation from './getProjectsValidation';
 import { Project, User } from 'src/models';
-import { getProjectData } from 'src/controllers/utils';
+import { getProjectData, getPublicUserData } from 'src/controllers/utils';
 import { ProjectData, PublicPaginationData } from 'src/types';
 
 type GetProjectsResponseBody = {
@@ -31,6 +31,10 @@ const getProjectsFlow = async (req: Request, res: Response) => {
       projects: projects.map((project) => ({
         ...getProjectData(project),
         updatedOn: project.updatedOn,
+        updatedBy:
+          project.updatedById &&
+          project.updatedBy &&
+          getPublicUserData(project.updatedBy),
       })),
       ...publicPaginationData,
     };
