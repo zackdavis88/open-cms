@@ -30,5 +30,12 @@ export interface MembershipData {
   isWriter: boolean;
 }
 
+export enum AuthorizationAction {
+  CREATE,
+  READ,
+  UPDATE,
+  DELETE,
+}
+
 export { type AllPaginationData } from 'src/controllers/utils/validatePagination';
 export { type PublicPaginationData } from 'src/controllers/utils/validatePagination';
