@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { fn, cast, col, Order } from 'sequelize';
+import { fn, col, Order, OrderItem } from 'sequelize';
 
 type ValidateOrder = ({
   query,
@@ -25,12 +25,19 @@ const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumn
     orderColumn = defaultOrderColumn;
   }
 
-  let orderBy = 'DESC';
+  let orderBy: 'ASC' | 'DESC' = 'DESC';
   if (typeof query.orderBy === 'string' && query.orderBy.toUpperCase() === 'ASC') {
     orderBy = 'ASC';
   }
 
-  const order = [[fn('LOWER', cast(col(orderColumn), 'text')), orderBy]] satisfies Order;
+  // TODO: This is not my favorite but it works for now. Its just flimsy because it makes assumptions
+  //       that all date-related column names end with 'On'. Its always true for now, but be wary.
+  let orderItem: OrderItem = [orderColumn, orderBy];
+  if (!orderColumn.endsWith('On')) {
+    orderItem = [fn('LOWER', col(orderColumn)), orderBy];
+  }
+
+  const order = [orderItem] satisfies Order;
 
   return order;
 };

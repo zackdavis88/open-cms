@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import validateUpdatePassword from './validateUpdatePassword';
+import updatePasswordValidation from './updatePasswordValidation';
 import { User } from 'src/models';
 import { UserData } from 'src/types';
 import { getPublicUserData } from 'src/controllers/utils';
@@ -19,7 +19,7 @@ const updatePasswordFlow = async (
 ) => {
   try {
     const { user } = req;
-    const { newPassword } = validateUpdatePassword({
+    const { newPassword } = updatePasswordValidation({
       user,
       newPasswordInput: req.body.newPassword,
       currentPasswordInput: req.body.currentPassword,

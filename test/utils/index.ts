@@ -93,6 +93,39 @@ export class TestHelper {
     return testUser;
   }
 
+  async createTestProject({
+    user,
+    name,
+    description,
+    isActive = true,
+    createdOn,
+    updatedOn,
+  }: {
+    user: User;
+    name?: string;
+    description?: string;
+    isActive?: boolean;
+    createdOn?: Date;
+    updatedOn?: Date;
+  }) {
+    const testProject = await user.createProject({
+      name: name || this.generateUUID(),
+      description: description || null,
+      isActive,
+      createdOn,
+      updatedOn,
+    });
+
+    await testProject.createMembership({
+      userId: user.id,
+      createdById: user.id,
+      isAdmin: true,
+    });
+
+    this.addTestProjectId(testProject.id);
+    return testProject;
+  }
+
   generateAuthToken(
     user: User,
     dataOverride?: TokenDataOverride | string,
@@ -119,6 +152,6 @@ export class TestHelper {
 
 export { default as request } from 'supertest';
 export { ERROR_TYPES } from '../../src/server/utils/errors';
-export { User } from '../../src/models';
+export { User, Project } from '../../src/models';
 export { swaggerSpec } from '../../src/openapi';
 export { UserData, ProjectData, MembershipData } from '../../src/types';

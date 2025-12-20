@@ -4,3 +4,4 @@ export { default as validateOrder } from './validateOrder';
 export { default as validateFilters } from './validateFilters';
 export { default as getProjectData } from './getProjectData';
 export { default as getMembershipData } from './getMembershipData';
+export { default as validateUUID } from './validateUUID';

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import validateRemoveUser from './validateRemoveUser';
+import removeUserValidation from './removeUserValidation';
 import { UserData } from 'src/types';
 import { getPublicUserData } from 'src/controllers/utils';
 
@@ -17,7 +17,7 @@ const RemoveUserFlow = async (
 ) => {
   try {
     const { user } = req;
-    validateRemoveUser({ user, confirm: req.body.confirm });
+    removeUserValidation({ user, confirm: req.body.confirm });
 
     user.isActive = false;
     user.deletedOn = new Date();

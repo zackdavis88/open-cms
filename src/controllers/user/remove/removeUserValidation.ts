@@ -1,9 +1,9 @@
 import { User } from 'src/models';
 import { ValidationError } from 'src/server/utils/errors';
 
-type ValidateRemoveUser = ({ user, confirm }: { user: User; confirm: unknown }) => void;
+type RemoveUserValidation = ({ user, confirm }: { user: User; confirm: unknown }) => void;
 
-const validateRemoveUser: ValidateRemoveUser = ({ user, confirm }) => {
+const removeUserValidation: RemoveUserValidation = ({ user, confirm }) => {
   if (confirm === null || confirm === undefined) {
     throw new ValidationError('confirm is missing from input');
   }
@@ -17,4 +17,4 @@ const validateRemoveUser: ValidateRemoveUser = ({ user, confirm }) => {
   }
 };
 
-export default validateRemoveUser;
+export default removeUserValidation;

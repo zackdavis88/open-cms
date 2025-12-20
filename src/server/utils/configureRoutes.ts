@@ -22,7 +22,14 @@ const configureRoutes = (app: Express) => {
   return Promise.all(routeFilePromises).then(() => {
     const documentationRouter = express.Router();
     documentationRouter.use('/docs', swaggerUi.serve);
-    documentationRouter.route('/docs').get(swaggerUi.setup(swaggerSpec));
+    documentationRouter.route('/docs').get(
+      swaggerUi.setup(swaggerSpec, {
+        swaggerOptions: {
+          // Set this option to true to persist authorization
+          persistAuthorization: true,
+        },
+      }),
+    );
     app.use(documentationRouter);
 
     const catchAllRouter = express.Router();
