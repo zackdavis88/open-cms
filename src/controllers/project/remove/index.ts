@@ -22,6 +22,7 @@ const RemoveProjectFlow = async (
     project.isActive = false;
     project.deletedOn = new Date();
     project.deletedBy = user;
+    project.deletedById = user.id;
     await project.save();
 
     const responseBody: RemoveProjectResponseBody = {
