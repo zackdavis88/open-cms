@@ -5,7 +5,7 @@ type AuthorizeProjectUpdate = (authUserMembership: Project['authUserMembership']
 
 const authorizeProjectUpdate: AuthorizeProjectUpdate = (authUserMembership) => {
   if (!authUserMembership || !authUserMembership.isAdmin) {
-    throw new AuthorizationError('you do not have permission to update this project');
+    throw new AuthorizationError('you do not have permissions to perform this action');
   }
 };
 

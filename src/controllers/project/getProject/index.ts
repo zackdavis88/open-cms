@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ProjectData } from 'src/types';
-import { getProjectData } from 'src/controllers/utils';
+import { getProjectData, getPublicUserData } from 'src/controllers/utils';
 import getProject from './getProject';
 import getProjectValidation from './getProjectValidation';
 
@@ -28,8 +28,16 @@ type GetProjectResponseBody = {
 
 const getProjectFlow = async (req: Request, res: Response) => {
   try {
+    const { project } = req;
     const responseBody: GetProjectResponseBody = {
-      project: getProjectData(req.project),
+      project: {
+        ...getProjectData(project),
+        updatedOn: project.updatedOn,
+        updatedBy:
+          project.updatedById &&
+          project.updatedBy &&
+          getPublicUserData(project.updatedBy),
+      },
     };
     return res.success('project has been successfully retrieved', responseBody);
   } catch (error) {

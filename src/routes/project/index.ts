@@ -13,7 +13,7 @@ const configureProjectRoutes = (router: Router) => {
     .route('/projects/:projectId')
     .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .get(ProjectController.getProject)
-    .post(
+    .patch(
       AuthController.authorizeProjectAction(AuthorizationAction.UPDATE),
       ProjectController.update,
     )

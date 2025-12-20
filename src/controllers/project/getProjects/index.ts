@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import getProjectsValidation from './getProjectsValidation';
-import { Project } from 'src/models';
+import { Project, User } from 'src/models';
 import { getProjectData } from 'src/controllers/utils';
 import { ProjectData, PublicPaginationData } from 'src/types';
 
@@ -21,15 +21,23 @@ const getProjectsFlow = async (req: Request, res: Response) => {
       limit: publicPaginationData.itemsPerPage,
       offset: pageOffset,
       order,
+      include: [
+        { model: User.scope('publicAttributes'), as: 'createdBy', required: false },
+        { model: User.scope('publicAttributes'), as: 'updatedBy', required: false },
+      ],
     });
 
     const responseBody: GetProjectsResponseBody = {
-      projects: projects.map((project) => getProjectData(project)),
+      projects: projects.map((project) => ({
+        ...getProjectData(project),
+        updatedOn: project.updatedOn,
+      })),
       ...publicPaginationData,
     };
 
     return res.success('project list has been successfully retrieved', responseBody);
   } catch (error) {
+    console.log(error);
     return res.sendError(error);
   }
 };

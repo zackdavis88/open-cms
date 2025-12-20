@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import removeProjectValidation from './removeProjectValidation';
 import { ProjectData } from 'src/types';
-import { getProjectData } from 'src/controllers/utils';
+import { getProjectData, getPublicUserData } from 'src/controllers/utils';
 
 interface RemoveProjectRequestBody {
   confirm?: unknown;
@@ -25,7 +25,17 @@ const RemoveProjectFlow = async (
     await project.save();
 
     const responseBody: RemoveProjectResponseBody = {
-      project: getProjectData(project),
+      project: {
+        ...getProjectData(project),
+        updatedOn: project.updatedOn || null,
+        updatedBy:
+          (project.updatedById &&
+            project.updatedBy &&
+            getPublicUserData(project.updatedBy)) ||
+          null,
+        deletedOn: project.deletedOn,
+        deletedBy: getPublicUserData(user),
+      },
     };
     return res.success('project has been successfully removed', responseBody);
   } catch (error) {

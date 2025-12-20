@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import updateProjectValidation from './updateProjectValidation';
 import { ProjectData } from 'src/types';
-import { getProjectData } from 'src/controllers/utils';
+import { getProjectData, getPublicUserData } from 'src/controllers/utils';
 
 type UpdateProjectResponseBody = {
   project: ProjectData;
@@ -30,7 +30,11 @@ const updateProjectFlow = async (req: Request, res: Response) => {
     await project.save();
 
     const responseBody: UpdateProjectResponseBody = {
-      project: getProjectData(project),
+      project: {
+        ...getProjectData(project),
+        updatedOn: project.updatedOn,
+        updatedBy: getPublicUserData(user),
+      },
     };
     return res.success('project has been successfully updated', responseBody);
   } catch (error) {

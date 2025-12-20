@@ -19,7 +19,7 @@ const validateRemoveProject: RemoveProjectValidation = ({ project, confirm }) =>
   }
 
   if (project.name !== confirm) {
-    throw new ValidationError(`confirm must match your name: ${project.name}`);
+    throw new ValidationError(`confirm must match the project name: ${project.name}`);
   }
 };
 

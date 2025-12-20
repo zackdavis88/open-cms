@@ -7,7 +7,8 @@ const getProjectData = (project: Project) => {
     name: project.name,
     description: project.description,
     createdOn: project.createdOn,
-    createdBy: project.createdBy && getPublicUserData(project.createdBy),
+    createdBy:
+      project.createdById && project.createdBy && getPublicUserData(project.createdBy),
   };
 };
 

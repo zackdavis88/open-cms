@@ -20,7 +20,6 @@ describe('Get Users', () => {
       await testHelper.createTestUser();
       await testHelper.createTestUser();
       testUser = await testHelper.createTestUser({
-        username: 'TestUser',
         createdOn: createdOnTimestamp,
       });
       authToken = testHelper.generateAuthToken(testUser);
@@ -176,7 +175,9 @@ describe('Get Users', () => {
 
     it('should allow filtering by username', (done) => {
       request
-        .get(`${apiRoute}?filterStringColumn=username&filterStringValue=test%`)
+        .get(
+          `${apiRoute}?filterStringColumn=username&filterStringValue=${testUser.username}`,
+        )
         .set('authorization', authToken)
         .expect(200)
         .end((err, res) => {
@@ -189,10 +190,11 @@ describe('Get Users', () => {
             return done('users data is not an array');
           }
           expect(users.length).toBe(1);
-          const { username, displayName, createdOn } = users[0];
-          expect(username).toBe('testuser');
-          expect(displayName).toBe('TestUser');
-          expect(createdOn).toBe(testUser.createdOn.toISOString());
+          expect(users[0]).toEqual({
+            username: testUser.username,
+            displayName: testUser.displayName,
+            createdOn: testUser.createdOn.toISOString(),
+          });
 
           done();
         });
@@ -215,10 +217,11 @@ describe('Get Users', () => {
             return done('users data is not an array');
           }
           expect(users.length).toBe(1);
-          const { username, displayName, createdOn } = users[0];
-          expect(username).toBe('testuser');
-          expect(displayName).toBe('TestUser');
-          expect(createdOn).toBe(testUser.createdOn.toISOString());
+          expect(users[0]).toEqual({
+            username: testUser.username,
+            displayName: testUser.displayName,
+            createdOn: testUser.createdOn.toISOString(),
+          });
 
           done();
         });
