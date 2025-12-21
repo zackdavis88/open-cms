@@ -34,7 +34,6 @@ const sendError = (res: Response) => (error: unknown) => {
 
   const isKnownError =
     isValidationError || isNotFoundError || isAuthenticationError || isAuthorizationError;
-
   if (!res.headersSent) {
     if (isKnownError) {
       res.statusCode = error.statusCode;
@@ -43,6 +42,9 @@ const sendError = (res: Response) => (error: unknown) => {
         errorType: error.errorType,
       });
     } else {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(error);
+      }
       res.statusCode = 500;
       return res.json({
         error: 'an unknown error has occurred',

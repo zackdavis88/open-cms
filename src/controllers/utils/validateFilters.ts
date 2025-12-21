@@ -154,7 +154,7 @@ type ValidateFilters = ({
     stringColumns?: string[];
     dateColumns?: string[];
   };
-}) => void | WhereOptions;
+}) => { filterStrings: WhereOptions | void; filterDates: WhereOptions | void } | void;
 
 const validateFilters: ValidateFilters = ({
   query,
@@ -167,7 +167,7 @@ const validateFilters: ValidateFilters = ({
     return;
   }
 
-  return { ...filterStrings, ...filterDates };
+  return { filterStrings, filterDates };
 };
 
 export default validateFilters;

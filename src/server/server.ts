@@ -12,6 +12,7 @@ import cors from 'cors';
 const SERVER_PORT = process.env.SERVER_PORT || 3000;
 const app = express();
 
+app.set('query parser', 'extended');
 app.use(
   express.urlencoded({
     extended: true,
