@@ -41,7 +41,6 @@ const getProjectsFlow = async (req: Request, res: Response) => {
 
     return res.success('project list has been successfully retrieved', responseBody);
   } catch (error) {
-    console.log(error);
     return res.sendError(error);
   }
 };

@@ -6,8 +6,9 @@ const authorizeProjectActionFlow = (action: AuthorizationAction) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       if (
-        action === AuthorizationAction.UPDATE ||
-        action === AuthorizationAction.DELETE
+        action === AuthorizationAction.UPDATE || // update a project or membership
+        action === AuthorizationAction.DELETE || // delete a project or membership
+        action === AuthorizationAction.CREATE // create a project membership
       ) {
         authorizeProjectAdmin(req.project.authUserMembership);
         return next();

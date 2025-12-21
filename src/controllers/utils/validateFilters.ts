@@ -151,8 +151,8 @@ type ValidateFilters = ({
 }: {
   query: Request['query'];
   allowedColumns: {
-    stringColumns: string[];
-    dateColumns: string[];
+    stringColumns?: string[];
+    dateColumns?: string[];
   };
 }) => void | WhereOptions;
 
@@ -160,8 +160,8 @@ const validateFilters: ValidateFilters = ({
   query,
   allowedColumns: { stringColumns, dateColumns },
 }) => {
-  const filterStrings = validateStringFilters({ query, stringColumns });
-  const filterDates = validateDateFilters({ query, dateColumns });
+  const filterStrings = stringColumns && validateStringFilters({ query, stringColumns });
+  const filterDates = dateColumns && validateDateFilters({ query, dateColumns });
 
   if (!filterStrings && !filterDates) {
     return;
