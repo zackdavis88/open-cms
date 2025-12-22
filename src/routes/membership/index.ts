@@ -10,7 +10,11 @@ const configureMembershipRoutes = (router: Router) => {
       AuthController.authorizeProjectAction(AuthorizationAction.CREATE),
       MembershipController.create,
     );
-  //   .get(MembershipController.getMemberships);
+
+  router
+    .route('/projects/:projectId/memberships')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(MembershipController.getMemberships);
 
   // router
   //   .route('/projects/:projectId/memberships/:membershipId')

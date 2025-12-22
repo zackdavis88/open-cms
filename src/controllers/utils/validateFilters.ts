@@ -1,6 +1,8 @@
 import { Request } from 'express';
 import { Op, WhereOptions } from 'sequelize';
 
+const isAssociationColumn = (columnName: string) => columnName.startsWith('__');
+const isNotAssociationColumn = (columnName: string) => !columnName.startsWith('__');
 const isString = (value: unknown) => typeof value === 'string';
 const isArray = (value: unknown) => Array.isArray(value);
 const isDate = (value: string) => !isNaN(new Date(value).getTime());
@@ -154,20 +156,53 @@ type ValidateFilters = ({
     stringColumns?: string[];
     dateColumns?: string[];
   };
-}) => { filterStrings: WhereOptions | void; filterDates: WhereOptions | void } | void;
+}) => {
+  filterStrings: WhereOptions | void;
+  filterDates: WhereOptions | void;
+  filterAssociations: Record<string, WhereOptions>;
+} | void;
 
 const validateFilters: ValidateFilters = ({
   query,
   allowedColumns: { stringColumns, dateColumns },
 }) => {
-  const filterStrings = stringColumns && validateStringFilters({ query, stringColumns });
-  const filterDates = dateColumns && validateDateFilters({ query, dateColumns });
+  const stringAssociationColumns =
+    stringColumns && stringColumns.filter(isAssociationColumn);
+  const dateAssociationColumns = dateColumns && dateColumns.filter(isAssociationColumn);
 
-  if (!filterStrings && !filterDates) {
+  const filterStrings =
+    stringColumns &&
+    validateStringFilters({
+      query,
+      stringColumns: stringColumns.filter(isNotAssociationColumn),
+    });
+  const filterAssociationStrings =
+    stringAssociationColumns &&
+    validateStringFilters({ query, stringColumns: stringAssociationColumns });
+  const filterDates =
+    dateColumns &&
+    validateDateFilters({
+      query,
+      dateColumns: dateColumns.filter(isNotAssociationColumn),
+    });
+  const filterAssociationDates =
+    dateAssociationColumns &&
+    validateDateFilters({ query, dateColumns: dateAssociationColumns });
+
+  if (
+    !filterStrings &&
+    !filterDates &&
+    !filterAssociationStrings &&
+    !filterAssociationDates
+  ) {
     return;
   }
 
-  return { filterStrings, filterDates };
+  return {
+    filterStrings,
+    filterDates,
+    filterAssociations: { ...filterAssociationStrings, ...filterAssociationDates },
+  };
 };
 
 export default validateFilters;
