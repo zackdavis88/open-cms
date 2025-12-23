@@ -7,7 +7,7 @@ import {
   MembershipData,
 } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/memberships/';
+let apiRoute = '/api/projects/:projectId/memberships';
 const request = testHelper.request;
 
 describe('Get Memberships', () => {
