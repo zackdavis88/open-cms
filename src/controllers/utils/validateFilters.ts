@@ -6,6 +6,8 @@ const isNotAssociationColumn = (columnName: string) => !columnName.startsWith('_
 const isString = (value: unknown) => typeof value === 'string';
 const isArray = (value: unknown) => Array.isArray(value);
 const isDate = (value: string) => !isNaN(new Date(value).getTime());
+const isBooleanStringValue = (value: string) =>
+  value.toLowerCase() === 'true' || value.toLowerCase() === 'false';
 const getDateOp = (value: string) => {
   switch (value.toLowerCase()) {
     case 'eq':
@@ -20,6 +22,67 @@ const getDateOp = (value: string) => {
       return Op.lte;
     default:
       return undefined;
+  }
+};
+
+type ValidateBooleanFilters = ({
+  query,
+  booleanColumns,
+}: {
+  query: Request['query'];
+  booleanColumns: string[];
+}) => void | WhereOptions;
+
+const validateBooleanFilters: ValidateBooleanFilters = ({
+  query,
+  booleanColumns,
+}: {
+  query: Request['query'];
+  booleanColumns: string[];
+}) => {
+  const { filterBooleanColumn, filterBooleanValue } = query;
+  const lowerCasedColumnNames = booleanColumns.map((columnName) =>
+    columnName.toLowerCase(),
+  );
+
+  if (isString(filterBooleanColumn) && isString(filterBooleanValue)) {
+    const filterBooleanColumnIndex = lowerCasedColumnNames.indexOf(
+      filterBooleanColumn.toLowerCase(),
+    );
+    const filterBooleanColumnIsValid = filterBooleanColumnIndex !== -1;
+    if (filterBooleanColumnIsValid && isBooleanStringValue(filterBooleanValue)) {
+      return {
+        [booleanColumns[filterBooleanColumnIndex]]:
+          filterBooleanValue.toLowerCase() === 'true',
+      };
+    }
+  } else if (isArray(filterBooleanColumn) && isArray(filterBooleanValue)) {
+    return filterBooleanColumn.reduce<WhereOptions>(
+      (prev, filterBooleanColumnName, index) => {
+        if (isString(filterBooleanColumnName)) {
+          const filterBooleanColumnIndex = lowerCasedColumnNames.indexOf(
+            filterBooleanColumnName.toLowerCase(),
+          );
+          const filterBooleanColumnIsValid = filterBooleanColumnIndex !== -1;
+          const filterBooleanValueFromArray = filterBooleanValue[index];
+          if (
+            filterBooleanColumnIsValid &&
+            filterBooleanValueFromArray &&
+            isString(filterBooleanValueFromArray) &&
+            isBooleanStringValue(filterBooleanValueFromArray)
+          ) {
+            return {
+              ...prev,
+              [booleanColumns[filterBooleanColumnIndex]]:
+                filterBooleanValueFromArray.toLowerCase() === 'true',
+            };
+          }
+        }
+
+        return prev;
+      },
+      {},
+    );
   }
 };
 
@@ -155,20 +218,24 @@ type ValidateFilters = ({
   allowedColumns: {
     stringColumns?: string[];
     dateColumns?: string[];
+    booleanColumns?: string[];
   };
 }) => {
   filterStrings: WhereOptions | void;
   filterDates: WhereOptions | void;
+  filterBooleans: WhereOptions | void;
   filterAssociations: Record<string, WhereOptions>;
 } | void;
 
 const validateFilters: ValidateFilters = ({
   query,
-  allowedColumns: { stringColumns, dateColumns },
+  allowedColumns: { stringColumns, dateColumns, booleanColumns },
 }) => {
   const stringAssociationColumns =
     stringColumns && stringColumns.filter(isAssociationColumn);
   const dateAssociationColumns = dateColumns && dateColumns.filter(isAssociationColumn);
+  const booleanAssociationColumns =
+    booleanColumns && booleanColumns.filter(isAssociationColumn);
 
   const filterStrings =
     stringColumns &&
@@ -189,11 +256,27 @@ const validateFilters: ValidateFilters = ({
     dateAssociationColumns &&
     validateDateFilters({ query, dateColumns: dateAssociationColumns });
 
+  const filterBooleans =
+    booleanColumns &&
+    validateBooleanFilters({
+      query,
+      booleanColumns: booleanColumns.filter(isNotAssociationColumn),
+    });
+
+  const filterAssociationBooleans =
+    booleanAssociationColumns &&
+    validateBooleanFilters({
+      query,
+      booleanColumns: booleanAssociationColumns,
+    });
+
   if (
     !filterStrings &&
     !filterDates &&
     !filterAssociationStrings &&
-    !filterAssociationDates
+    !filterAssociationDates &&
+    !filterBooleans &&
+    !filterAssociationBooleans
   ) {
     return;
   }
@@ -201,6 +284,7 @@ const validateFilters: ValidateFilters = ({
   return {
     filterStrings,
     filterDates,
+    filterBooleans,
     filterAssociations: { ...filterAssociationStrings, ...filterAssociationDates },
   };
 };

@@ -27,6 +27,7 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
     allowedColumns: {
       stringColumns: ['__user_username', '__createdBy_username', '__updatedBy_username'],
       dateColumns: ['createdOn', 'updatedOn'],
+      booleanColumns: ['isAdmin', 'isWriter'],
     },
   });
 
@@ -70,6 +71,7 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
       ...dbQuery.where,
       ...filters.filterStrings,
       ...filters.filterDates,
+      ...filters.filterBooleans,
     };
   }
 
@@ -84,6 +86,8 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
       '__user_username',
       '__createdBy_username',
       '__updatedBy_username',
+      'isAdmin',
+      'isWriter',
     ],
   });
 

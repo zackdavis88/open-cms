@@ -36,7 +36,7 @@ const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumn
   if (orderColumn.startsWith('__')) {
     const [associationName, columnName] = orderColumn.replace('__', '').split('_');
     orderItem = [associationName, columnName, orderBy];
-  } else if (!orderColumn.endsWith('On')) {
+  } else if (!orderColumn.startsWith('is') && !orderColumn.endsWith('On')) {
     orderItem = [fn('LOWER', col(orderColumn)), orderBy];
   }
 
