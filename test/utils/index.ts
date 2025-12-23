@@ -93,6 +93,38 @@ export class TestHelper {
     return testUser;
   }
 
+  async createTestMembership({
+    project,
+    user,
+    createdBy,
+    updatedBy,
+    updatedOn,
+    isAdmin,
+    isWriter,
+  }: {
+    project: Project;
+    user: User;
+    createdBy: User;
+    updatedBy?: User;
+    updatedOn?: Date;
+    isAdmin?: boolean;
+    isWriter?: boolean;
+  }) {
+    const membership = await project.createMembership({
+      userId: user.id,
+      createdById: createdBy.id,
+      updatedById: updatedBy?.id,
+      updatedOn: updatedOn || updatedBy?.id ? new Date() : null,
+      isAdmin: isAdmin || false,
+      isWriter: isWriter || false,
+    });
+    membership.user = user;
+    membership.createdBy = createdBy;
+    membership.updatedBy = updatedBy;
+    membership.project = project;
+    return membership;
+  }
+
   async createTestProject({
     user,
     name,
@@ -152,6 +184,6 @@ export class TestHelper {
 
 export { default as request } from 'supertest';
 export { ERROR_TYPES } from '../../src/server/utils/errors';
-export { User, Project } from '../../src/models';
+export { User, Project, Membership } from '../../src/models';
 export { swaggerSpec } from '../../src/openapi';
 export { UserData, ProjectData, MembershipData } from '../../src/types';
