@@ -33,7 +33,10 @@ const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumn
   // TODO: This is not my favorite but it works for now. Its just flimsy because it makes assumptions
   //       that all date-related column names end with 'On'. Its always true for now, but be wary.
   let orderItem: OrderItem = [orderColumn, orderBy];
-  if (!orderColumn.endsWith('On')) {
+  if (orderColumn.startsWith('__')) {
+    const [associationName, columnName] = orderColumn.replace('__', '').split('_');
+    orderItem = [associationName, columnName, orderBy];
+  } else if (!orderColumn.endsWith('On')) {
     orderItem = [fn('LOWER', col(orderColumn)), orderBy];
   }
 

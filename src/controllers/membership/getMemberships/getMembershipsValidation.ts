@@ -78,7 +78,13 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
   const order = validateOrder({
     query,
     defaultOrderColumn: 'createdOn',
-    allowedColumns: ['createdOn', 'updatedOn'],
+    allowedColumns: [
+      'createdOn',
+      'updatedOn',
+      '__user_username',
+      '__createdBy_username',
+      '__updatedBy_username',
+    ],
   });
 
   return { ...paginationData, order, dbQuery };
