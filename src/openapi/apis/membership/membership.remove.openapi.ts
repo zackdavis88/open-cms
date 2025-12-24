@@ -1,24 +1,44 @@
 /*******************************************
+ * REQUEST BODY                            *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   requestBodies:
+ *     RemoveMembershipBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               confirm:
+ *                 type: string
+ *                 description: displayName of the membership's user
+ *                 examples: ["JohnDoe"]
+ */
+
+/*******************************************
  * RESPONSE                                *
  *******************************************/
 /**
  * @openapi
  * components:
  *   responses:
- *     GetMembershipResponse:
- *       description: Membership retrieved successfully
+ *     RemoveMembershipResponse:
+ *       description: Membership successfully deleted
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             description: Requested membership data
+ *             description: Deleted membership data
  *             properties:
  *               message:
  *                 type: string
  *                 description: Successful message
- *                 examples: ["membership has been successfully retrieved"]
+ *                 examples: ["membership has been successfully removed"]
  *               membership:
- *                 description: Requested membership details
+ *                 description: Deleted membership details
  *                 allOf:
  *                   - $ref: "#/components/schemas/MembershipData"
  *                   - type: object
@@ -42,26 +62,30 @@
  */
 
 /*******************************************
- * GET MEMBERSHIP                          *
+ * REMOVE MEMBERSHIP                       *
  *******************************************/
 /**
  * @openapi
  * /api/projects/{projectId}/memberships/{membershipId}:
- *   get:
+ *   delete:
  *     tags:
  *       - Membership
- *     summary: Get Membership Details
- *     description: Gets membership data based on the unique id of the membership
+ *     summary: Delete Membership
+ *     description: Deletes a memberships for a project
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ProjectIdParam"
  *       - $ref: "#/components/parameters/MembershipIdParam"
+ *     requestBody:
+ *       $ref: "#/components/requestBodies/RemoveMembershipBody"
  *     responses:
  *       200:
- *         $ref: "#/components/responses/GetMembershipResponse"
+ *         $ref: "#/components/responses/RemoveMembershipResponse"
  *       401:
  *         $ref: "#/components/responses/AuthenticationError"
+ *       403:
+ *         $ref: "#/components/responses/AuthorizationError"
  *       404:
  *         $ref: "#/components/responses/NotFoundError"
  *       422:

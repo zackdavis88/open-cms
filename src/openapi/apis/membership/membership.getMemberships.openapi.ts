@@ -64,6 +64,10 @@
  *             allOf:
  *               - type: object
  *                 description: Requested membership list data
+ *                 required:
+ *                   - message
+ *                   - project
+ *                   - memberships
  *                 properties:
  *                   message:
  *                     type: string

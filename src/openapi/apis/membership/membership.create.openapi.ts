@@ -42,7 +42,14 @@
  *                 examples: ["membership has been successfully created"]
  *               membership:
  *                 description: Created membership details
- *                 $ref: "#/components/schemas/MembershipData"
+ *                 allOf:
+ *                   - $ref: "#/components/schemas/MembershipData"
+ *                   - type: object
+ *                     properties:
+ *                       project:
+ *                         $ref: "#/components/schemas/MinimalProjectData"
+ *                     required:
+ *                       - project
  *             required:
  *               - message
  *               - membership

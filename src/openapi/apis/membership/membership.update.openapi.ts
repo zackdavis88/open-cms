@@ -1,39 +1,65 @@
 /*******************************************
+ * REQUEST BODY                            *
+ *******************************************/
+/**
+ * @openapi
+ * components:
+ *   requestBodies:
+ *     UpdateMembershipBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               isAdmin:
+ *                 type: boolean
+ *                 description: Admin privileges
+ *                 examples: [false, true]
+ *               isWriter:
+ *                 type: boolean
+ *                 description: Writer privileges
+ *                 examples: [true, false]
+ */
+
+/*******************************************
  * RESPONSE                                *
  *******************************************/
 /**
  * @openapi
  * components:
  *   responses:
- *     GetMembershipResponse:
- *       description: Membership retrieved successfully
+ *     UpdateMembershipResponse:
+ *       description: Membership successfully updated
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             description: Requested membership data
+ *             description: Updated membership data
  *             properties:
  *               message:
  *                 type: string
  *                 description: Successful message
- *                 examples: ["membership has been successfully retrieved"]
+ *                 examples: ["membership has been successfully updated"]
  *               membership:
- *                 description: Requested membership details
+ *                 description: Updated membership details
  *                 allOf:
  *                   - $ref: "#/components/schemas/MembershipData"
  *                   - type: object
  *                     required:
  *                       - project
+ *                       - updatedOn
+ *                       - updatedBy
  *                     properties:
  *                       project:
  *                         $ref: "#/components/schemas/MinimalProjectData"
  *                       updatedOn:
- *                         type: ["string", "null"]
+ *                         type: ["string"]
  *                         format: date-time
  *                         description: Timestamp of when the membership was updated
- *                         examples: ["2025-12-27T15:54:47.862Z", null]
+ *                         examples: ["2025-12-27T15:54:47.862Z"]
  *                       updatedBy:
- *                         type: ["object", "null"]
+ *                         type: ["object"]
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User details of the last update
  *             required:
@@ -42,26 +68,30 @@
  */
 
 /*******************************************
- * GET MEMBERSHIP                          *
+ * UPDATE MEMBERSHIP                       *
  *******************************************/
 /**
  * @openapi
  * /api/projects/{projectId}/memberships/{membershipId}:
- *   get:
+ *   patch:
  *     tags:
  *       - Membership
- *     summary: Get Membership Details
- *     description: Gets membership data based on the unique id of the membership
+ *     summary: Update Membership Details
+ *     description: Updates user privileges for a project
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ProjectIdParam"
  *       - $ref: "#/components/parameters/MembershipIdParam"
+ *     requestBody:
+ *       $ref: "#/components/requestBodies/UpdateMembershipBody"
  *     responses:
  *       200:
- *         $ref: "#/components/responses/GetMembershipResponse"
+ *         $ref: "#/components/responses/UpdateMembershipResponse"
  *       401:
  *         $ref: "#/components/responses/AuthenticationError"
+ *       403:
+ *         $ref: "#/components/responses/AuthorizationError"
  *       404:
  *         $ref: "#/components/responses/NotFoundError"
  *       422:
