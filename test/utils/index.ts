@@ -96,6 +96,7 @@ export class TestHelper {
   async createTestMembership({
     project,
     user,
+    createdOn,
     createdBy,
     updatedBy,
     updatedOn,
@@ -104,6 +105,7 @@ export class TestHelper {
   }: {
     project: Project;
     user: User;
+    createdOn?: Date;
     createdBy: User;
     updatedBy?: User;
     updatedOn?: Date;
@@ -114,6 +116,7 @@ export class TestHelper {
       userId: user.id,
       createdById: createdBy.id,
       updatedById: updatedBy?.id,
+      createdOn,
       updatedOn: updatedOn || updatedBy?.id ? new Date() : null,
       isAdmin: isAdmin || false,
       isWriter: isWriter || false,

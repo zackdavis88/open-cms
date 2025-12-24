@@ -40,12 +40,14 @@ describe('Get Memberships', () => {
       });
       const adminMember1 = await testHelper.createTestUser();
       testProject = await testHelper.createTestProject({ user: adminMember1 });
+      const now = Date.now();
       const adminMember2 = await testHelper.createTestUser();
       await testHelper.createTestMembership({
         user: adminMember2,
         isAdmin: true,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now),
       });
       const adminMember3 = await testHelper.createTestUser();
       await testHelper.createTestMembership({
@@ -53,6 +55,7 @@ describe('Get Memberships', () => {
         isAdmin: true,
         createdBy: adminMember2,
         project: testProject,
+        createdOn: new Date(now + 1),
       });
 
       const writeMember1 = await testHelper.createTestUser();
@@ -64,40 +67,33 @@ describe('Get Memberships', () => {
       const writeMember7 = await testHelper.createTestUser();
       const writeMember8 = await testHelper.createTestUser();
       const writeMember9 = await testHelper.createTestUser();
-      const writeMember10 = await testHelper.createTestUser({
-        username: 'writeMember10',
-      });
-      const writeMember11 = await testHelper.createTestUser({
-        username: 'writeMember11',
-      });
-      const writeMember12 = await testHelper.createTestUser({
-        username: 'writeMember12',
-      });
-      const writeMember13 = await testHelper.createTestUser({
-        username: 'writeMember13',
-      });
-      const writeMember14 = await testHelper.createTestUser({
-        username: 'writeMember14',
-      });
-      const readMember1 = await testHelper.createTestUser({ username: 'readMember1' });
-      const readMember2 = await testHelper.createTestUser({ username: 'readeMember2' });
+      const writeMember10 = await testHelper.createTestUser();
+      const writeMember11 = await testHelper.createTestUser();
+      const writeMember12 = await testHelper.createTestUser();
+      const writeMember13 = await testHelper.createTestUser();
+      const writeMember14 = await testHelper.createTestUser();
+      const readMember1 = await testHelper.createTestUser();
+      const readMember2 = await testHelper.createTestUser();
       writeMembership1 = await testHelper.createTestMembership({
         user: writeMember1,
         isWriter: true,
         createdBy: adminMember3,
         project: testProject,
+        createdOn: new Date(now + 2),
       });
       writeMembership2 = await testHelper.createTestMembership({
         user: writeMember2,
         isWriter: true,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 3),
       });
       writeMembership3 = await testHelper.createTestMembership({
         user: writeMember3,
         isWriter: true,
         createdBy: adminMember3,
         project: testProject,
+        createdOn: new Date(now + 4),
         updatedBy: adminMember2,
       });
       await testHelper.createTestMembership({
@@ -105,18 +101,21 @@ describe('Get Memberships', () => {
         isWriter: true,
         createdBy: adminMember3,
         project: testProject,
+        createdOn: new Date(now + 5),
       });
       await testHelper.createTestMembership({
         user: writeMember5,
         isWriter: true,
         createdBy: adminMember2,
         project: testProject,
+        createdOn: new Date(now + 6),
       });
       writeMembership6 = await testHelper.createTestMembership({
         user: writeMember6,
         isWriter: true,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 7),
         updatedBy: adminMember3,
       });
       writeMembership7 = await testHelper.createTestMembership({
@@ -124,18 +123,21 @@ describe('Get Memberships', () => {
         isWriter: true,
         createdBy: adminMember2,
         project: testProject,
+        createdOn: new Date(now + 8),
       });
       writeMembership8 = await testHelper.createTestMembership({
         user: writeMember8,
         isWriter: true,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 9),
       });
       writeMembership9 = await testHelper.createTestMembership({
         user: writeMember9,
         isWriter: true,
         createdBy: adminMember3,
         project: testProject,
+        createdOn: new Date(now + 10),
         updatedBy: adminMember3,
       });
       writeMembership10 = await testHelper.createTestMembership({
@@ -143,24 +145,28 @@ describe('Get Memberships', () => {
         isWriter: true,
         createdBy: adminMember2,
         project: testProject,
+        createdOn: new Date(now + 11),
       });
       writeMembership11 = await testHelper.createTestMembership({
         user: writeMember11,
         isWriter: true,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 12),
       });
       writeMembership12 = await testHelper.createTestMembership({
         user: writeMember12,
         isWriter: true,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 13),
       });
       writeMembership13 = await testHelper.createTestMembership({
         user: writeMember13,
         isWriter: true,
         createdBy: adminMember3,
         project: testProject,
+        createdOn: new Date(now + 14),
         updatedBy: adminMember2,
       });
       writeMembership14 = await testHelper.createTestMembership({
@@ -168,16 +174,19 @@ describe('Get Memberships', () => {
         isWriter: true,
         createdBy: adminMember2,
         project: testProject,
+        createdOn: new Date(now + 15),
       });
       readMembership1 = await testHelper.createTestMembership({
         user: readMember1,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 16),
       });
       readMembership2 = await testHelper.createTestMembership({
         user: readMember2,
         createdBy: adminMember1,
         project: testProject,
+        createdOn: new Date(now + 17),
       });
     });
 

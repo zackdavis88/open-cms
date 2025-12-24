@@ -60,7 +60,7 @@ describe('Remove User', () => {
     });
 
     it('should reject requests when confirm does not match displayName', (done) => {
-      payload.confirm = testUser.username;
+      payload.confirm = 'notCorrect';
       request
         .delete(apiRoute)
         .set('authorization', authToken)
