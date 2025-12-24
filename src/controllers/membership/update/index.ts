@@ -18,8 +18,8 @@ const updateMembershipFlow = async (
   try {
     const { membership, user: authUser, project } = req;
     const { isAdmin, isWriter } = updateMembershipValidation({
-      isAdminInput: req.body.isAdmin,
-      isWriterInput: req.body.isWriter,
+      isAdminInput: req.body?.isAdmin,
+      isWriterInput: req.body?.isWriter,
     });
 
     if (typeof isAdmin === 'boolean') {

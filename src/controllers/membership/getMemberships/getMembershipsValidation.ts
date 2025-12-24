@@ -37,7 +37,7 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
     },
     include: [
       {
-        model: User,
+        model: User.scope('publicAttributes'),
         as: 'user',
         where:
           (filters?.filterAssociations?.__user_username && {
@@ -46,7 +46,7 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
           undefined,
       },
       {
-        model: User,
+        model: User.scope('publicAttributes'),
         as: 'createdBy',
         where:
           (filters?.filterAssociations?.__createdBy_username && {
@@ -55,7 +55,7 @@ const getMembershipsValidation: GetMembershipsValidation = async ({ query, proje
           undefined,
       },
       {
-        model: User,
+        model: User.scope('publicAttributes'),
         as: 'updatedBy',
         where:
           (filters?.filterAssociations?.__updatedBy_username && {

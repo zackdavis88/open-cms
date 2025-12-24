@@ -17,7 +17,7 @@ const RemoveProjectFlow = async (
 ) => {
   try {
     const { user, project } = req;
-    removeProjectValidation({ project, confirm: req.body.confirm });
+    removeProjectValidation({ project, confirm: req.body?.confirm });
 
     project.isActive = false;
     project.deletedOn = new Date();

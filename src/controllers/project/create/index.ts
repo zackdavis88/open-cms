@@ -12,8 +12,8 @@ const createProjectFlow = async (req: Request, res: Response) => {
   try {
     const { user } = req;
     const { name, description } = createProjectValidation({
-      nameInput: req.body.name,
-      descriptionInput: req.body.description,
+      nameInput: req.body?.name,
+      descriptionInput: req.body?.description,
     });
 
     const newProject = await user.createProject({

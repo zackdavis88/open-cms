@@ -21,8 +21,8 @@ const updatePasswordFlow = async (
     const { user } = req;
     const { newPassword } = updatePasswordValidation({
       user,
-      newPasswordInput: req.body.newPassword,
-      currentPasswordInput: req.body.currentPassword,
+      newPasswordInput: req.body?.newPassword,
+      currentPasswordInput: req.body?.currentPassword,
     });
 
     user.hash = User.generateHash(newPassword);

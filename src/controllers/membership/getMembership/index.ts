@@ -16,9 +16,9 @@ export const getMembershipMiddleware = async (
     const membership = await project.getMembership({
       where: { id: req.params.membershipId },
       include: [
-        { model: User, as: 'user' },
-        { model: User, as: 'createdBy' },
-        { model: User, as: 'updatedBy' },
+        { model: User.scope('publicAttributes'), as: 'user' },
+        { model: User.scope('publicAttributes'), as: 'createdBy' },
+        { model: User.scope('publicAttributes'), as: 'updatedBy' },
       ],
     });
 

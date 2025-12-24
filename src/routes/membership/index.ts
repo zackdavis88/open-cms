@@ -24,11 +24,12 @@ const configureMembershipRoutes = (router: Router) => {
       AuthController.authorizeProjectAction(AuthorizationAction.UPDATE),
       MembershipController.getMembershipMiddleware,
       MembershipController.update,
+    )
+    .delete(
+      AuthController.authorizeProjectAction(AuthorizationAction.DELETE),
+      MembershipController.getMembershipMiddleware,
+      MembershipController.remove,
     );
-  //   .delete(
-  //     AuthController.authorizeProjectAction(AuthorizationAction.DELETE),
-  //     MembershipController.remove,
-  //  );
 };
 
 export default configureMembershipRoutes;

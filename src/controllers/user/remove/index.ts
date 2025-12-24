@@ -17,7 +17,7 @@ const RemoveUserFlow = async (
 ) => {
   try {
     const { user } = req;
-    removeUserValidation({ user, confirm: req.body.confirm });
+    removeUserValidation({ user, confirm: req.body?.confirm });
 
     user.isActive = false;
     user.deletedOn = new Date();
