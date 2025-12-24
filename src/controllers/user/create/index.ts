@@ -19,8 +19,8 @@ const createUserFlow = async (
 ) => {
   try {
     const { username, password } = await createUserValidation({
-      usernameInput: req.body.username,
-      passwordInput: req.body.password,
+      usernameInput: req.body?.username,
+      passwordInput: req.body?.password,
     });
 
     const newUser = await User.create({

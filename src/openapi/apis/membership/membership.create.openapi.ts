@@ -5,23 +5,20 @@
  * @openapi
  * components:
  *   requestBodies:
- *     CreateProjectBody:
- *       required: true
+ *     CreateMembershipBody:
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the project
- *                 examples: ["MyFancyProject"]
- *               description:
- *                 type: string
- *                 description: Description of the project
- *                 examples: ["Super fancy, Super cool"]
- *             required:
- *                - name
+ *               isAdmin:
+ *                 type: boolean
+ *                 description: New membership admin permissions
+ *                 examples: [false, true]
+ *               isWriter:
+ *                 type: boolean
+ *                 description: New membership writer permissions
+ *                 examples: [true, false]
  */
 
 /*******************************************
@@ -31,23 +28,20 @@
  * @openapi
  * components:
  *   responses:
- *     CreateProjectResponse:
- *       description: Project successfully created
+ *     CreateMembershipResponse:
+ *       description: Membership successfully created
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             description: New project and membership data
+ *             description: New membership data
  *             properties:
  *               message:
  *                 type: string
  *                 description: Successful message
- *                 examples: ["project has been successfully created"]
- *               project:
- *                 description: Created project details
- *                 $ref: "#/components/schemas/ProjectData"
+ *                 examples: ["membership has been successfully created"]
  *               membership:
- *                 description: Admin membership details
+ *                 description: Created membership details
  *                 allOf:
  *                   - $ref: "#/components/schemas/MembershipData"
  *                   - type: object
@@ -58,30 +52,36 @@
  *                       - project
  *             required:
  *               - message
- *               - project
  *               - membership
  */
 
 /*******************************************
- * CREATE PROJECT ENDPOINT                 *
+ * CREATE MEMBERSHIP                       *
  *******************************************/
 /**
  * @openapi
- * /api/projects:
+ * /api/projects/{projectId}/memberships/{username}:
  *   post:
  *     tags:
- *       - Project
- *     summary: Create Project
- *     description: Creates a new project with provided name and description
+ *       - Membership
+ *     summary: Create Membership
+ *     description: Creates a new membership for a user
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       $ref: "#/components/requestBodies/CreateProjectBody"
+ *       $ref: "#/components/requestBodies/CreateMembershipBody"
+ *     parameters:
+ *       - $ref: "#/components/parameters/ProjectIdParam"
+ *       - $ref: "#/components/parameters/UsernameParam"
  *     responses:
  *       200:
- *         $ref: "#/components/responses/CreateProjectResponse"
+ *         $ref: "#/components/responses/CreateMembershipResponse"
  *       401:
  *         $ref: "#/components/responses/AuthenticationError"
+ *       403:
+ *         $ref: "#/components/responses/AuthorizationError"
+ *       404:
+ *         $ref: "#/components/responses/NotFoundError"
  *       422:
  *         $ref: "#/components/responses/ValidationError"
  *       500:

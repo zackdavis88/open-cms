@@ -30,7 +30,8 @@ const getProjectsValidation: GetProjectsValidation = async (query) => {
   if (filters) {
     whereQuery.where = {
       ...whereQuery.where,
-      ...filters,
+      ...filters.filterStrings,
+      ...filters.filterDates,
     };
   }
 

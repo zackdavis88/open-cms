@@ -45,7 +45,7 @@ class Project extends Model<InferAttributes<Project>, InferCreationAttributes<Pr
   declare countMemberships: HasManyCountAssociationsMixin;
 
   // Membership associations - HasOne
-  declare getMembership: HasOneGetAssociationMixin<Membership>;
+  declare getMembership: HasOneGetAssociationMixin<Membership | null>;
   declare authUserMembership: NonAttribute<Membership | null>;
 }
 

@@ -1,0 +1,35 @@
+import { Router } from 'express';
+import { AuthController, ProjectController, MembershipController } from 'src/controllers';
+import { AuthorizationAction } from 'src/types';
+
+const configureMembershipRoutes = (router: Router) => {
+  router
+    .route('/projects/:projectId/memberships/:username')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .post(
+      AuthController.authorizeProjectAction(AuthorizationAction.CREATE),
+      MembershipController.create,
+    );
+
+  router
+    .route('/projects/:projectId/memberships')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(MembershipController.getMemberships);
+
+  router
+    .route('/projects/:projectId/memberships/:membershipId')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(MembershipController.getMembershipMiddleware, MembershipController.getMembership)
+    .patch(
+      AuthController.authorizeProjectAction(AuthorizationAction.UPDATE),
+      MembershipController.getMembershipMiddleware,
+      MembershipController.update,
+    )
+    .delete(
+      AuthController.authorizeProjectAction(AuthorizationAction.DELETE),
+      MembershipController.getMembershipMiddleware,
+      MembershipController.remove,
+    );
+};
+
+export default configureMembershipRoutes;

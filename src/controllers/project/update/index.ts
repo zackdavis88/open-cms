@@ -11,8 +11,8 @@ const updateProjectFlow = async (req: Request, res: Response) => {
   try {
     const { user, project } = req;
     const { name, description } = updateProjectValidation({
-      nameInput: req.body.name,
-      descriptionInput: req.body.description,
+      nameInput: req.body?.name,
+      descriptionInput: req.body?.description,
     });
 
     if (name) {
