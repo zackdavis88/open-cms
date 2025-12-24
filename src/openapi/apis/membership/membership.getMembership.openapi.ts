@@ -5,56 +5,59 @@
  * @openapi
  * components:
  *   responses:
- *     GetProjectResponse:
- *       description: Project retrieved successfully
+ *     GetMembershipResponse:
+ *       description: Membership retrieved successfully
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             description: Requested project data
+ *             description: Requested membership data
  *             properties:
  *               message:
  *                 type: string
  *                 description: Successful message
- *                 examples: ["project has been successfully retrieved"]
- *               project:
- *                 description: Requested project details
+ *                 examples: ["membership has been successfully retrieved"]
+ *               membership:
+ *                 description: Requested membership details
  *                 allOf:
- *                   - $ref: "#/components/schemas/ProjectData"
+ *                   - $ref: "#/components/schemas/MembershipData"
  *                   - type: object
  *                     properties:
+ *                       project:
+ *                         $ref: "#/components/schemas/MinimalProjectData"
  *                       updatedOn:
  *                         type: ["string", "null"]
  *                         format: date-time
- *                         description: Timestamp of when the project was updated
- *                         examples: ["2025-12-20T15:54:47.862Z", null]
+ *                         description: Timestamp of when the membership was updated
+ *                         examples: ["2025-12-27T15:54:47.862Z", null]
  *                       updatedBy:
  *                         type: ["object", "null"]
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User details of the last update
- *       required:
- *         - message
- *         - project
+ *             required:
+ *               - message
+ *               - membership
  */
 
 /*******************************************
- * GET PROJECT                             *
+ * GET MEMBERSHIP                          *
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}:
+ * /api/projects/{projectId}/memberships/{membershipId}:
  *   get:
  *     tags:
- *       - Project
- *     parameters:
- *       - $ref: "#/components/parameters/ProjectIdParam"
- *     summary: Get Project Details
- *     description: Gets project data based on the unique id of the project
+ *       - Membership
+ *     summary: Get Membership Details
+ *     description: Gets membership data based on the unique id of the membership
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/ProjectIdParam"
+ *       - $ref: "#/components/parameters/MembershipIdParam"
  *     responses:
  *       200:
- *         $ref: "#/components/responses/GetProjectResponse"
+ *         $ref: "#/components/responses/GetMembershipResponse"
  *       401:
  *         $ref: "#/components/responses/AuthenticationError"
  *       404:

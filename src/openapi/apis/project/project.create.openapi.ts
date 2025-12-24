@@ -48,7 +48,14 @@
  *                 $ref: "#/components/schemas/ProjectData"
  *               membership:
  *                 description: Admin membership details
- *                 $ref: "#/components/schemas/MembershipData"
+ *                 allOf:
+ *                   - $ref: "#/components/schemas/MembershipData"
+ *                   - type: object
+ *                     properties:
+ *                       project:
+ *                         $ref: "#/components/schemas/MinimalProjectData"
+ *                     required:
+ *                       - project
  *             required:
  *               - message
  *               - project
