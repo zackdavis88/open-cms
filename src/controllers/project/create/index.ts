@@ -9,6 +9,7 @@ type CreateProjectResponseBody = {
 };
 
 const createProjectFlow = async (req: Request, res: Response) => {
+  const dbTransaction = await req.sequelize.transaction();
   try {
     const { user } = req;
     const { name, description } = createProjectValidation({
@@ -16,21 +17,29 @@ const createProjectFlow = async (req: Request, res: Response) => {
       descriptionInput: req.body?.description,
     });
 
-    const newProject = await user.createProject({
-      name,
-      description,
-    });
+    const newProject = await user.createProject(
+      {
+        name,
+        description,
+      },
+      { transaction: dbTransaction },
+    );
     newProject.createdBy = user;
 
     // All project creators are automatically given an admin membership.
-    const adminMembership = await newProject.createMembership({
-      userId: user.id,
-      isAdmin: true,
-      createdById: user.id,
-    });
+    const adminMembership = await newProject.createMembership(
+      {
+        userId: user.id,
+        isAdmin: true,
+        createdById: user.id,
+      },
+      { transaction: dbTransaction },
+    );
     adminMembership.user = user;
     adminMembership.project = newProject;
     adminMembership.createdBy = user;
+
+    await dbTransaction.commit(); // Insert both models in a single transaction.
 
     const responseBody: CreateProjectResponseBody = {
       project: getProjectData(newProject),
@@ -38,6 +47,7 @@ const createProjectFlow = async (req: Request, res: Response) => {
     };
     return res.success('project has been successfully created', responseBody);
   } catch (error) {
+    await dbTransaction.rollback();
     return res.sendError(error);
   }
 };
