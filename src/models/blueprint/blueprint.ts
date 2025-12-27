@@ -16,11 +16,19 @@ import Project from 'src/models/project/project';
 interface BaseBlueprintField {
   id: string;
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
   isRequired?: boolean;
 }
 
-type BlueprintField =
+export const BlueprintFieldTypeValues = {
+  STRING: 'string',
+  NUMBER: 'number',
+  DATE: 'date',
+  BOOLEAN: 'boolean',
+  ARRAY: 'array',
+  OBJECT: 'object',
+} as const;
+
+export type BlueprintField =
   | StringBlueprintField
   | NumberBlueprintField
   | BooleanBlueprintField
@@ -28,35 +36,37 @@ type BlueprintField =
   | ArrayBlueprintField
   | ObjectBlueprintField;
 
-interface StringBlueprintField extends BaseBlueprintField {
-  type: 'string';
+export interface StringBlueprintField extends BaseBlueprintField {
+  type: typeof BlueprintFieldTypeValues.STRING;
   regex?: string;
   minLength?: number;
   maxLength?: number;
 }
 
-interface NumberBlueprintField extends BaseBlueprintField {
-  type: 'number';
+export interface NumberBlueprintField extends BaseBlueprintField {
+  type: typeof BlueprintFieldTypeValues.NUMBER;
   min?: number;
   max?: number;
   isInteger?: boolean;
 }
 
-interface BooleanBlueprintField extends BaseBlueprintField {
-  type: 'boolean';
+export interface BooleanBlueprintField extends BaseBlueprintField {
+  type: typeof BlueprintFieldTypeValues.BOOLEAN;
 }
 
-interface DateBlueprintField extends BaseBlueprintField {
-  type: 'date';
+export interface DateBlueprintField extends BaseBlueprintField {
+  type: typeof BlueprintFieldTypeValues.DATE;
 }
 
-interface ArrayBlueprintField extends BaseBlueprintField {
-  type: 'array';
+export interface ArrayBlueprintField extends BaseBlueprintField {
+  type: typeof BlueprintFieldTypeValues.ARRAY;
+  minLength?: number;
+  maxLength?: number;
   arrayOf: BlueprintField;
 }
 
-interface ObjectBlueprintField extends BaseBlueprintField {
-  type: 'object';
+export interface ObjectBlueprintField extends BaseBlueprintField {
+  type: typeof BlueprintFieldTypeValues.OBJECT;
   fields: BlueprintField[];
 }
 
@@ -78,7 +88,6 @@ class Blueprint extends Model<
   InferCreationAttributes<Blueprint>
 > {
   declare id: CreationOptional<string>;
-  declare name: string;
   declare isActive: CreationOptional<boolean>;
 
   declare projectId: ForeignKey<Project['id']>;
@@ -109,9 +118,6 @@ export const initializeBlueprint = (sequelize: Sequelize) => {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
-      },
-      name: {
-        type: DataTypes.STRING,
       },
       isActive: {
         type: DataTypes.BOOLEAN,

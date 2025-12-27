@@ -1,4 +1,5 @@
-import { validateName, validateDescription } from 'src/controllers/project/utils';
+import { validateDescription } from 'src/controllers/project/utils';
+import { validateName } from 'src/controllers/utils';
 
 type CreateProjectValidation = ({
   nameInput,

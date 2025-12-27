@@ -1,3 +1,5 @@
+import { type BlueprintField } from 'src/models/blueprint/blueprint';
+
 export interface UserData {
   username: string;
   displayName: string;
@@ -30,6 +32,20 @@ export interface MembershipData {
   isWriter: boolean;
 }
 
+export interface BlueprintData {
+  id: string;
+  project: Pick<ProjectData, 'id' | 'name'>;
+  name: string;
+  fields: BlueprintField[];
+  createdOn: Date;
+  createdBy: UserData | null;
+  blueprintVersionId: string;
+  updatedOn?: Date | null;
+  updatedBy?: UserData | null;
+  deletedOn?: Date | null;
+  deletedBy?: UserData | null;
+}
+
 export enum AuthorizationAction {
   CREATE,
   READ,
@@ -39,3 +55,13 @@ export enum AuthorizationAction {
 
 export { type AllPaginationData } from 'src/controllers/utils/validatePagination';
 export { type PublicPaginationData } from 'src/controllers/utils/validatePagination';
+export { type BlueprintField };
+export {
+  type StringBlueprintField,
+  type BooleanBlueprintField,
+  type DateBlueprintField,
+  type ObjectBlueprintField,
+  type ArrayBlueprintField,
+  type NumberBlueprintField,
+  BlueprintFieldTypeValues,
+} from 'src/models/blueprint/blueprint';

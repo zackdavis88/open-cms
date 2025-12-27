@@ -133,4 +133,4 @@ export const initializeModelsAndSync = async (sequelize: Sequelize) => {
 export { User } from './user';
 export { Project } from './project';
 export { Membership } from './membership';
-export { Blueprint } from './blueprint';
+export { Blueprint, BlueprintVersion } from './blueprint';
