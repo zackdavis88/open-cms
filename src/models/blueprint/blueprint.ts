@@ -9,6 +9,7 @@ import {
   NonAttribute,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
+  Deferrable,
 } from 'sequelize';
 import User from 'src/models/user/user';
 import Project from 'src/models/project/project';
@@ -127,6 +128,15 @@ export const initializeBlueprint = (sequelize: Sequelize) => {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
+      blueprintVersionId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'blueprint_versions',
+          key: 'id',
+          deferrable: new Deferrable.INITIALLY_DEFERRED(),
+        },
+      },
       updatedOn: {
         type: DataTypes.DATE,
       },
@@ -143,6 +153,15 @@ export const initializeBlueprint = (sequelize: Sequelize) => {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
+      },
+      blueprintId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'blueprints',
+          key: 'id',
+          deferrable: new Deferrable.INITIALLY_DEFERRED(),
+        },
       },
       name: {
         type: DataTypes.STRING,

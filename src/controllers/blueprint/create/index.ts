@@ -18,6 +18,12 @@ const createBlueprintFlow = async (
   res: Response,
 ) => {
   try {
+    // This is needed so that we can pre-seed blueprint/version ids before they exist.
+    const dbTransaction = await req.sequelize.transaction();
+    await req.sequelize.query('SET CONSTRAINTS ALL DEFERRED', {
+      transaction: dbTransaction,
+    });
+
     const { user, project } = req;
     const { name, fields } = await createBlueprintValidation({
       nameInput: req.body?.name,
@@ -25,19 +31,29 @@ const createBlueprintFlow = async (
     });
 
     const blueprintId = crypto.randomUUID();
+    const blueprintVersionId = crypto.randomUUID();
 
-    const initialVersion = await BlueprintVersion.create({
-      blueprintId,
-      name,
-      fields,
-      createdById: user.id,
-    });
+    const initialVersion = await BlueprintVersion.create(
+      {
+        id: blueprintVersionId,
+        blueprintId,
+        name,
+        fields,
+        createdById: user.id,
+      },
+      { transaction: dbTransaction },
+    );
 
-    const newBlueprint = await project.createBlueprint({
-      id: blueprintId,
-      createdById: user.id,
-      blueprintVersionId: initialVersion.id,
-    });
+    const newBlueprint = await project.createBlueprint(
+      {
+        id: blueprintId,
+        createdById: user.id,
+        blueprintVersionId,
+      },
+      { transaction: dbTransaction },
+    );
+
+    await dbTransaction.commit();
 
     const responseBody: CreateBlueprintResponseBody = {
       blueprint: getBlueprintData(
