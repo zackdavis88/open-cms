@@ -11,7 +11,7 @@ const generatedBlueprintFields = [
   generateBlueprintField({ type: 'date', options: { name: 'rootDate1' } }),
   generateBlueprintField({
     type: 'number',
-    options: { name: 'rootNumber1', isInteger: true, max: 100, min: 0 },
+    options: { name: 'rootNumber1', isInteger: true, max: 100, min: 0, isRequired: true },
   }),
   generateBlueprintField({ type: 'boolean', options: { name: 'rootBoolean1' } }),
   generateBlueprintField({
@@ -19,6 +19,8 @@ const generatedBlueprintFields = [
     options: {
       name: 'rootArray1',
       arrayOf: generateBlueprintField({ type: 'string' }),
+      minLength: 1,
+      maxLength: 9,
     },
   }),
   generateBlueprintField({
@@ -28,7 +30,14 @@ const generatedBlueprintFields = [
       fields: [
         generateBlueprintField({
           type: 'object',
-          options: { fields: [generateBlueprintField({ type: 'string' })] },
+          options: {
+            fields: [
+              generateBlueprintField({
+                type: 'string',
+                options: { minLength: 1, maxLength: 25 },
+              }),
+            ],
+          },
         }),
         generateBlueprintField({
           type: 'object',

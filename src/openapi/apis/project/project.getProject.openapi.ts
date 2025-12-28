@@ -12,6 +12,7 @@
  *           schema:
  *             type: object
  *             description: Requested project data
+ *             required: ["message", "project"]
  *             properties:
  *               message:
  *                 type: string
@@ -32,9 +33,6 @@
  *                         type: ["object", "null"]
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User details of the last update
- *       required:
- *         - message
- *         - project
  */
 
 /*******************************************

@@ -20,9 +20,7 @@
  *               user:
  *                 description: Requested user details
  *                 $ref: "#/components/schemas/PublicUserData"
- *       required:
- *         - message
- *         - user
+ *             required: ["message", "user"]
  */
 
 /*******************************************

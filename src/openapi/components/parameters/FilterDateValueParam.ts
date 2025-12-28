@@ -2,7 +2,7 @@ const FilterDateValueParam = {
   name: 'filterDateValue',
   in: 'query',
   schema: {
-    type: 'date',
+    type: 'string',
     format: 'date-time',
   },
 };

@@ -33,6 +33,7 @@
  *           schema:
  *             type: object
  *             description: Deleted project data
+ *             required: ["message", "project"]
  *             properties:
  *               message:
  *                 type: string
@@ -62,9 +63,6 @@
  *                         type: object
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User that deleted the project
- *       required:
- *         - message
- *         - project
  */
 
 /*******************************************

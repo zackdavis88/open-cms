@@ -52,7 +52,6 @@ const options = {
         bearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          format: 'JWT',
         },
       },
       schemas: buildComponents('schemas'),
