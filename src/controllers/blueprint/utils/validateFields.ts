@@ -32,29 +32,43 @@ const isObjectField = (field: unknown): field is ObjectBlueprintField =>
   field.type.toLowerCase() === BlueprintFieldTypeValues.OBJECT;
 
 const depthFirstValidation = (fields: unknown[], parentName = 'root') => {
-  return fields.reduce<BlueprintField[]>((validatedFields, field) => {
+  const branchNames = fields.map((field) => {
+    if (!isRecord(field) || typeof field.name !== 'string') {
+      throw new ValidationError(`${parentName} fields must be a blueprint field object`);
+    }
+
+    return field.name;
+  });
+
+  return fields.reduce<BlueprintField[]>((validatedFields, field, currentIndex) => {
     const validatedField = {
       id: crypto.randomUUID(),
     } as Record<string, unknown>;
 
     if (!isRecord(field)) {
-      throw new ValidationError(`${parentName} fields input must be a field object`);
+      throw new ValidationError(`${parentName} fields must be a blueprint field object`);
     }
 
     const name = field.name;
-    if (!name || typeof name !== 'string') {
+    if (typeof name !== 'string') {
       throw new ValidationError(`${parentName} field name must be a string`);
     }
 
-    if (name.length < 3 || name.length > 30) {
+    if (name.length < 1 || name.length > 50) {
       throw new ValidationError(
-        `${parentName} field name must be 3 - 30 characters in length`,
+        `${parentName} field name must be 1 - 50 characters in length`,
       );
     }
 
-    const regex = new RegExp('^[A-Za-z0-9-_+=&^%$#*@!|/(){}?.,<>;\':" ]+$');
+    const regex = /^[A-Za-z0-9 _+=&^%$#*@!|/(){}?.,<>;:'"-]+$/;
     if (!regex.test(name)) {
       throw new ValidationError(`${parentName} field name contains invalid characters`);
+    }
+
+    // Make sure this same name is not used on this branch of the tree.
+    const indexOfBranchName = branchNames.indexOf(name);
+    if (indexOfBranchName !== currentIndex) {
+      throw new ValidationError(`${parentName} fields contains duplicate name: ${name}`);
     }
 
     let isRequired = false;
@@ -157,7 +171,6 @@ const depthFirstValidation = (fields: unknown[], parentName = 'root') => {
     // Date fields have no options at the moment, those would go here if added in the future.
 
     if (isArrayField(field)) {
-      console.log(field);
       const { maxLength, minLength, arrayOf } = field;
       if (
         typeof maxLength === 'number' &&
@@ -185,7 +198,7 @@ const depthFirstValidation = (fields: unknown[], parentName = 'root') => {
         throw new ValidationError(`${parentName} array field minLength must be a number`);
       }
 
-      if (!arrayOf || typeof arrayOf !== 'object' || Array.isArray(arrayOf)) {
+      if (!arrayOf || !isRecord(arrayOf) || Array.isArray(arrayOf)) {
         throw new ValidationError(
           `${parentName} array field arrayOf must be a field object`,
         );
@@ -203,7 +216,7 @@ const depthFirstValidation = (fields: unknown[], parentName = 'root') => {
 
     if (isObjectField(field)) {
       const { fields } = field;
-      if (!field || !Array.isArray(fields) || fields.length === 0) {
+      if (!fields || !Array.isArray(fields) || fields.length === 0) {
         throw new ValidationError(
           `${parentName} object field fields must be an array of blueprint field objects`,
         );
@@ -237,11 +250,11 @@ const validateFields: ValidateFields = ({ fields, isOptional = false }) => {
   }
 
   if (fields === undefined || fields === null) {
-    throw new ValidationError('root fields is missing from input');
+    throw new ValidationError('fields is missing from input');
   }
 
   if (!Array.isArray(fields) || fields.length === 0) {
-    throw new ValidationError('root fields must be an array of blueprint field objects');
+    throw new ValidationError('fields must be an array of blueprint field objects');
   }
 
   return depthFirstValidation(fields satisfies unknown[]);

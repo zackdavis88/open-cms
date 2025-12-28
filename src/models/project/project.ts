@@ -53,6 +53,9 @@ class Project extends Model<InferAttributes<Project>, InferCreationAttributes<Pr
   declare createBlueprint: HasManyCreateAssociationMixin<Blueprint>;
   declare getBlueprints: HasManyGetAssociationsMixin<Blueprint>;
   declare countBlueprints: HasManyCountAssociationsMixin;
+
+  // Blueprint associations - HasOne
+  declare getBlueprint: HasOneGetAssociationMixin<Blueprint | null>;
 }
 
 export const initializeProject = (sequelize: Sequelize) => {

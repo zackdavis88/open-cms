@@ -17,19 +17,18 @@ const createBlueprintFlow = async (
   req: Request<never, never, CreateBlueprintRequestBody>,
   res: Response,
 ) => {
+  const dbTransaction = await req.sequelize.transaction();
   try {
-    // This is needed so that we can pre-seed blueprint/version ids before they exist.
-    const dbTransaction = await req.sequelize.transaction();
-    await req.sequelize.query('SET CONSTRAINTS ALL DEFERRED', {
-      transaction: dbTransaction,
-    });
-
     const { user, project } = req;
     const { name, fields } = await createBlueprintValidation({
       nameInput: req.body?.name,
       fieldsInput: req.body?.fields,
     });
 
+    // We are declaring the ids of the Blueprint and BlueprintVersion in advanced
+    // because they are both models that reference each other so we need to know the id.
+    // These models are setup with deferred foreign key constraints, so as long as these
+    // ids are used as expected, we shouldnt get any transaction errors.
     const blueprintId = crypto.randomUUID();
     const blueprintVersionId = crypto.randomUUID();
 
@@ -67,6 +66,7 @@ const createBlueprintFlow = async (
 
     return res.success('blueprint has been successfully created', responseBody);
   } catch (error) {
+    await dbTransaction.rollback();
     return res.sendError(error);
   }
 };
