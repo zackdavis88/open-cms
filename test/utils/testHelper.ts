@@ -4,6 +4,9 @@ import { Project, User, initializeModels } from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import jwt from 'jsonwebtoken';
+import { BlueprintField } from '../../src/models/blueprint/blueprint';
+import generateBlueprintField from './generateBlueprintField';
+
 const {
   AUTH_SECRET,
   SERVER_PORT,
@@ -13,6 +16,45 @@ const {
   DATABASE_PORT,
   DATABASE_NAME,
 } = process.env;
+
+const DEFAULT_FIELDS = [
+  generateBlueprintField({
+    type: 'object',
+    options: {
+      fields: [
+        generateBlueprintField({
+          type: 'object',
+          options: {
+            fields: [
+              generateBlueprintField({
+                type: 'string',
+                options: { minLength: 1, maxLength: 25 },
+              }),
+            ],
+          },
+        }),
+        generateBlueprintField({
+          type: 'object',
+          options: {
+            fields: [
+              generateBlueprintField({
+                type: 'object',
+                options: {
+                  fields: [generateBlueprintField({ type: 'boolean' })],
+                },
+              }),
+            ],
+          },
+        }),
+        generateBlueprintField({
+          type: 'array',
+          options: { arrayOf: generateBlueprintField({ type: 'number' }) },
+        }),
+        generateBlueprintField({ type: 'string' }),
+      ],
+    },
+  }),
+];
 
 interface TokenDataOverride {
   id?: string;
@@ -126,6 +168,40 @@ export class TestHelper {
     membership.updatedBy = updatedBy;
     membership.project = project;
     return membership;
+  }
+
+  async createTestBlueprint({
+    project,
+    createdBy,
+    createdOn,
+    updatedBy,
+    updatedOn,
+    name,
+    fields,
+    isActive,
+  }: {
+    project: Project;
+    createdOn?: Date;
+    createdBy: User;
+    updatedBy?: User;
+    updatedOn?: Date;
+    name?: string;
+    fields?: BlueprintField[];
+    isActive?: boolean;
+  }) {
+    const blueprint = await project.createBlueprint({
+      createdOn,
+      createdById: createdBy.id,
+      updatedById: updatedBy?.id,
+      updatedOn: updatedOn || updatedBy?.id ? new Date() : null,
+      name: name || crypto.randomUUID(),
+      fields: fields || DEFAULT_FIELDS,
+      isActive,
+    });
+    blueprint.project = project;
+    blueprint.createdBy = createdBy;
+    blueprint.updatedBy = updatedBy;
+    return blueprint;
   }
 
   async createTestProject({

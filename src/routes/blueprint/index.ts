@@ -10,6 +10,15 @@ const configureBlueprintRoutes = (router: Router) => {
       AuthController.authorizeBlueprintAction(AuthorizationAction.CREATE),
       BlueprintController.create,
     );
+
+  router
+    .route('/projects/:projectId/blueprints/:blueprintId')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(
+      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      BlueprintController.getBlueprintMiddleware,
+      BlueprintController.getBlueprint,
+    );
 };
 
 export default configureBlueprintRoutes;
