@@ -39,7 +39,6 @@ export interface BlueprintData {
   fields: BlueprintField[];
   createdOn: Date;
   createdBy: UserData | null;
-  blueprintVersionId: string;
   updatedOn?: Date | null;
   updatedBy?: UserData | null;
   deletedOn?: Date | null;

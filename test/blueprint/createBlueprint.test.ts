@@ -1,11 +1,4 @@
-import {
-  TestHelper,
-  ERROR_TYPES,
-  User,
-  Project,
-  BlueprintVersion,
-  generateBlueprintField,
-} from '../utils';
+import { TestHelper, ERROR_TYPES, User, Project, generateBlueprintField } from '../utils';
 const testHelper = new TestHelper();
 let apiRoute = '/api/projects/:projectId/blueprints';
 const request = testHelper.request;
@@ -869,18 +862,15 @@ describe('Create Blueprint', () => {
           // Ensure the blueprint and version really exist in the db.
           const blueprintDbResult = await testProject.getBlueprint({
             where: { id: blueprint.id, isActive: true },
-            include: [{ model: BlueprintVersion, as: 'version', required: true }],
           });
 
-          if (!blueprintDbResult || !blueprintDbResult.version) {
+          if (!blueprintDbResult) {
             return done('database does not have entry for blueprint and/or version');
           }
 
-          expect(blueprintDbResult.version.id).toBe(blueprint.blueprintVersionId);
-          expect(blueprintDbResult.version.name).toBe(blueprint.name);
-          expect(blueprintDbResult.version.fields).toMatchObject(
-            generatedBlueprintFields,
-          );
+          expect(blueprintDbResult.id).toBe(blueprint.id);
+          expect(blueprintDbResult.name).toBe(blueprint.name);
+          expect(blueprintDbResult.fields).toMatchObject(generatedBlueprintFields);
           expect(blueprint.createdOn).toBe(blueprintDbResult.createdOn.toISOString());
           expect(blueprint.createdBy).toEqual({
             username: writerUser.username,

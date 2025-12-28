@@ -112,15 +112,11 @@ export const initializeModels = (sequelize: Sequelize) => {
   User.hasOne(Blueprint, { as: 'deletedBlueprint', foreignKey: 'deletedById' });
   Blueprint.belongsTo(User, { as: 'deletedBy' });
 
-  // BlueprintVersion -> Blueprint associations: versions / version
+  // BlueprintVersion -> Blueprint associations: versions
   Blueprint.hasMany(BlueprintVersion, {
     as: 'versions',
     foreignKey: 'blueprintId',
     onDelete: 'CASCADE',
-  });
-  Blueprint.belongsTo(BlueprintVersion, {
-    as: 'version',
-    foreignKey: 'blueprintVersionId',
   });
   BlueprintVersion.belongsTo(Blueprint, { as: 'blueprint' });
 };
