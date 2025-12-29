@@ -14,8 +14,8 @@
  *         description: Successfully generated OpenAPI specs
  *         content:
  *           application/json:
- *             properties:
- *               {}
+ *             schema:
+ *               type: "object"
  *       500:
  *         $ref: "#/components/responses/FatalError"
  */

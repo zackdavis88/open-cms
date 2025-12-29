@@ -11,6 +11,7 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required: ["confirm"]
  *             properties:
  *               confirm:
  *                 type: string
@@ -33,6 +34,7 @@
  *           schema:
  *             type: object
  *             description: Deleted project data
+ *             required: ["message", "project"]
  *             properties:
  *               message:
  *                 type: string
@@ -43,6 +45,7 @@
  *                 allOf:
  *                   - $ref: "#/components/schemas/ProjectData"
  *                   - type: object
+ *                     required: ["updatedOn", "updatedBy", "deletedOn", "deletedBy"]
  *                     properties:
  *                       updatedOn:
  *                         type: ["string", "null"]
@@ -62,9 +65,6 @@
  *                         type: object
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User that deleted the project
- *       required:
- *         - message
- *         - project
  */
 
 /*******************************************

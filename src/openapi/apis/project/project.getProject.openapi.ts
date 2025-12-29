@@ -12,6 +12,7 @@
  *           schema:
  *             type: object
  *             description: Requested project data
+ *             required: ["message", "project"]
  *             properties:
  *               message:
  *                 type: string
@@ -22,6 +23,7 @@
  *                 allOf:
  *                   - $ref: "#/components/schemas/ProjectData"
  *                   - type: object
+ *                     required: ["updatedOn", "updatedBy"]
  *                     properties:
  *                       updatedOn:
  *                         type: ["string", "null"]
@@ -32,9 +34,6 @@
  *                         type: ["object", "null"]
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User details of the last update
- *       required:
- *         - message
- *         - project
  */
 
 /*******************************************

@@ -15,6 +15,7 @@ import {
 } from 'sequelize';
 import User from 'src/models/user/user';
 import Membership from 'src/models/membership/membership';
+import Blueprint from 'src/models/blueprint/blueprint';
 
 class Project extends Model<InferAttributes<Project>, InferCreationAttributes<Project>> {
   declare id: CreationOptional<string>;
@@ -47,6 +48,14 @@ class Project extends Model<InferAttributes<Project>, InferCreationAttributes<Pr
   // Membership associations - HasOne
   declare getMembership: HasOneGetAssociationMixin<Membership | null>;
   declare authUserMembership: NonAttribute<Membership | null>;
+
+  // Blueprint associations - HasMany
+  declare createBlueprint: HasManyCreateAssociationMixin<Blueprint>;
+  declare getBlueprints: HasManyGetAssociationsMixin<Blueprint>;
+  declare countBlueprints: HasManyCountAssociationsMixin;
+
+  // Blueprint associations - HasOne
+  declare getBlueprint: HasOneGetAssociationMixin<Blueprint | null>;
 }
 
 export const initializeProject = (sequelize: Sequelize) => {

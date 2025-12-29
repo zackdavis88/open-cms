@@ -45,6 +45,7 @@
  *             allOf:
  *               - type: object
  *                 description: Requested project list data
+ *                 required: ["message", "projects"]
  *                 properties:
  *                   message:
  *                     type: string
@@ -57,6 +58,7 @@
  *                       allOf:
  *                         - $ref: "#/components/schemas/ProjectData"
  *                         - type: object
+ *                           required: ["updatedOn", "updatedBy"]
  *                           properties:
  *                             updatedOn:
  *                               type: ["string", "null"]

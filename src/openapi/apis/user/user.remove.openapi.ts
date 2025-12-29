@@ -34,6 +34,7 @@
  *           schema:
  *             type: object
  *             description: Deleted user's data
+ *             required: ["message", "user"]
  *             properties:
  *               message:
  *                 type: string
@@ -44,6 +45,7 @@
  *                 allOf:
  *                   - $ref: "#/components/schemas/UserData"
  *                   - type: object
+ *                     required: ["deletedOn"]
  *                     properties:
  *                       deletedOn:
  *                         type: string

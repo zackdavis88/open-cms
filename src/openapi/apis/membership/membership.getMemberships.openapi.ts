@@ -82,6 +82,7 @@
  *                       allOf:
  *                         - $ref: "#/components/schemas/MembershipData"
  *                         - type: object
+ *                           required: ["updatedOn", "updatedBy"]
  *                           properties:
  *                             updatedOn:
  *                               type: ["string", "null"]

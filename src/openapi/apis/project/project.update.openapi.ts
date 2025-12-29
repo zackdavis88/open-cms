@@ -13,11 +13,11 @@
  *             type: object
  *             properties:
  *               name:
- *                 type: [string, null]
+ *                 type: ["string", "null"]
  *                 description: New name of the project
  *                 examples: ["SomethingNewButStillFancy"]
  *               description:
- *                 type: [string, null]
+ *                 type: ["string", "null"]
  *                 description: New description of the project
  *                 examples: ["This project is updated, but still fancy!"]
  *
@@ -37,6 +37,7 @@
  *           schema:
  *             type: object
  *             description: Updated project data
+ *             required: ["message", "project"]
  *             properties:
  *               message:
  *                 type: string
@@ -47,19 +48,17 @@
  *                 allOf:
  *                   - $ref: "#/components/schemas/ProjectData"
  *                   - type: object
+ *                     required: ["updatedOn", "updatedBy"]
  *                     properties:
  *                       updatedOn:
  *                         type: string
  *                         format: date-time
  *                         description: Timestamp of when the project was updated
- *                         examples: ["2025-12-20T15:54:47.862Z", null]
+ *                         examples: ["2025-12-20T15:54:47.862Z"]
  *                       updatedBy:
  *                         type: object
  *                         $ref: "#/components/schemas/PublicUserData"
  *                         description: User details of the last update
- *       required:
- *         - message
- *         - project
  */
 
 /*******************************************

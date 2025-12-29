@@ -45,6 +45,7 @@
  *             allOf:
  *               - type: object
  *                 description: Requested user list data
+ *                 required: ["message", "users"]
  *                 properties:
  *                   message:
  *                     type: string

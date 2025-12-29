@@ -5,7 +5,7 @@ const getProjectData = (project: Project) => {
   return {
     id: project.id,
     name: project.name,
-    description: project.description,
+    description: project.description || null,
     createdOn: project.createdOn,
     createdBy:
       project.createdById && project.createdBy && getPublicUserData(project.createdBy),

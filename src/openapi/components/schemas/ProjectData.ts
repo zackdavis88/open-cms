@@ -23,7 +23,7 @@ const ProjectData = {
     },
   ],
 
-  required: ['id', 'name', 'createdOn', 'createdBy'],
+  required: ['id', 'name', 'createdOn', 'createdBy', 'description'],
 };
 
 export default ProjectData;
