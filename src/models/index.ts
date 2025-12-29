@@ -119,6 +119,17 @@ export const initializeModels = (sequelize: Sequelize) => {
     onDelete: 'CASCADE',
   });
   BlueprintVersion.belongsTo(Blueprint, { as: 'blueprint' });
+
+  // BlueprintVersion -> User associations: createdBy
+  User.hasMany(BlueprintVersion, {
+    as: 'createdBlueprintVersions',
+    foreignKey: 'createdById',
+  });
+  User.hasOne(BlueprintVersion, {
+    as: 'createdBlueprintVersion',
+    foreignKey: 'createdById',
+  });
+  BlueprintVersion.belongsTo(User, { as: 'createdBy' });
 };
 
 export const initializeModelsAndSync = async (sequelize: Sequelize) => {

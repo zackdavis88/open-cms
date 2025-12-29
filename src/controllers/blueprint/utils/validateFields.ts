@@ -242,7 +242,7 @@ type ValidateFields = ({
 }: {
   fields?: unknown;
   isOptional?: boolean;
-}) => BlueprintField[] | void;
+}) => BlueprintField[] | undefined;
 
 const validateFields: ValidateFields = ({ fields, isOptional = false }) => {
   if (isOptional && (fields === undefined || fields === null)) {

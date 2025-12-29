@@ -1,28 +1,16 @@
-import { TestHelper, ERROR_TYPES, User, Project, generateBlueprintField } from '../utils';
+import {
+  TestHelper,
+  ERROR_TYPES,
+  User,
+  Project,
+  generateBlueprintField,
+  Blueprint,
+} from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints';
+let apiRoute = '/api/projects/:projectId/blueprints/:blueprintId';
 const request = testHelper.request;
 
 const generatedBlueprintFields = [
-  generateBlueprintField({
-    type: 'string',
-    options: { name: 'rootString1', regex: '^test_regex' },
-  }),
-  generateBlueprintField({ type: 'date', options: { name: 'rootDate1' } }),
-  generateBlueprintField({
-    type: 'number',
-    options: { name: 'rootNumber1', isInteger: true, max: 100, min: 0, isRequired: true },
-  }),
-  generateBlueprintField({ type: 'boolean', options: { name: 'rootBoolean1' } }),
-  generateBlueprintField({
-    type: 'array',
-    options: {
-      name: 'rootArray1',
-      arrayOf: generateBlueprintField({ type: 'string' }),
-      minLength: 1,
-      maxLength: 9,
-    },
-  }),
   generateBlueprintField({
     type: 'object',
     options: {
@@ -35,6 +23,16 @@ const generatedBlueprintFields = [
               generateBlueprintField({
                 type: 'string',
                 options: { minLength: 1, maxLength: 25 },
+              }),
+            ],
+          },
+        }),
+        generateBlueprintField({
+          type: 'object',
+          options: {
+            fields: [
+              generateBlueprintField({
+                type: 'date',
               }),
             ],
           },
@@ -62,8 +60,8 @@ const generatedBlueprintFields = [
   }),
 ];
 
-describe('Create Blueprint', () => {
-  describe(`POST ${apiRoute}`, () => {
+describe('Update Blueprint', () => {
+  describe(`PATCH ${apiRoute}`, () => {
     let adminUser: User;
     let writerUser: User;
     let readUser: User;
@@ -74,6 +72,8 @@ describe('Create Blueprint', () => {
     let writerAuthToken: string;
     let readerAuthToken: string;
     let nonMemberAuthToken: string;
+    let testBlueprint: Blueprint;
+    let deletedBlueprint: Blueprint;
     let requestPayload: {
       name?: unknown;
       fields?: unknown;
@@ -100,6 +100,17 @@ describe('Create Blueprint', () => {
         user: readUser,
         createdBy: adminUser,
       });
+
+      testBlueprint = await testHelper.createTestBlueprint({
+        project: testProject,
+        createdBy: writerUser,
+      });
+
+      deletedBlueprint = await testHelper.createTestBlueprint({
+        project: testProject,
+        createdBy: adminUser,
+        isActive: false,
+      });
     });
 
     beforeEach(() => {
@@ -107,9 +118,9 @@ describe('Create Blueprint', () => {
       writerAuthToken = testHelper.generateAuthToken(writerUser);
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints`;
+      apiRoute = `/api/projects/${testProject.id}/blueprints/${testBlueprint.id}`;
       requestPayload = {
-        name: 'Unit Test Blueprint',
+        name: 'Updated Name',
         fields: generatedBlueprintFields,
       };
     });
@@ -119,7 +130,7 @@ describe('Create Blueprint', () => {
     });
 
     it('should require authentication', (done) => {
-      request.post(apiRoute).send(requestPayload).expect(
+      request.patch(apiRoute).send(requestPayload).expect(
         401,
         {
           error: 'authorization header is missing from input',
@@ -131,7 +142,7 @@ describe('Create Blueprint', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .post('/api/projects/SomethingWrong/blueprints')
+        .patch(`/api/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`)
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -145,7 +156,9 @@ describe('Create Blueprint', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .post(`/api/projects/${testHelper.generateUUID()}/blueprints`)
+        .patch(
+          `/api/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -159,7 +172,7 @@ describe('Create Blueprint', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .post(`/api/projects/${deletedProject.id}/blueprints`)
+        .patch(`/api/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`)
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -172,7 +185,7 @@ describe('Create Blueprint', () => {
     });
 
     it('should reject requests when the user is not a project member', (done) => {
-      request.post(apiRoute).set('authorization', nonMemberAuthToken).expect(
+      request.patch(apiRoute).set('authorization', nonMemberAuthToken).expect(
         403,
         {
           error: 'you do not have permissions to perform this action',
@@ -183,7 +196,7 @@ describe('Create Blueprint', () => {
     });
 
     it('should reject requests when the user does not have write permissions', (done) => {
-      request.post(apiRoute).set('authorization', readerAuthToken).expect(
+      request.patch(apiRoute).set('authorization', readerAuthToken).expect(
         403,
         {
           error: 'you do not have permissions to perform this action',
@@ -193,26 +206,63 @@ describe('Create Blueprint', () => {
       );
     });
 
-    it('should reject requests when name is missing', (done) => {
-      requestPayload.name = undefined;
+    it('should reject when blueprint id is not a valid uuid', (done) => {
       request
-        .post(apiRoute)
-        .set('authorization', writerAuthToken)
-        .send(requestPayload)
+        .patch(`/api/projects/${testProject.id}/blueprints/wrong`)
+        .set('authorization', adminAuthToken)
         .expect(
           422,
           {
-            error: 'name is missing from input',
+            error: 'requested blueprint id is not valid',
             errorType: ERROR_TYPES.VALIDATION,
           },
           done,
         );
     });
 
-    it('should reject requests when name is not a string', (done) => {
-      requestPayload.name = false;
+    it('should reject when blueprint is not found', (done) => {
       request
-        .post(apiRoute)
+        .patch(`/api/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`)
+        .set('authorization', adminAuthToken)
+        .expect(
+          404,
+          {
+            error: 'requested blueprint not found',
+            errorType: ERROR_TYPES.NOT_FOUND,
+          },
+          done,
+        );
+    });
+
+    it('should reject when blueprint is deleted', (done) => {
+      request
+        .patch(`/api/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`)
+        .set('authorization', adminAuthToken)
+        .expect(
+          404,
+          {
+            error: 'requested blueprint not found',
+            errorType: ERROR_TYPES.NOT_FOUND,
+          },
+          done,
+        );
+    });
+
+    it('should reject requests when there is nothing to update', (done) => {
+      request.patch(apiRoute).set('authorization', writerAuthToken).expect(
+        422,
+        {
+          error: 'input contains nothing to update',
+          errorType: ERROR_TYPES.VALIDATION,
+        },
+        done,
+      );
+    });
+
+    it('should reject requests when name is not a string', (done) => {
+      requestPayload.name = 111;
+      request
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -228,7 +278,7 @@ describe('Create Blueprint', () => {
     it('should reject requests when name is less than 3 characters', (done) => {
       requestPayload.name = 'a';
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -244,7 +294,7 @@ describe('Create Blueprint', () => {
     it('should reject requests when name is more than 30 characters', (done) => {
       requestPayload.name = Array(31).fill('a').join('');
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -260,7 +310,7 @@ describe('Create Blueprint', () => {
     it('should reject requests when name contains invalid characters', (done) => {
       requestPayload.name = '👍👍👍';
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -273,26 +323,10 @@ describe('Create Blueprint', () => {
         );
     });
 
-    it('should reject requests when fields is missing', (done) => {
-      requestPayload.fields = undefined;
-      request
-        .post(apiRoute)
-        .set('authorization', writerAuthToken)
-        .send(requestPayload)
-        .expect(
-          422,
-          {
-            error: 'fields is missing from input',
-            errorType: ERROR_TYPES.VALIDATION,
-          },
-          done,
-        );
-    });
-
     it('should reject requests when fields is not an array of objects', (done) => {
       requestPayload.fields = {};
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -308,7 +342,7 @@ describe('Create Blueprint', () => {
     it('should reject requests when fields is an empty array', (done) => {
       requestPayload.fields = [];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -324,7 +358,7 @@ describe('Create Blueprint', () => {
     it('should reject requests when fields contains non-objects', (done) => {
       requestPayload.fields = [generateBlueprintField({ type: 'date' }), 'somethingElse'];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -342,7 +376,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'array' }), name: 12345 },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -360,7 +394,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'object' }), name: '' },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -381,7 +415,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -402,7 +436,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -421,7 +455,7 @@ describe('Create Blueprint', () => {
         generateBlueprintField({ type: 'date', options: { name: 'testName' } }),
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -439,7 +473,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'string' }), isRequired: 'yes' },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -457,7 +491,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'string' }), type: undefined },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -476,7 +510,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'string' }), type: 3478924 },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -495,7 +529,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'number' }), type: 'notAValidType' },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -514,7 +548,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'string' }), regex: true },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -535,7 +569,7 @@ describe('Create Blueprint', () => {
         }),
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -558,7 +592,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -581,7 +615,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -602,7 +636,7 @@ describe('Create Blueprint', () => {
         }),
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -625,7 +659,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -648,7 +682,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -666,7 +700,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'number' }), isInteger: 'yes' },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -687,7 +721,7 @@ describe('Create Blueprint', () => {
         }),
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -710,7 +744,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -733,7 +767,7 @@ describe('Create Blueprint', () => {
         },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -749,7 +783,7 @@ describe('Create Blueprint', () => {
     it('should reject requests when array field arrayOf is missing', (done) => {
       requestPayload.fields = [generateBlueprintField({ type: 'array' })];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -767,7 +801,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'array' }), arrayOf: [] },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -785,7 +819,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'array' }), arrayOf: 'strings, lol' },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -803,7 +837,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'object' }), fields: undefined },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -821,7 +855,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'object' }), fields: '' },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -839,7 +873,7 @@ describe('Create Blueprint', () => {
         { ...generateBlueprintField({ type: 'object' }), fields: [] },
       ];
       request
-        .post(apiRoute)
+        .patch(apiRoute)
         .set('authorization', writerAuthToken)
         .send(requestPayload)
         .expect(
@@ -852,10 +886,10 @@ describe('Create Blueprint', () => {
         );
     });
 
-    it('should successfully create a new blueprint', (done) => {
+    it('should successfully update a blueprint', (done) => {
       request
-        .post(apiRoute)
-        .set('authorization', writerAuthToken)
+        .patch(apiRoute)
+        .set('authorization', adminAuthToken)
         .send(requestPayload)
         .expect(200)
         .end(async (err, res) => {
@@ -864,17 +898,16 @@ describe('Create Blueprint', () => {
           }
 
           const { message, blueprint } = res.body;
-          expect(message).toBe('blueprint has been successfully created');
+          expect(message).toBe('blueprint has been successfully updated');
           expect(blueprint.name).toBe(requestPayload.name);
           expect(blueprint.fields).toMatchObject(generatedBlueprintFields);
 
-          // Ensure the blueprint exists in the db.
           const blueprintDbResult = await testProject.getBlueprint({
             where: { id: blueprint.id, isActive: true },
           });
 
           if (!blueprintDbResult) {
-            return done('database does not have entry for blueprint');
+            return done('database does not have entry for blueprint and/or version');
           }
 
           expect(blueprintDbResult.id).toBe(blueprint.id);
@@ -890,6 +923,21 @@ describe('Create Blueprint', () => {
             id: testProject.id,
             name: testProject.name,
           });
+          expect(blueprint.updatedOn).toBe(blueprintDbResult.updatedOn?.toISOString());
+          expect(blueprint.updatedBy).toEqual({
+            username: adminUser.username,
+            displayName: adminUser.displayName,
+            createdOn: adminUser.createdOn.toISOString(),
+          });
+
+          const versions = await blueprintDbResult.getVersions();
+          expect(versions.length).toBe(1);
+          const pastVersion = versions[0];
+          expect(pastVersion.id).toBeTruthy();
+          expect(pastVersion.createdOn).toBeTruthy();
+          expect(pastVersion.createdById).toBe(adminUser.id);
+          expect(pastVersion.name).toBe(testBlueprint.name); // testBlueprint.name is the original name.
+          expect(pastVersion.fields).toEqual(testBlueprint.fields); // testBlueprint.fields are the original fields.
           done();
         });
     });
