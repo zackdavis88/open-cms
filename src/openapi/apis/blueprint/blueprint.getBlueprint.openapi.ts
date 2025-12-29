@@ -54,6 +54,7 @@
  *       - Blueprint
  *     summary: Get Blueprint Details
  *     description: Gets blueprint data based on the unique id of the project/blueprint
+ *     operationId: getBlueprintById
  *     security:
  *       - bearerAuth: []
  *     parameters:

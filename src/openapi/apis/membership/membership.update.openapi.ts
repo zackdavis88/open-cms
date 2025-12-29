@@ -78,6 +78,7 @@
  *       - Membership
  *     summary: Update Membership Details
  *     description: Updates user privileges for a project
+ *     operationId: updateMembership
  *     security:
  *       - bearerAuth: []
  *     parameters:

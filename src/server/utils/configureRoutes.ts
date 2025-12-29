@@ -28,6 +28,7 @@ const configureRoutes = (app: Express) => {
           // Set this option to true to persist authorization
           persistAuthorization: true,
         },
+        customSiteTitle: 'Open CMS Documentation',
       }),
     );
     app.use(documentationRouter);

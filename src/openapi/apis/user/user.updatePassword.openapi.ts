@@ -63,6 +63,7 @@
  *       - User
  *     summary: Update User Password
  *     description: Updates a user's password
+ *     operationId: updateUserPassword
  *     security:
  *       - bearerAuth: []
  *     requestBody:

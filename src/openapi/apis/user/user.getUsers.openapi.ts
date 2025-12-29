@@ -80,6 +80,7 @@
  *       - $ref: "#/components/parameters/FilterDateOpParam"
  *     summary: Get User List
  *     description: Gets a pagintated list of users
+ *     operationId: getUserList
  *     security:
  *       - bearerAuth: []
  *     responses:

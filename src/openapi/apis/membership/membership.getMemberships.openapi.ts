@@ -120,6 +120,7 @@
  *       - $ref: "#/components/parameters/FilterBooleanValueParam"
  *     summary: Get Membership List
  *     description: Gets a pagintated list of memberships for a project
+ *     operationId: getMembershipList
  *     security:
  *       - bearerAuth: []
  *     responses:

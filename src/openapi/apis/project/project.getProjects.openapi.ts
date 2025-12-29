@@ -93,6 +93,7 @@
  *       - $ref: "#/components/parameters/FilterDateOpParam"
  *     summary: Get Project List
  *     description: Gets a pagintated list of projects
+ *     operationId: getProjectList
  *     security:
  *       - bearerAuth: []
  *     responses:

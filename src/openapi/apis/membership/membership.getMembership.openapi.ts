@@ -51,6 +51,7 @@
  *       - Membership
  *     summary: Get Membership Details
  *     description: Gets membership data based on the unique id of the membership
+ *     operationId: getMembershipById
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -74,6 +74,7 @@
  *       - Blueprint
  *     summary: Create Blueprint
  *     description: Creates a new blueprint
+ *     operationId: createBlueprint
  *     security:
  *       - bearerAuth: []
  *     requestBody:

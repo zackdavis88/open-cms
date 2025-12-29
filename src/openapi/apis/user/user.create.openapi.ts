@@ -63,6 +63,7 @@
  *       - User
  *     summary: Create User
  *     description: Creates a new user with provided username and password
+ *     operationId: createUser
  *     requestBody:
  *       $ref: "#/components/requestBodies/CreateUserBody"
  *     responses:
