@@ -8,7 +8,7 @@ interface UpdateBlueprintRequestBody {
   fields?: unknown;
 }
 
-type CreateBlueprintResponseBody = {
+type UpdateBlueprintResponseBody = {
   blueprint: BlueprintData;
 };
 
@@ -47,7 +47,7 @@ const updateBlueprintFlow = async (
     await blueprint.save({ transaction: dbTransaction });
     await dbTransaction.commit();
 
-    const responseBody: CreateBlueprintResponseBody = {
+    const responseBody: UpdateBlueprintResponseBody = {
       blueprint: {
         ...getBlueprintData(
           Object.assign(blueprint, {

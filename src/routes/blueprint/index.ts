@@ -27,6 +27,11 @@ const configureBlueprintRoutes = (router: Router) => {
       AuthController.authorizeBlueprintAction(AuthorizationAction.UPDATE),
       BlueprintController.getBlueprintMiddleware,
       BlueprintController.update,
+    )
+    .delete(
+      AuthController.authorizeBlueprintAction(AuthorizationAction.DELETE),
+      BlueprintController.getBlueprintMiddleware,
+      BlueprintController.remove,
     );
 };
 
