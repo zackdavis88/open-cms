@@ -11,6 +11,7 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required: ["confirm"]
  *             properties:
  *               confirm:
  *                 type: string
@@ -42,8 +43,7 @@
  *                 allOf:
  *                   - $ref: "#/components/schemas/MembershipData"
  *                   - type: object
- *                     required:
- *                       - project
+ *                     required: ["project", "updatedOn", "updatedBy"]
  *                     properties:
  *                       project:
  *                         $ref: "#/components/schemas/MinimalProjectData"

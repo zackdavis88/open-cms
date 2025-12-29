@@ -11,6 +11,7 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required: ["confirm"]
  *             properties:
  *               confirm:
  *                 type: string
@@ -44,6 +45,7 @@
  *                 allOf:
  *                   - $ref: "#/components/schemas/ProjectData"
  *                   - type: object
+ *                     required: ["updatedOn", "updatedBy", "deletedOn", "deletedBy"]
  *                     properties:
  *                       updatedOn:
  *                         type: ["string", "null"]

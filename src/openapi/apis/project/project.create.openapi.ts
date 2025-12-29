@@ -37,7 +37,7 @@
  *         application/json:
  *           schema:
  *             type: object
- *             description: New project and membership data
+ *             description: New project data
  *             properties:
  *               message:
  *                 type: string
@@ -46,20 +46,9 @@
  *               project:
  *                 description: Created project details
  *                 $ref: "#/components/schemas/ProjectData"
- *               membership:
- *                 description: Admin membership details
- *                 allOf:
- *                   - $ref: "#/components/schemas/MembershipData"
- *                   - type: object
- *                     properties:
- *                       project:
- *                         $ref: "#/components/schemas/MinimalProjectData"
- *                     required:
- *                       - project
  *             required:
  *               - message
  *               - project
- *               - membership
  */
 
 /*******************************************

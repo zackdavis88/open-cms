@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import createProjectValidation from './createProjectValidation';
-import { ProjectData, MembershipData } from 'src/types';
-import { getProjectData, getMembershipData } from 'src/controllers/utils';
+import { ProjectData } from 'src/types';
+import { getProjectData } from 'src/controllers/utils';
 
 type CreateProjectResponseBody = {
   project: ProjectData;
-  membership: MembershipData;
 };
 
 const createProjectFlow = async (req: Request, res: Response) => {
@@ -27,7 +26,7 @@ const createProjectFlow = async (req: Request, res: Response) => {
     newProject.createdBy = user;
 
     // All project creators are automatically given an admin membership.
-    const adminMembership = await newProject.createMembership(
+    await newProject.createMembership(
       {
         userId: user.id,
         isAdmin: true,
@@ -35,15 +34,11 @@ const createProjectFlow = async (req: Request, res: Response) => {
       },
       { transaction: dbTransaction },
     );
-    adminMembership.user = user;
-    adminMembership.project = newProject;
-    adminMembership.createdBy = user;
 
-    await dbTransaction.commit(); // Insert both models in a single transaction.
+    await dbTransaction.commit();
 
     const responseBody: CreateProjectResponseBody = {
       project: getProjectData(newProject),
-      membership: getMembershipData(adminMembership),
     };
     return res.success('project has been successfully created', responseBody);
   } catch (error) {

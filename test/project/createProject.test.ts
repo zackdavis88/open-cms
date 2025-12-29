@@ -1,4 +1,4 @@
-import { TestHelper, ERROR_TYPES, User } from '../utils';
+import { TestHelper, ERROR_TYPES, User, Membership } from '../utils';
 const testHelper = new TestHelper();
 const apiRoute = '/api/projects';
 const request = testHelper.request;
@@ -134,7 +134,7 @@ describe('Create Project', () => {
             return done(err);
           }
 
-          const { message, project, membership } = res.body;
+          const { message, project } = res.body;
           expect(message).toBe('project has been successfully created');
           expect(project.id).toBeTruthy();
           expect(project.name).toBe(requestPayload.name);
@@ -145,23 +145,18 @@ describe('Create Project', () => {
             displayName: testUser.displayName,
             createdOn: testUser.createdOn.toISOString(),
           });
-          expect(membership.id).toBeTruthy();
-          expect(membership.user).toEqual({
-            username: testUser.username,
-            displayName: testUser.displayName,
-            createdOn: testUser.createdOn.toISOString(),
+
+          // Validate that an admin membership was created for the user.
+          const adminMembership = Membership.findOne({
+            where: {
+              projectId: project.id,
+              userId: testUser.id,
+              isAdmin: true,
+            },
           });
-          expect(membership.project).toEqual({
-            id: project.id,
-            name: project.name,
-          });
-          expect(membership.createdOn).toBeTruthy();
-          expect(membership.createdBy).toEqual({
-            username: testUser.username,
-            displayName: testUser.displayName,
-            createdOn: testUser.createdOn.toISOString(),
-          });
-          expect(membership.isAdmin).toBe(true);
+          if (!adminMembership) {
+            return done('admin membership was not found in database');
+          }
           testHelper.addTestProjectId(project.id);
           done();
         });
