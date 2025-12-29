@@ -5,17 +5,17 @@
  * @openapi
  * components:
  *   requestBodies:
- *     CreateBlueprintBody:
+ *     UpdateBlueprintBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required: ["name", "fields"]
  *             properties:
  *               name:
  *                 type: string
- *                 description: Name of the new blueprint
- *                 examples: ["SuperCoolBlueprint"]
+ *                 description: Updated name of the blueprint
+ *                 examples: ["UpdatedBlueprint"]
  *               fields:
  *                 type: array
  *                 description: Array of blueprint fields that describe your component shape
@@ -27,6 +27,7 @@
  *                     - $ref: "#/components/schemas/BlueprintDateField"
  *                     - $ref: "#/components/schemas/BlueprintArrayField"
  *                     - $ref: "#/components/schemas/BlueprintObjectField"
+ *                 examples: [[{"name": "stringField1", "type": "string"}, {"name": "arrayField1", "type": "array", "arrayOf": {"name": "arrayItem", "type": "number", "isInteger": true}}]]
  */
 
 /*******************************************
@@ -36,53 +37,65 @@
  * @openapi
  * components:
  *   responses:
- *     CreateBlueprintResponse:
- *       description: Blueprint successfully created
+ *     UpdateBlueprintResponse:
+ *       description: Blueprint successfully updated
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             description: New blueprint data
+ *             description: Updated blueprint data
  *             properties:
  *               message:
  *                 type: string
  *                 description: Successful message
- *                 examples: ["blueprint has been successfully created"]
+ *                 examples: ["blueprint has been successfully updated"]
  *               blueprint:
- *                 description: Created blueprint details
+ *                 description: Updated blueprint details
  *                 allOf:
  *                   - $ref: "#/components/schemas/BlueprintData"
  *                   - type: object
  *                     properties:
  *                       project:
  *                         $ref: "#/components/schemas/MinimalProjectData"
+ *                       updatedOn:
+ *                         type: "string"
+ *                         format: date-time
+ *                         description: Timestamp of when the blueprint was updated
+ *                         examples: ["2025-12-20T15:54:47.862Z", null]
+ *                       updatedBy:
+ *                         type: "object"
+ *                         $ref: "#/components/schemas/PublicUserData"
+ *                         description: User details of the last update
  *                     required:
  *                       - project
+ *                       - updatedOn
+ *                       - updatedBy
  *             required:
  *               - message
  *               - blueprint
  */
 
 /*******************************************
- * CREATE BLUEPRINT                        *
+ * UPDATE BLUEPRINT                        *
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/blueprints:
- *   post:
+ * /api/projects/{projectId}/blueprints/{blueprintId}:
+ *   patch:
  *     tags:
  *       - Blueprint
- *     summary: Create Blueprint
- *     description: Creates a new blueprint
+ *     summary: Update Blueprint
+ *     description: Updates a blueprint
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       $ref: "#/components/requestBodies/CreateBlueprintBody"
+ *       $ref: "#/components/requestBodies/UpdateBlueprintBody"
  *     parameters:
  *       - $ref: "#/components/parameters/ProjectIdParam"
+ *       - $ref: "#/components/parameters/BlueprintIdParam"
  *     responses:
  *       200:
- *         $ref: "#/components/responses/CreateBlueprintResponse"
+ *         $ref: "#/components/responses/UpdateBlueprintResponse"
  *       401:
  *         $ref: "#/components/responses/AuthenticationError"
  *       403:
