@@ -9,6 +9,10 @@ const configureBlueprintRoutes = (router: Router) => {
     .post(
       AuthController.authorizeBlueprintAction(AuthorizationAction.CREATE),
       BlueprintController.create,
+    )
+    .get(
+      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      BlueprintController.getBlueprints,
     );
 
   router
