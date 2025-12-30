@@ -34,10 +34,16 @@ app.use(
 );
 
 app.use(configureResponseHandlers);
-configureDatabaseConnection(app).then(() => {
-  configureRoutes(app).then(() => {
-    app.listen(SERVER_PORT);
+configureDatabaseConnection(app)
+  .then(() => {
+    return configureRoutes(app);
+  })
+  .then(() => {
+    app.listen(SERVER_PORT, () => {
+      console.log(`Open CMS running on port ${SERVER_PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Server failed to start', err);
+    process.exit(1);
   });
-});
-
-console.log(`Open CMS running on port ${SERVER_PORT}`);
