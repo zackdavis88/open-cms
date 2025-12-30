@@ -88,6 +88,7 @@
  *       - $ref: "#/components/parameters/BlueprintIdParam"
  *     summary: Delete Blueprint
  *     description: Deletes a blueprint
+ *     operationId: removeBlueprint
  *     requestBody:
  *       $ref: "#/components/requestBodies/RemoveBlueprintBody"
  *     security:

@@ -9,6 +9,7 @@
  *       - Discovery
  *     summary: Get OpenAPI JSON
  *     description: Returns OpenAPI specs in JSON format
+ *     operationId: getOpenApiSpec
  *     responses:
  *       200:
  *         description: Successfully generated OpenAPI specs

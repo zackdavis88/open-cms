@@ -62,6 +62,7 @@
  *       - Project
  *     summary: Create Project
  *     description: Creates a new project with provided name and description
+ *     operationId: createProject
  *     security:
  *       - bearerAuth: []
  *     requestBody:

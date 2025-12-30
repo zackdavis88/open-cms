@@ -4,6 +4,8 @@ import fs from 'fs';
 import { NotFoundError } from './errors';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from 'src/openapi';
+import customThemeStyles from 'src/openapi/custom-theme/custom-theme-styles';
+import customThemeToggle from 'src/openapi/custom-theme/custom-theme-toggle';
 
 const configureRoutes = (app: Express) => {
   const rootPath = process.env.NODE_ENV === 'production' ? 'dist' : 'src';
@@ -21,13 +23,24 @@ const configureRoutes = (app: Express) => {
 
   return Promise.all(routeFilePromises).then(() => {
     const documentationRouter = express.Router();
+
+    // Serve the custom JS and (optionally) CSS for theme toggling before the swagger static serve
+    documentationRouter.get('/docs/custom-theme.js', (_req, res) => {
+      res.type('application/javascript').send(customThemeToggle);
+    });
+    documentationRouter.get('/docs/custom-theme.css', (_req, res) => {
+      res.type('text/css').send(customThemeStyles);
+    });
+
     documentationRouter.use('/docs', swaggerUi.serve);
     documentationRouter.route('/docs').get(
       swaggerUi.setup(swaggerSpec, {
+        customJs: ['/docs/custom-theme.js'],
+        customCssUrl: '/docs/custom-theme.css',
         swaggerOptions: {
-          // Set this option to true to persist authorization
           persistAuthorization: true,
         },
+        customSiteTitle: 'Open CMS Documentation',
       }),
     );
     app.use(documentationRouter);

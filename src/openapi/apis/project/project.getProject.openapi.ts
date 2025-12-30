@@ -49,6 +49,7 @@
  *       - $ref: "#/components/parameters/ProjectIdParam"
  *     summary: Get Project Details
  *     description: Gets project data based on the unique id of the project
+ *     operationId: getProjectById
  *     security:
  *       - bearerAuth: []
  *     responses:

@@ -41,6 +41,7 @@
  *       - Authentication
  *     summary: Refresh AuthToken
  *     description: Refreshes an authentication token for a user
+ *     operationId: refreshAuthToken
  *     security:
  *       - bearerAuth: []
  *     responses:

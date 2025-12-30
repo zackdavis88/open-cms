@@ -86,6 +86,7 @@
  *       - Blueprint
  *     summary: Update Blueprint
  *     description: Updates a blueprint
+ *     operationId: updateBlueprint
  *     security:
  *       - bearerAuth: []
  *     requestBody:

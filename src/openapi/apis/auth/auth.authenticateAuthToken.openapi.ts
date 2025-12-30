@@ -36,6 +36,7 @@
  *       - Authentication
  *     summary: Get Authenticated User Details
  *     description: Returns details of the authenticated user
+ *     operationId: getAuthenticatedUser
  *     security:
  *       - bearerAuth: []
  *     responses:

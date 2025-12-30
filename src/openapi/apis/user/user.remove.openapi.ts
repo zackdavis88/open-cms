@@ -64,6 +64,7 @@
  *       - User
  *     summary: Delete User
  *     description: Deletes a user
+ *     operationId: removeUser
  *     security:
  *       - bearerAuth: []
  *     requestBody:

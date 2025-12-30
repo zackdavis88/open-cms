@@ -74,6 +74,7 @@
  *       - $ref: "#/components/parameters/ProjectIdParam"
  *     summary: Update Project Details
  *     description: Updated project data
+ *     operationId: updateProject
  *     requestBody:
  *       $ref: "#/components/requestBodies/UpdateProjectBody"
  *     security:

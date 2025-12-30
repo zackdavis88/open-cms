@@ -36,6 +36,7 @@
  *       - $ref: "#/components/parameters/UsernameParam"
  *     summary: Get User Details
  *     description: Gets user data
+ *     operationId: getUserByUsername
  *     security:
  *       - bearerAuth: []
  *     responses:

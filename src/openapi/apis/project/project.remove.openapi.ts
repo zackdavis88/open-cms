@@ -80,6 +80,7 @@
  *       - $ref: "#/components/parameters/ProjectIdParam"
  *     summary: Delete Project
  *     description: Deletes a project
+ *     operationId: removeProject
  *     requestBody:
  *       $ref: "#/components/requestBodies/RemoveProjectBody"
  *     security:

@@ -72,6 +72,7 @@
  *       - Membership
  *     summary: Delete Membership
  *     description: Deletes a memberships for a project
+ *     operationId: removeMembership
  *     security:
  *       - bearerAuth: []
  *     parameters:

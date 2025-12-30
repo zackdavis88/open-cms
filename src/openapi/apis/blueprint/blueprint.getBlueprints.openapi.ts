@@ -88,6 +88,7 @@
  *       - Blueprint
  *     summary: Get Blueprint List
  *     description: Gets a pagintated list of blueprints
+ *     operationId: getBlueprintList
  *     security:
  *       - bearerAuth: []
  *     parameters:

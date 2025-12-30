@@ -66,6 +66,7 @@
  *       - Membership
  *     summary: Create Membership
  *     description: Creates a new membership for a user
+ *     operationId: createMembership
  *     security:
  *       - bearerAuth: []
  *     requestBody:

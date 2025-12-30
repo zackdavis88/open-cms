@@ -41,6 +41,7 @@
  *       - Authentication
  *     summary: Generate AuthToken
  *     description: Generates an authentication token for a user
+ *     operationId: generateAuthToken
  *     security:
  *       - basicAuth: []
  *     responses:
