@@ -41,7 +41,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}:
+ * /projects/{projectId}:
  *   get:
  *     tags:
  *       - Project

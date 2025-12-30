@@ -82,7 +82,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/blueprints:
+ * /projects/{projectId}/blueprints:
  *   get:
  *     tags:
  *       - Blueprint

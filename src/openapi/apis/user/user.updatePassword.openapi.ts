@@ -57,7 +57,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/users/password:
+ * /users/password:
  *   patch:
  *     tags:
  *       - User

@@ -35,7 +35,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/auth/refresh:
+ * /auth/refresh:
  *   get:
  *     tags:
  *       - Authentication

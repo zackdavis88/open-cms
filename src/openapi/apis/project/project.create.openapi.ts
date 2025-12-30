@@ -56,7 +56,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects:
+ * /projects:
  *   post:
  *     tags:
  *       - Project

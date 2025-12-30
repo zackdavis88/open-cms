@@ -30,7 +30,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/auth/me:
+ * /auth/me:
  *   get:
  *     tags:
  *       - Authentication

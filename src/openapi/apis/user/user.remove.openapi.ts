@@ -58,7 +58,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/users/me:
+ * /users/me:
  *   delete:
  *     tags:
  *       - User

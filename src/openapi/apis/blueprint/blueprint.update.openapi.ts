@@ -80,7 +80,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/blueprints/{blueprintId}:
+ * /projects/{projectId}/blueprints/{blueprintId}:
  *   patch:
  *     tags:
  *       - Blueprint

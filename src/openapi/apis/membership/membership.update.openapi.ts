@@ -72,7 +72,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/memberships/{membershipId}:
+ * /projects/{projectId}/memberships/{membershipId}:
  *   patch:
  *     tags:
  *       - Membership

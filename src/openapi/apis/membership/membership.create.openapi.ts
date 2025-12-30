@@ -60,7 +60,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/memberships/{username}:
+ * /projects/{projectId}/memberships/{username}:
  *   post:
  *     tags:
  *       - Membership

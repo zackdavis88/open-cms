@@ -45,7 +45,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/memberships/{membershipId}:
+ * /projects/{projectId}/memberships/{membershipId}:
  *   get:
  *     tags:
  *       - Membership
