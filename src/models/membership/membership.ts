@@ -27,7 +27,7 @@ class Membership extends Model<
   declare createdOn: CreationOptional<Date>;
 
   declare getUpdatedBy: BelongsToGetAssociationMixin<User>;
-  declare updatedById: ForeignKey<User['id'] | null>;
+  declare updatedById: ForeignKey<User['id']> | null;
   declare updatedBy: NonAttribute<User | null>;
   declare updatedOn: CreationOptional<Date | null>;
 

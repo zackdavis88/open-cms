@@ -9,9 +9,12 @@ import {
   NonAttribute,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasOneGetAssociationMixin,
 } from 'sequelize';
 import User from 'src/models/user/user';
 import Project from 'src/models/project/project';
+import Component from 'src/models/component/component';
 
 interface BaseBlueprintField {
   id: string;
@@ -109,6 +112,14 @@ class Blueprint extends Model<
 
   declare createVersion: HasManyCreateAssociationMixin<BlueprintVersion>;
   declare getVersions: HasManyGetAssociationsMixin<BlueprintVersion>;
+
+  // Component associations - HasMany
+  declare createComponent: HasManyCreateAssociationMixin<Component>;
+  declare getComponents: HasManyGetAssociationsMixin<Component>;
+  declare countComponents: HasManyCountAssociationsMixin;
+
+  // Component associations - HasOne
+  declare getComponent: HasOneGetAssociationMixin<Component | null>;
 }
 
 export const initializeBlueprint = (sequelize: Sequelize) => {
