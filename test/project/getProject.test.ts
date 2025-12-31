@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId');
 const request = testHelper.request;
 
 describe('Get Project', () => {
@@ -18,7 +18,7 @@ describe('Get Project', () => {
         user: testUser,
         isActive: false,
       });
-      apiRoute = `/api/projects/${testProject.id}`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}`);
     });
 
     afterAll(async () => {
@@ -37,19 +37,22 @@ describe('Get Project', () => {
     });
 
     it('should reject when project id is not a valid uuid', (done) => {
-      request.get('/api/projects/SomethingWrong').set('authorization', authToken).expect(
-        422,
-        {
-          error: 'requested project id is not valid',
-          errorType: ERROR_TYPES.VALIDATION,
-        },
-        done,
-      );
+      request
+        .get(testHelper.apiRoute('/projects/SomethingWrong'))
+        .set('authorization', authToken)
+        .expect(
+          422,
+          {
+            error: 'requested project id is not valid',
+            errorType: ERROR_TYPES.VALIDATION,
+          },
+          done,
+        );
     });
 
     it('should reject when project is not found', (done) => {
       request
-        .get(`/api/projects/${testHelper.generateUUID()}`)
+        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}`))
         .set('authorization', authToken)
         .expect(
           404,
@@ -63,7 +66,7 @@ describe('Get Project', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .get(`/api/projects/${deletedProject.id}`)
+        .get(testHelper.apiRoute(`/projects/${deletedProject.id}`))
         .set('authorization', authToken)
         .expect(
           404,

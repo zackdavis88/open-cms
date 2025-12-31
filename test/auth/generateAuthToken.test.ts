@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-const apiRoute = '/api/auth';
+const apiRoute = testHelper.apiRoute('/auth');
 const request = testHelper.request;
 
 describe('Generate AuthToken', () => {

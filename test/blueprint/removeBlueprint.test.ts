@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project, Blueprint } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints/:blueprintId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints/:blueprintId');
 const request = testHelper.request;
 
 describe('Delete Blueprint', () => {
@@ -61,7 +61,9 @@ describe('Delete Blueprint', () => {
       writerAuthToken = testHelper.generateAuthToken(writerUser);
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints/${testBlueprint.id}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/blueprints/${testBlueprint.id}`,
+      );
       requestPayload = {
         confirm: testBlueprint.name,
       };
@@ -84,7 +86,11 @@ describe('Delete Blueprint', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .delete(`/api/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`)
+        .delete(
+          testHelper.apiRoute(
+            `/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -99,7 +105,9 @@ describe('Delete Blueprint', () => {
     it('should reject when project is not found', (done) => {
       request
         .delete(
-          `/api/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+          ),
         )
         .set('authorization', adminAuthToken)
         .expect(
@@ -114,7 +122,11 @@ describe('Delete Blueprint', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .delete(`/api/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`)
+        .delete(
+          testHelper.apiRoute(
+            `/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -150,7 +162,7 @@ describe('Delete Blueprint', () => {
 
     it('should reject when blueprint id is not a valid uuid', (done) => {
       request
-        .delete(`/api/projects/${testProject.id}/blueprints/wrong`)
+        .delete(testHelper.apiRoute(`/projects/${testProject.id}/blueprints/wrong`))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -164,7 +176,11 @@ describe('Delete Blueprint', () => {
 
     it('should reject when blueprint is not found', (done) => {
       request
-        .delete(`/api/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`)
+        .delete(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -178,7 +194,11 @@ describe('Delete Blueprint', () => {
 
     it('should reject when blueprint is deleted', (done) => {
       request
-        .delete(`/api/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`)
+        .delete(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,

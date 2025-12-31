@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project, generateBlueprintField } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints');
 const request = testHelper.request;
 
 const generatedBlueprintFields = [
@@ -107,7 +107,7 @@ describe('Create Blueprint', () => {
       writerAuthToken = testHelper.generateAuthToken(writerUser);
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}/blueprints`);
       requestPayload = {
         name: 'Unit Test Blueprint',
         fields: generatedBlueprintFields,
@@ -131,7 +131,7 @@ describe('Create Blueprint', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .post('/api/projects/SomethingWrong/blueprints')
+        .post(testHelper.apiRoute('/projects/SomethingWrong/blueprints'))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -145,7 +145,7 @@ describe('Create Blueprint', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .post(`/api/projects/${testHelper.generateUUID()}/blueprints`)
+        .post(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/blueprints`))
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -159,7 +159,7 @@ describe('Create Blueprint', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .post(`/api/projects/${deletedProject.id}/blueprints`)
+        .post(testHelper.apiRoute(`/projects/${deletedProject.id}/blueprints`))
         .set('authorization', adminAuthToken)
         .expect(
           404,

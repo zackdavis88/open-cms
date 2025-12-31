@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project, Membership } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/memberships/:membershipId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/memberships/:membershipId');
 const request = testHelper.request;
 
 describe('Update Membership', () => {
@@ -44,7 +44,9 @@ describe('Update Membership', () => {
     });
 
     beforeEach(() => {
-      apiRoute = `/api/projects/${testProject.id}/memberships/${testMembership.id}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/memberships/${testMembership.id}`,
+      );
     });
 
     afterAll(async () => {
@@ -64,7 +66,11 @@ describe('Update Membership', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .patch(`/api/projects/SomethingWrong/memberships/${testHelper.generateUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/SomethingWrong/memberships/${testHelper.generateUUID()}`,
+          ),
+        )
         .set('authorization', nonMemberAuthToken)
         .expect(
           422,
@@ -79,7 +85,9 @@ describe('Update Membership', () => {
     it('should reject when project is not found', (done) => {
       request
         .patch(
-          `/api/projects/${testHelper.generateUUID()}/memberships/${testHelper.generateUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${testHelper.generateUUID()}/memberships/${testHelper.generateUUID()}`,
+          ),
         )
         .set('authorization', nonMemberAuthToken)
         .expect(
@@ -95,7 +103,9 @@ describe('Update Membership', () => {
     it('should reject when project is deleted', (done) => {
       request
         .patch(
-          `/api/projects/${deletedProject.id}/memberships/${testHelper.generateUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${deletedProject.id}/memberships/${testHelper.generateUUID()}`,
+          ),
         )
         .set('authorization', nonMemberAuthToken)
         .expect(
@@ -132,7 +142,7 @@ describe('Update Membership', () => {
 
     it('should reject when membership id is not a valid uuid', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/memberships/NotAUUID`)
+        .patch(testHelper.apiRoute(`/projects/${testProject.id}/memberships/NotAUUID`))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -146,7 +156,11 @@ describe('Update Membership', () => {
 
     it('should reject when membership is not found', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/memberships/${testHelper.generateUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/memberships/${testHelper.generateUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,

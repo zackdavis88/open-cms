@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/memberships/:username';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/memberships/:username');
 const request = testHelper.request;
 
 describe('Create Membership', () => {
@@ -38,7 +38,9 @@ describe('Create Membership', () => {
       adminAuthToken = testHelper.generateAuthToken(adminUser);
       writerAuthToken = testHelper.generateAuthToken(writerUser);
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
-      apiRoute = `/api/projects/${testProject.id}/memberships/${testUser.displayName}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/memberships/${testUser.displayName}`,
+      );
       requestPayload = {
         isAdmin: true,
         isWriter: false,
@@ -62,7 +64,7 @@ describe('Create Membership', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .post('/api/projects/SomethingWrong/memberships/someUsername')
+        .post(testHelper.apiRoute('/projects/SomethingWrong/memberships/someUsername'))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -76,7 +78,11 @@ describe('Create Membership', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .post(`/api/projects/${testHelper.generateUUID()}/memberships/someUsername`)
+        .post(
+          testHelper.apiRoute(
+            `/projects/${testHelper.generateUUID()}/memberships/someUsername`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -90,7 +96,9 @@ describe('Create Membership', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .post(`/api/projects/${deletedProject.id}/memberships/someUsername`)
+        .post(
+          testHelper.apiRoute(`/projects/${deletedProject.id}/memberships/someUsername`),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -126,7 +134,7 @@ describe('Create Membership', () => {
 
     it('should reject requests when the requested user does not exist', (done) => {
       request
-        .post(`/api/projects/${testProject.id}/memberships/DoesNotExi$t`)
+        .post(testHelper.apiRoute(`/projects/${testProject.id}/memberships/DoesNotExi$t`))
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -140,7 +148,11 @@ describe('Create Membership', () => {
 
     it('should reject requests when the requested user is deleted', (done) => {
       request
-        .post(`/api/projects/${testProject.id}/memberships/${deletedUser.displayName}`)
+        .post(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/memberships/${deletedUser.displayName}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -154,7 +166,11 @@ describe('Create Membership', () => {
 
     it('should reject requests when the requested user is already a member', (done) => {
       request
-        .post(`/api/projects/${testProject.id}/memberships/${writerUser.displayName}`)
+        .post(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/memberships/${writerUser.displayName}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           422,

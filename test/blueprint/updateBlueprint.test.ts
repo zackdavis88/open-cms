@@ -7,7 +7,7 @@ import {
   Blueprint,
 } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints/:blueprintId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints/:blueprintId');
 const request = testHelper.request;
 
 const generatedBlueprintFields = [
@@ -118,7 +118,9 @@ describe('Update Blueprint', () => {
       writerAuthToken = testHelper.generateAuthToken(writerUser);
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints/${testBlueprint.id}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/blueprints/${testBlueprint.id}`,
+      );
       requestPayload = {
         name: 'Updated Name',
         fields: generatedBlueprintFields,
@@ -142,7 +144,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .patch(`/api/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -157,7 +163,9 @@ describe('Update Blueprint', () => {
     it('should reject when project is not found', (done) => {
       request
         .patch(
-          `/api/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+          ),
         )
         .set('authorization', adminAuthToken)
         .expect(
@@ -172,7 +180,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .patch(`/api/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -208,7 +220,7 @@ describe('Update Blueprint', () => {
 
     it('should reject when blueprint id is not a valid uuid', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/blueprints/wrong`)
+        .patch(testHelper.apiRoute(`/projects/${testProject.id}/blueprints/wrong`))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -222,7 +234,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when blueprint is not found', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -236,7 +252,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when blueprint is deleted', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,

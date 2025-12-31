@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-const apiRoute = '/api/auth/me';
+const apiRoute = testHelper.apiRoute('/auth/me');
 const request = testHelper.request;
 
 const TEN_HOURS_AND_ONE_SECOND = 60 * 60 * 10 + 1;

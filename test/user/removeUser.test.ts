@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-const apiRoute = '/api/users/me';
+const apiRoute = testHelper.apiRoute('/users/me');
 const request = testHelper.request;
 
 interface RemoveUserPayload {

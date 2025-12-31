@@ -7,7 +7,7 @@ import {
   BlueprintData,
 } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints');
 const request = testHelper.request;
 
 describe('Get Blueprints', () => {
@@ -189,7 +189,7 @@ describe('Get Blueprints', () => {
     beforeEach(() => {
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}/blueprints`);
     });
 
     afterAll(async () => {
@@ -209,7 +209,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .get('/api/projects/SomethingWrong/blueprints')
+        .get(testHelper.apiRoute('/projects/SomethingWrong/blueprints'))
         .set('authorization', nonMemberAuthToken)
         .expect(
           422,
@@ -223,7 +223,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(`/api/projects/${testHelper.generateUUID()}/blueprints`)
+        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/blueprints`))
         .set('authorization', readerAuthToken)
         .expect(
           404,
@@ -237,7 +237,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .get(`/api/projects/${deletedProject.id}/blueprints`)
+        .get(testHelper.apiRoute(`/projects/${deletedProject.id}/blueprints`))
         .set('authorization', readerAuthToken)
         .expect(
           404,

@@ -56,6 +56,11 @@ const DEFAULT_FIELDS = [
   }),
 ];
 
+let BASE_URL = '/api';
+if (typeof process.env.BASE_URL === 'string' && process.env.BASE_URL.startsWith('/')) {
+  BASE_URL = process.env.BASE_URL;
+}
+
 interface TokenDataOverride {
   id?: string;
   apiKey?: string;
@@ -258,5 +263,10 @@ export class TestHelper {
     }
 
     return `Bearer ${token}`;
+  }
+
+  apiRoute(path: string) {
+    const url = new URL(`${BASE_URL}${path}`, 'https://open-cms.com');
+    return url.pathname;
   }
 }

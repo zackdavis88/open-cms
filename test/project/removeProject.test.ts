@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId');
 const request = testHelper.request;
 
 describe('Remove Project', () => {
@@ -39,7 +39,7 @@ describe('Remove Project', () => {
       requestPayload = {
         confirm: testProject.name,
       };
-      apiRoute = `/api/projects/${testProject.id}`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}`);
     });
 
     afterAll(async () => {
@@ -59,7 +59,7 @@ describe('Remove Project', () => {
 
     it('should reject requests when the project id is not valid', (done) => {
       request
-        .delete('/api/projects/ImpossibleId')
+        .delete(testHelper.apiRoute('/projects/ImpossibleId'))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -73,7 +73,7 @@ describe('Remove Project', () => {
 
     it('should reject requests when the project is deleted', (done) => {
       request
-        .delete(`/api/projects/${deletedProject.id}`)
+        .delete(testHelper.apiRoute(`/projects/${deletedProject.id}`))
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -87,7 +87,7 @@ describe('Remove Project', () => {
 
     it('should reject requests when the project does not exist', (done) => {
       request
-        .delete(`/api/projects/${testHelper.generateUUID()}`)
+        .delete(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}`))
         .set('authorization', adminAuthToken)
         .expect(
           404,
