@@ -581,6 +581,24 @@ describe('Update Blueprint', () => {
         );
     });
 
+    it('should reject requests when string field regex is not valid', (done) => {
+      requestPayload.fields = [
+        { ...generateBlueprintField({ type: 'string' }), regex: '^test\\' },
+      ];
+      request
+        .patch(apiRoute)
+        .set('authorization', writerAuthToken)
+        .send(requestPayload)
+        .expect(
+          422,
+          {
+            error: 'root string field regex is invalid',
+            errorType: ERROR_TYPES.VALIDATION,
+          },
+          done,
+        );
+    });
+
     it('should reject requests when string field minLength is greater than maxLength', (done) => {
       requestPayload.fields = [
         generateBlueprintField({

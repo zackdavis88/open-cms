@@ -103,6 +103,14 @@ const depthFirstValidation = (fields: unknown[], parentName = 'root') => {
       if (regex && typeof regex !== 'string') {
         throw new ValidationError(`${parentName} string field regex must be a string`);
       }
+      // Make sure the RegExp is valid.
+      if (regex && typeof regex === 'string') {
+        try {
+          new RegExp(regex);
+        } catch {
+          throw new ValidationError(`${parentName} string field regex is invalid`);
+        }
+      }
 
       if (
         typeof maxLength === 'number' &&
