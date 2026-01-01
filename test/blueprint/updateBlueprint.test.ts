@@ -5,6 +5,7 @@ import {
   Project,
   generateBlueprintField,
   Blueprint,
+  Component,
 } from '../utils';
 const testHelper = new TestHelper();
 let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints/:blueprintId');
@@ -78,6 +79,9 @@ describe('Update Blueprint', () => {
       name?: unknown;
       fields?: unknown;
     };
+    let testComponent1: Component;
+    let testComponent2: Component;
+    let testComponent3: Component;
 
     beforeAll(async () => {
       adminUser = await testHelper.createTestUser();
@@ -109,6 +113,25 @@ describe('Update Blueprint', () => {
       deletedBlueprint = await testHelper.createTestBlueprint({
         project: testProject,
         createdBy: adminUser,
+        isActive: false,
+      });
+
+      testComponent1 = await testHelper.createTestComponent({
+        project: testProject,
+        createdBy: adminUser,
+        blueprint: testBlueprint,
+      });
+
+      testComponent2 = await testHelper.createTestComponent({
+        project: testProject,
+        createdBy: adminUser,
+        blueprint: testBlueprint,
+      });
+
+      testComponent3 = await testHelper.createTestComponent({
+        project: testProject,
+        createdBy: adminUser,
+        blueprint: testBlueprint,
         isActive: false,
       });
     });
@@ -976,6 +999,17 @@ describe('Update Blueprint', () => {
           expect(pastVersion.createdById).toBe(adminUser.id);
           expect(pastVersion.name).toBe(testBlueprint.name); // testBlueprint.name is the original name.
           expect(pastVersion.fields).toEqual(testBlueprint.fields); // testBlueprint.fields are the original fields.
+
+          await testComponent1.reload();
+          await testComponent2.reload();
+          await testComponent3.reload();
+
+          // component 1 and 2 should be updated with a version id.
+          expect(testComponent1.blueprintVersionId).toBe(pastVersion.id);
+          expect(testComponent2.blueprintVersionId).toBe(pastVersion.id);
+
+          // component 3 should not. It is not active at the time of blueprint update.
+          expect(testComponent3.blueprintVersionId).toBe(null);
           done();
         });
     });

@@ -18,7 +18,7 @@ const createComponentFlow = async (
 ) => {
   try {
     const { user, project, blueprint } = req;
-    const { name, content } = await createComponentValidation({
+    const { name, content } = createComponentValidation({
       blueprint,
       nameInput: req.body?.name,
       contentInput: req.body?.content,
