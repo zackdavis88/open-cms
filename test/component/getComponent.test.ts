@@ -230,7 +230,7 @@ describe('Get Component', () => {
                 createdOn: writerUser.createdOn.toISOString(),
               }) ||
               null,
-            blueprintVersionId: testComponent.blueprintVersionId,
+            blueprintVersion: null,
             project: {
               id: testProject.id,
               name: testProject.name,

@@ -44,7 +44,11 @@ const getComponentFlow = async (req: Request, res: Response) => {
     const responseBody: GetComponentResponseBody = {
       component: {
         ...getComponentData(Object.assign(component, { project })),
-        blueprintVersionId: component.blueprintVersionId || null,
+        blueprintVersion: component.blueprintVersionId &&
+          component.blueprintVersion && {
+            id: component.blueprintVersion.id,
+            name: component.blueprintVersion.name,
+          },
         updatedOn: component.updatedOn || null,
         updatedBy:
           (component.updatedById &&
