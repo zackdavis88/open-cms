@@ -45,6 +45,20 @@ export interface BlueprintData {
   deletedBy?: UserData | null;
 }
 
+export interface ComponentData {
+  id: string;
+  project: Pick<ProjectData, 'id' | 'name'>;
+  blueprint: Pick<BlueprintData, 'id' | 'name'>;
+  name: string;
+  content: Record<string, unknown>;
+  createdOn: Date;
+  createdBy: UserData | null;
+  updatedOn?: Date | null;
+  updatedBy?: UserData | null;
+  deletedOn?: Date | null;
+  deletedBy?: UserData | null;
+}
+
 export enum AuthorizationAction {
   CREATE,
   READ,

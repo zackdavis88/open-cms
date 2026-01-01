@@ -1,4 +1,5 @@
 export { default as getBlueprintData } from './getBlueprintData';
+export { default as getComponentData } from './getComponentData';
 export { default as getMembershipData } from './getMembershipData';
 export { default as getProjectData } from './getProjectData';
 export { default as getPublicUserData } from './getPublicUserData';
