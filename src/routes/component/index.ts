@@ -16,6 +16,14 @@ const configureComponentRoutes = (router: Router) => {
       BlueprintController.getBlueprintMiddleware,
       ComponentController.create,
     );
-};
 
+  router
+    .route('/projects/:projectId/components/:componentId')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(
+      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      ComponentController.getComponentMiddleware,
+      ComponentController.getComponent,
+    );
+};
 export default configureComponentRoutes;

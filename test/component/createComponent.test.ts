@@ -919,7 +919,7 @@ describe('Create Component', () => {
           }
 
           expect(message).toBe('component has been successfully created');
-          expect(component).toMatchObject({
+          expect(component).toEqual({
             id: dbComponent.id,
             name: requestPayload.name,
             createdOn: dbComponent.createdOn.toISOString(),
@@ -936,11 +936,11 @@ describe('Create Component', () => {
               id: testBlueprint.id,
               name: testBlueprint.name,
             },
-          });
-          expect(component.content).toEqual({
-            ...(requestPayload.content as Record<string, unknown>),
-            startDate: new Date('01-01-2026').toISOString(),
-            endDate: new Date('04-17-2026').toISOString(),
+            content: {
+              ...(requestPayload.content as Record<string, unknown>),
+              startDate: new Date('01-01-2026').toISOString(),
+              endDate: new Date('04-17-2026').toISOString(),
+            },
           });
           done();
         });
