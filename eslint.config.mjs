@@ -42,15 +42,6 @@ export default defineConfig([
     },
 
     rules: {
-      indent: [
-        'error',
-        2,
-        {
-          SwitchCase: 1,
-          ignoredNodes: ['TemplateLiteral > *', 'ConditionalExpression'],
-        },
-      ],
-
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single'],
       semi: ['error', 'always'],

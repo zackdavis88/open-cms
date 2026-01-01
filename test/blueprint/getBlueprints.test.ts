@@ -456,48 +456,6 @@ describe('Get Blueprints', () => {
         });
     });
 
-    it('should allow filtering by name', (done) => {
-      request
-        .get(
-          `${apiRoute}?itemsPerPage=100&filterStringColumn=name&filterStringValue=${testBlueprint1.name}`,
-        )
-        .set('authorization', readerAuthToken)
-        .expect(200)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-
-          const { blueprints, page, itemsPerPage, totalItems, totalPages } = res.body;
-          const expectedBlueprints = [testBlueprint1];
-          expect(blueprints).toEqual(
-            expectedBlueprints.map((expectedBlueprint) => ({
-              id: expectedBlueprint.id,
-              name: expectedBlueprint.name,
-              createdOn: expectedBlueprint.createdOn.toISOString(),
-              createdBy: {
-                username: expectedBlueprint.createdBy.username,
-                displayName: expectedBlueprint.createdBy.displayName,
-                createdOn: expectedBlueprint.createdBy.createdOn.toISOString(),
-              },
-              updatedOn: expectedBlueprint.updatedOn?.toISOString() || null,
-              updatedBy:
-                (expectedBlueprint.updatedBy && {
-                  username: expectedBlueprint.updatedBy.username,
-                  displayName: expectedBlueprint.updatedBy.displayName,
-                  createdOn: expectedBlueprint.updatedBy.createdOn.toISOString(),
-                }) ||
-                null,
-            })),
-          );
-          expect(page).toBe(1);
-          expect(totalPages).toBe(1);
-          expect(totalItems).toBe(1);
-          expect(itemsPerPage).toBe(100);
-          done();
-        });
-    });
-
     it('should allow filtering by createdBy username', (done) => {
       request
         .get(

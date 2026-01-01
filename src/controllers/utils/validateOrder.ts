@@ -5,13 +5,20 @@ type ValidateOrder = ({
   query,
   defaultOrderColumn,
   allowedColumns,
+  customOrderColumn,
 }: {
   query: Request['query'];
   defaultOrderColumn: string;
   allowedColumns: string[];
+  customOrderColumn?: Record<string, string>;
 }) => Order;
 
-const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumns }) => {
+const validateOrder: ValidateOrder = ({
+  query,
+  defaultOrderColumn,
+  allowedColumns,
+  customOrderColumn,
+}) => {
   let orderColumn = defaultOrderColumn;
   if (typeof query.orderColumn === 'string') {
     orderColumn = query.orderColumn;
@@ -37,7 +44,17 @@ const validateOrder: ValidateOrder = ({ query, defaultOrderColumn, allowedColumn
     const [associationName, columnName] = orderColumn.replace('__', '').split('_');
     orderItem = [associationName, columnName, orderBy];
   } else if (!orderColumn.startsWith('is') && !orderColumn.endsWith('On')) {
-    orderItem = [fn('LOWER', col(orderColumn)), orderBy];
+    orderItem = [
+      fn(
+        'LOWER',
+        col(
+          customOrderColumn && customOrderColumn[orderColumn] ?
+            customOrderColumn[orderColumn]
+          : orderColumn,
+        ),
+      ),
+      orderBy,
+    ];
   }
 
   const order = [orderItem] satisfies Order;

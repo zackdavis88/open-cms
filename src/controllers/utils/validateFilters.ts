@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { Op, WhereOptions } from 'sequelize';
+import validateUUID from './validateUUID';
 
 const isAssociationColumn = (columnName: string) => columnName.startsWith('__');
 const isNotAssociationColumn = (columnName: string) => !columnName.startsWith('__');
@@ -83,6 +84,55 @@ const validateBooleanFilters: ValidateBooleanFilters = ({
       },
       {},
     );
+  }
+};
+
+type ValidateIdFilters = ({
+  query,
+  idColumns,
+}: {
+  query: Request['query'];
+  idColumns: string[];
+}) => void | WhereOptions;
+
+const validateIdFilters: ValidateIdFilters = ({ query, idColumns }) => {
+  const { filterIdColumn, filterIdValue } = query;
+  const lowerCasedColumnNames = idColumns.map((idColumns) => idColumns.toLowerCase());
+
+  if (isString(filterIdColumn) && isString(filterIdValue)) {
+    const filterIdColumnIndex = lowerCasedColumnNames.indexOf(
+      filterIdColumn.toLowerCase(),
+    );
+    const filterIdColumnIsValid = filterIdColumnIndex !== -1;
+    validateUUID(filterIdValue, 'filterIdValue');
+    if (filterIdColumnIsValid) {
+      return {
+        [idColumns[filterIdColumnIndex]]: filterIdValue,
+      };
+    }
+  } else if (isArray(filterIdColumn) && isArray(filterIdValue)) {
+    return filterIdColumn.reduce<WhereOptions>((prev, filterIdColumnName, index) => {
+      if (isString(filterIdColumnName)) {
+        const filterIdColumnIndex = lowerCasedColumnNames.indexOf(
+          filterIdColumnName.toLowerCase(),
+        );
+        const filterIdColumnIsValid = filterIdColumnIndex !== -1;
+        const filterIdValueFromArray = filterIdValue[index];
+        if (
+          filterIdColumnIsValid &&
+          filterIdValueFromArray &&
+          isString(filterIdValueFromArray)
+        ) {
+          validateUUID(filterIdValueFromArray, 'filterIdValue');
+          return {
+            ...prev,
+            [idColumns[filterIdColumnIndex]]: filterIdValueFromArray,
+          };
+        }
+      }
+
+      return prev;
+    }, {});
   }
 };
 
@@ -219,23 +269,26 @@ type ValidateFilters = ({
     stringColumns?: string[];
     dateColumns?: string[];
     booleanColumns?: string[];
+    idColumns?: string[];
   };
 }) => {
   filterStrings: WhereOptions | void;
   filterDates: WhereOptions | void;
   filterBooleans: WhereOptions | void;
+  filterIds: WhereOptions | void;
   filterAssociations: Record<string, WhereOptions>;
 } | void;
 
 const validateFilters: ValidateFilters = ({
   query,
-  allowedColumns: { stringColumns, dateColumns, booleanColumns },
+  allowedColumns: { stringColumns, dateColumns, booleanColumns, idColumns },
 }) => {
   const stringAssociationColumns =
     stringColumns && stringColumns.filter(isAssociationColumn);
   const dateAssociationColumns = dateColumns && dateColumns.filter(isAssociationColumn);
   const booleanAssociationColumns =
     booleanColumns && booleanColumns.filter(isAssociationColumn);
+  const idAssociationColumns = idColumns && idColumns.filter(isAssociationColumn);
 
   const filterStrings =
     stringColumns &&
@@ -270,13 +323,21 @@ const validateFilters: ValidateFilters = ({
       booleanColumns: booleanAssociationColumns,
     });
 
+  const filterIds =
+    idColumns &&
+    validateIdFilters({ query, idColumns: idColumns.filter(isNotAssociationColumn) });
+  const filterAssociationIds =
+    idAssociationColumns && validateIdFilters({ query, idColumns: idAssociationColumns });
+
   if (
     !filterStrings &&
     !filterDates &&
     !filterAssociationStrings &&
     !filterAssociationDates &&
     !filterBooleans &&
-    !filterAssociationBooleans
+    !filterAssociationBooleans &&
+    !filterIds &&
+    !filterAssociationIds
   ) {
     return;
   }
@@ -285,7 +346,12 @@ const validateFilters: ValidateFilters = ({
     filterStrings,
     filterDates,
     filterBooleans,
-    filterAssociations: { ...filterAssociationStrings, ...filterAssociationDates },
+    filterIds,
+    filterAssociations: {
+      ...filterAssociationStrings,
+      ...filterAssociationDates,
+      ...filterAssociationIds,
+    },
   };
 };
 
