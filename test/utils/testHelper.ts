@@ -22,6 +22,7 @@ const DEFAULT_FIELDS = [
     type: 'object',
     options: {
       name: 'defaultObjectField',
+      isRequired: true,
       fields: [
         generateBlueprintField({
           type: 'object',

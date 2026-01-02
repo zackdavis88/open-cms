@@ -1,0 +1,65 @@
+import { Request, Response } from 'express';
+import updateComponentValidation from './updateComponentValidation';
+import { ComponentData } from 'src/types';
+import { getComponentData, getPublicUserData } from 'src/controllers/utils';
+
+interface UpdateComponentRequestBody {
+  name?: unknown;
+  content?: unknown;
+}
+
+type UpdateComponentResponseBody = {
+  component: ComponentData;
+};
+
+const updateComponentFlow = async (
+  req: Request<never, never, UpdateComponentRequestBody>,
+  res: Response,
+) => {
+  try {
+    const { user, project, component } = req;
+    const { name, content } = updateComponentValidation({
+      blueprint: component.blueprint,
+      blueprintVersion: component.blueprintVersion ?? undefined,
+      nameInput: req.body?.name,
+      contentInput: req.body?.content,
+    });
+
+    // TODO: Create a new component version here. When those exist.
+
+    if (name) {
+      component.name = name;
+    }
+
+    if (content) {
+      component.content = content;
+    }
+
+    component.updatedOn = new Date();
+    component.updatedById = user.id;
+    await component.save();
+
+    const responseBody: UpdateComponentResponseBody = {
+      component: {
+        ...getComponentData(
+          Object.assign(component, {
+            project,
+          }),
+        ),
+        blueprintVersion: component.blueprintVersionId &&
+          component.blueprintVersion && {
+            id: component.blueprintVersion.id,
+            name: component.blueprintVersion.name,
+          },
+        updatedOn: component.updatedOn,
+        updatedBy: getPublicUserData(user),
+      },
+    };
+
+    return res.success('component has been successfully updated', responseBody);
+  } catch (error) {
+    return res.sendError(error);
+  }
+};
+
+export default updateComponentFlow;

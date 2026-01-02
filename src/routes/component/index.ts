@@ -32,6 +32,11 @@ const configureComponentRoutes = (router: Router) => {
       AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
       ComponentController.getComponentMiddleware,
       ComponentController.getComponent,
+    )
+    .patch(
+      AuthController.authorizeBlueprintAction(AuthorizationAction.UPDATE),
+      ComponentController.getComponentMiddleware,
+      ComponentController.update,
     );
 };
 export default configureComponentRoutes;

@@ -1,4 +1,4 @@
-import { Blueprint } from 'src/models';
+import { Blueprint, BlueprintVersion } from 'src/models';
 import { ValidationError } from 'src/server/utils/errors';
 import {
   BlueprintFieldTypeValues,
@@ -308,7 +308,7 @@ const depthFirstValidation: DepthFirstValidation = ({ fields, content }) => {
 };
 
 type ValidateContent = (input: {
-  blueprint: Blueprint;
+  blueprint: Blueprint | BlueprintVersion;
   content?: unknown;
   isOptional?: boolean;
 }) => Record<string, unknown> | undefined;

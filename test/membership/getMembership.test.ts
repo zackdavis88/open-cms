@@ -145,7 +145,7 @@ describe('Get Membership', () => {
         .expect(200)
         .end((err, res) => {
           if (err) {
-            done(err);
+            return done(err);
           }
 
           const { message, membership } = res.body;
