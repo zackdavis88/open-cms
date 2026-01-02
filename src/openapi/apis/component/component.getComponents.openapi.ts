@@ -5,29 +5,36 @@
  * @openapi
  * components:
  *   parameters:
- *     GetBlueprintsOrderColumnParam:
+ *     GetComponentsOrderColumnParam:
  *       name: orderColumn
  *       description: Column to order results by
  *       in: query
  *       schema:
  *         type: string
- *         enum: [name, createdOn, updatedOn, __createdBy_username, __updatedBy_username]
- *     GetBlueprintsFilterStringColumnParam:
+ *         enum: [name, createdOn, updatedOn, __createdBy_username, __updatedBy_username, __blueprint_name, __blueprintVersion_name]
+ *     GetComponentsFilterStringColumnParam:
  *       name: filterStringColumn
  *       description: String column to filter results with
  *       in: query
  *       schema:
  *         type: string
- *         enum: [name, __createdBy_username, __updatedBy_username]
+ *         enum: [name, __createdBy_username, __updatedBy_username, __blueprint_name, __blueprintVersion_name]
  *       style: form
  *       explode: true
- *     GetBlueprintsFilterDateColumnParam:
+ *     GetComponentsFilterDateColumnParam:
  *       name: filterDateColumn
  *       description: Date column to filter with
  *       in: query
  *       schema:
  *         type: string
  *         enum: [createdOn, updatedOn]
+ *     GetComponentsFilterIdColumnParam:
+ *       name: filterIdColumn
+ *       description: Id column to filter with
+ *       in: query
+ *       schema:
+ *         type: string
+ *         enum: [__blueprint_id, __blueprintVersion_id]
  */
 
 /*******************************************
@@ -37,74 +44,86 @@
  * @openapi
  * components:
  *   responses:
- *     GetBlueprintsResponse:
- *       description: Blueprint successfully retrieved
+ *     GetComponentsResponse:
+ *       description: Component successfully retrieved
  *       content:
  *         application/json:
  *           schema:
  *             allOf:
  *               - type: object
- *                 description: Requested blueprint data
+ *                 description: Requested component data
  *                 properties:
  *                   message:
  *                     type: string
  *                     description: Successful message
- *                     examples: ["blueprint list has been successfully retrieved"]
+ *                     examples: ["component list has been successfully retrieved"]
  *                   project:
  *                     $ref: "#/components/schemas/MinimalProjectData"
- *                   blueprints:
+ *                   components:
  *                     type: array
- *                     description: Requested blueprint list details
+ *                     description: Requested component list details
  *                     items:
  *                       allOf:
- *                         - $ref: "#/components/schemas/MinimalBlueprintData"
+ *                         - $ref: "#/components/schemas/ComponentData"
  *                         - type: object
- *                           required: ["updatedOn", "updatedBy"]
+ *                           required: ["updatedOn", "updatedBy", "blueprintVersion"]
  *                           properties:
  *                             updatedOn:
  *                               type: ["string", "null"]
  *                               format: date-time
- *                               description: Timestamp of when the blueprint was updated
+ *                               description: Timestamp of when the component was updated
  *                               examples: ["2025-12-20T15:54:47.862Z", null]
  *                             updatedBy:
  *                               type: ["object", "null"]
  *                               $ref: "#/components/schemas/PublicUserData"
  *                               description: User details of the last update
+ *                             blueprintVersion:
+ *                               type: ["object", "null"]
+ *                               properties:
+ *                                 id:
+ *                                   type: string
+ *                                   format: uuid
+ *                                   examples: ["f0c0fb93-ea38-45bc-9267-c42cf0d2c844"]
+ *                                 name:
+ *                                   type: string
+ *                                   examples: ["CoolBlueprint"]
  *                 required:
  *                   - message
- *                   - blueprints
+ *                   - components
  *                   - project
  *               - $ref: "#/components/schemas/PaginationData"
  */
 
 /*******************************************
- * GET BLUEPRINTS                          *
+ * GET COMPONENTS                          *
  *******************************************/
 /**
  * @openapi
- * /projects/{projectId}/blueprints:
+ * /projects/{projectId}/components:
  *   get:
  *     tags:
- *       - Blueprint
- *     summary: Get Blueprint List
- *     description: Gets a pagintated list of blueprints
- *     operationId: getBlueprintList
+ *       - Component
+ *     summary: Get Component List
+ *     description: Gets a pagintated list of components
+ *     operationId: getComponentList
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: "#/components/parameters/ProjectIdParam"
  *       - $ref: "#/components/parameters/PageParam"
  *       - $ref: "#/components/parameters/ItemsPerPageParam"
- *       - $ref: "#/components/parameters/GetBlueprintsOrderColumnParam"
+ *       - $ref: "#/components/parameters/GetComponentsOrderColumnParam"
  *       - $ref: "#/components/parameters/OrderByValueParam"
- *       - $ref: "#/components/parameters/GetBlueprintsFilterStringColumnParam"
+ *       - $ref: "#/components/parameters/GetComponentsFilterStringColumnParam"
  *       - $ref: "#/components/parameters/FilterStringValueParam"
- *       - $ref: "#/components/parameters/GetBlueprintsFilterDateColumnParam"
+ *       - $ref: "#/components/parameters/GetComponentsFilterDateColumnParam"
  *       - $ref: "#/components/parameters/FilterDateValueParam"
  *       - $ref: "#/components/parameters/FilterDateOpParam"
+ *       - $ref: "#/components/parameters/GetComponentsFilterIdColumnParam"
+ *       - $ref: "#/components/parameters/FilterIdValueParam"
  *     responses:
  *       200:
- *         $ref: "#/components/responses/GetBlueprintsResponse"
+ *         $ref: "#/components/responses/GetComponentsResponse"
  *       401:
  *         $ref: "#/components/responses/AuthenticationError"
  *       403:
