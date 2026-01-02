@@ -37,6 +37,11 @@ const configureComponentRoutes = (router: Router) => {
       AuthController.authorizeBlueprintAction(AuthorizationAction.UPDATE),
       ComponentController.getComponentMiddleware,
       ComponentController.update,
+    )
+    .delete(
+      AuthController.authorizeBlueprintAction(AuthorizationAction.DELETE),
+      ComponentController.getComponentMiddleware,
+      ComponentController.remove,
     );
 };
 export default configureComponentRoutes;
