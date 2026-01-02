@@ -79,7 +79,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/blueprints/{blueprintId}:
+ * /projects/{projectId}/blueprints/{blueprintId}:
  *   delete:
  *     tags:
  *       - Blueprint

@@ -72,7 +72,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}:
+ * /projects/{projectId}:
  *   delete:
  *     tags:
  *       - Project

@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId');
 const request = testHelper.request;
 
 describe('Update Project', () => {
@@ -41,7 +41,7 @@ describe('Update Project', () => {
         name: 'UpdateTestProject',
         description: 'Testing project update',
       };
-      apiRoute = `/api/projects/${testProject.id}`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}`);
     });
 
     afterAll(async () => {
@@ -61,7 +61,7 @@ describe('Update Project', () => {
 
     it('should reject requests when the project id is not valid', (done) => {
       request
-        .patch('/api/projects/ImpossibleId')
+        .patch(testHelper.apiRoute('/projects/ImpossibleId'))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -75,7 +75,7 @@ describe('Update Project', () => {
 
     it('should reject requests when the project is deleted', (done) => {
       request
-        .patch(`/api/projects/${deletedProject.id}`)
+        .patch(testHelper.apiRoute(`/projects/${deletedProject.id}`))
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -89,7 +89,7 @@ describe('Update Project', () => {
 
     it('should reject requests when the project does not exist', (done) => {
       request
-        .patch(`/api/projects/${testHelper.generateUUID()}`)
+        .patch(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}`))
         .set('authorization', adminAuthToken)
         .expect(
           404,

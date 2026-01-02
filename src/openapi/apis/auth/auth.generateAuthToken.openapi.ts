@@ -35,7 +35,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/auth:
+ * /auth:
  *   get:
  *     tags:
  *       - Authentication

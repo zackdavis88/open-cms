@@ -4,7 +4,7 @@ import { Project, User, initializeModels } from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import jwt from 'jsonwebtoken';
-import { BlueprintField } from '../../src/models/blueprint/blueprint';
+import Blueprint, { BlueprintField } from '../../src/models/blueprint/blueprint';
 import generateBlueprintField from './generateBlueprintField';
 
 const {
@@ -21,14 +21,21 @@ const DEFAULT_FIELDS = [
   generateBlueprintField({
     type: 'object',
     options: {
+      name: 'defaultObjectField',
+      isRequired: true,
       fields: [
         generateBlueprintField({
           type: 'object',
           options: {
+            name: 'nestedObjectField1',
             fields: [
               generateBlueprintField({
                 type: 'string',
-                options: { minLength: 1, maxLength: 25 },
+                options: {
+                  name: 'nestedObject1StringField',
+                  minLength: 1,
+                  maxLength: 25,
+                },
               }),
             ],
           },
@@ -36,11 +43,17 @@ const DEFAULT_FIELDS = [
         generateBlueprintField({
           type: 'object',
           options: {
+            name: 'nestedObjectField2',
             fields: [
               generateBlueprintField({
                 type: 'object',
                 options: {
-                  fields: [generateBlueprintField({ type: 'boolean' })],
+                  fields: [
+                    generateBlueprintField({
+                      type: 'boolean',
+                      options: { name: 'nestedObject2BooleanField' },
+                    }),
+                  ],
                 },
               }),
             ],
@@ -48,13 +61,36 @@ const DEFAULT_FIELDS = [
         }),
         generateBlueprintField({
           type: 'array',
-          options: { arrayOf: generateBlueprintField({ type: 'number' }) },
+          options: {
+            name: 'nestedArrayField',
+            arrayOf: generateBlueprintField({ type: 'number' }),
+          },
         }),
-        generateBlueprintField({ type: 'string' }),
+        generateBlueprintField({
+          type: 'string',
+          options: { name: 'nestedStringField' },
+        }),
       ],
     },
   }),
 ];
+
+const DEFAULT_CONTENT = {
+  defaultObjectField: {
+    nestedObjectField1: {
+      nestedObject1StringField: 'some string value',
+    },
+    nestedObjectField2: {
+      nestedObject2BooleanField: true,
+    },
+    nestedArrayField: [1, 2, 3, 4],
+  },
+};
+
+let BASE_URL = '/api';
+if (typeof process.env.BASE_URL === 'string' && process.env.BASE_URL.startsWith('/')) {
+  BASE_URL = process.env.BASE_URL;
+}
 
 interface TokenDataOverride {
   id?: string;
@@ -204,6 +240,47 @@ export class TestHelper {
     return blueprint;
   }
 
+  async createTestComponent({
+    project,
+    blueprint,
+    createdBy,
+    createdOn,
+    updatedBy,
+    updatedOn,
+    isActive,
+    name,
+    content,
+    blueprintVersionId,
+  }: {
+    project: Project;
+    blueprint: Blueprint;
+    createdBy: User;
+    createdOn?: Date;
+    updatedOn?: Date;
+    updatedBy?: User;
+    isActive?: boolean;
+    name?: string;
+    content?: Record<string, unknown>;
+    blueprintVersionId?: string;
+  }) {
+    const component = await project.createComponent({
+      createdOn,
+      createdById: createdBy.id,
+      updatedById: updatedBy?.id,
+      updatedOn: updatedOn || updatedBy?.id ? new Date() : null,
+      name: name || crypto.randomUUID(),
+      content: content || DEFAULT_CONTENT,
+      isActive,
+      blueprintVersionId,
+      blueprintId: blueprint.id,
+    });
+    component.project = project;
+    component.createdBy = createdBy;
+    component.updatedBy = updatedBy;
+    component.blueprint = blueprint;
+    return component;
+  }
+
   async createTestProject({
     user,
     name,
@@ -258,5 +335,10 @@ export class TestHelper {
     }
 
     return `Bearer ${token}`;
+  }
+
+  apiRoute(path: string) {
+    const url = new URL(`${BASE_URL}${path}`, 'https://open-cms.com');
+    return url.pathname;
   }
 }

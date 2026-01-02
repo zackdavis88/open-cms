@@ -7,7 +7,7 @@ import {
   MembershipData,
 } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/memberships';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/memberships');
 const request = testHelper.request;
 
 describe('Get Memberships', () => {
@@ -191,7 +191,7 @@ describe('Get Memberships', () => {
     });
 
     beforeEach(() => {
-      apiRoute = `/api/projects/${testProject.id}/memberships`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}/memberships`);
     });
 
     afterAll(async () => {
@@ -211,7 +211,7 @@ describe('Get Memberships', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .get('/api/projects/SomethingWrong/memberships')
+        .get(testHelper.apiRoute('/projects/SomethingWrong/memberships'))
         .set('authorization', authToken)
         .expect(
           422,
@@ -225,7 +225,7 @@ describe('Get Memberships', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(`/api/projects/${testHelper.generateUUID()}/memberships`)
+        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/memberships`))
         .set('authorization', authToken)
         .expect(
           404,
@@ -239,7 +239,7 @@ describe('Get Memberships', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .get(`/api/projects/${deletedProject.id}/memberships`)
+        .get(testHelper.apiRoute(`/projects/${deletedProject.id}/memberships`))
         .set('authorization', authToken)
         .expect(
           404,

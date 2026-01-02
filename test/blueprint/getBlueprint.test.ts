@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project, Blueprint } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints/:blueprintId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints/:blueprintId');
 const request = testHelper.request;
 
 describe('Get Blueprint', () => {
@@ -46,7 +46,9 @@ describe('Get Blueprint', () => {
     beforeEach(() => {
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints/${testBlueprint.id}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/blueprints/${testBlueprint.id}`,
+      );
     });
 
     afterAll(async () => {
@@ -66,7 +68,11 @@ describe('Get Blueprint', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .get(`/api/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`)
+        .get(
+          testHelper.apiRoute(
+            `/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', readerAuthToken)
         .expect(
           422,
@@ -80,7 +86,11 @@ describe('Get Blueprint', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(`/api/projects/${crypto.randomUUID()}/blueprints/${crypto.randomUUID()}`)
+        .get(
+          testHelper.apiRoute(
+            `/projects/${crypto.randomUUID()}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', nonMemberAuthToken)
         .expect(
           404,
@@ -94,7 +104,11 @@ describe('Get Blueprint', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .get(`/api/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`)
+        .get(
+          testHelper.apiRoute(
+            `/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', readerAuthToken)
         .expect(
           404,
@@ -119,7 +133,7 @@ describe('Get Blueprint', () => {
 
     it('should reject when blueprint id is not a valid uuid', (done) => {
       request
-        .get(`/api/projects/${testProject.id}/blueprints/wrong`)
+        .get(testHelper.apiRoute(`/projects/${testProject.id}/blueprints/wrong`))
         .set('authorization', readerAuthToken)
         .expect(
           422,
@@ -133,7 +147,11 @@ describe('Get Blueprint', () => {
 
     it('should reject when blueprint is deleted', (done) => {
       request
-        .get(`/api/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`)
+        .get(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`,
+          ),
+        )
         .set('authorization', readerAuthToken)
         .expect(
           404,
@@ -147,7 +165,11 @@ describe('Get Blueprint', () => {
 
     it('should reject when blueprint is not found', (done) => {
       request
-        .get(`/api/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`)
+        .get(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', readerAuthToken)
         .expect(
           404,

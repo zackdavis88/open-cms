@@ -28,7 +28,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/users/{username}:
+ * /users/{username}:
  *   get:
  *     tags:
  *       - User

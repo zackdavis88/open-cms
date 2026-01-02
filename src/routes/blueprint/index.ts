@@ -7,11 +7,11 @@ const configureBlueprintRoutes = (router: Router) => {
     .route('/projects/:projectId/blueprints')
     .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .post(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.CREATE),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.CREATE),
       BlueprintController.create,
     )
     .get(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       BlueprintController.getBlueprints,
     );
 
@@ -19,17 +19,17 @@ const configureBlueprintRoutes = (router: Router) => {
     .route('/projects/:projectId/blueprints/:blueprintId')
     .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .get(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       BlueprintController.getBlueprintMiddleware,
       BlueprintController.getBlueprint,
     )
     .patch(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.UPDATE),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.UPDATE),
       BlueprintController.getBlueprintMiddleware,
       BlueprintController.update,
     )
     .delete(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.DELETE),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.DELETE),
       BlueprintController.getBlueprintMiddleware,
       BlueprintController.remove,
     );

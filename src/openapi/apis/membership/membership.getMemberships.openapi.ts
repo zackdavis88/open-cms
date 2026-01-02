@@ -101,7 +101,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/memberships:
+ * /projects/{projectId}/memberships:
  *   get:
  *     tags:
  *       - Membership

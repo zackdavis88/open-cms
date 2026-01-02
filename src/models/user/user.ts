@@ -14,6 +14,8 @@ import {
 } from 'sequelize';
 import Project from 'src/models/project/project';
 import Membership from 'src/models/membership/membership';
+import Blueprint from 'src/models/blueprint/blueprint';
+import Component from 'src/models/component/component';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<string>;
@@ -52,6 +54,38 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare getCreatedMembership: HasOneGetAssociationMixin<Membership>;
   declare getUpdatedMembership: HasOneGetAssociationMixin<Membership>;
   declare getMembership: HasOneGetAssociationMixin<Membership>;
+
+  // Blueprint associations - HasMany
+  declare getCreatedBlueprints: HasManyGetAssociationsMixin<Blueprint>;
+  declare countCreatedBlueprints: HasManyCountAssociationsMixin;
+  declare getUpdatedBlueprints: HasManyGetAssociationsMixin<Blueprint>;
+  declare countUpdatedBlueprints: HasManyCountAssociationsMixin;
+  declare getDeletedBlueprints: HasManyGetAssociationsMixin<Blueprint>;
+  declare countDeletedBlueprints: HasManyCountAssociationsMixin;
+  declare getBlueprints: HasManyGetAssociationsMixin<Blueprint>;
+  declare countBlueprints: HasManyCountAssociationsMixin;
+
+  // Blueprint associations - HasOne
+  declare getCreatedBlueprint: HasOneGetAssociationMixin<Blueprint>;
+  declare getUpdatedBlueprint: HasOneGetAssociationMixin<Blueprint>;
+  declare getDeletedBlueprint: HasOneGetAssociationMixin<Blueprint>;
+  declare getBlueprint: HasOneGetAssociationMixin<Blueprint>;
+
+  // Component associations - HasMany
+  declare getCreatedComponents: HasManyGetAssociationsMixin<Component>;
+  declare countCreatedComponents: HasManyCountAssociationsMixin;
+  declare getUpdatedComponents: HasManyGetAssociationsMixin<Component>;
+  declare countUpdatedComponents: HasManyCountAssociationsMixin;
+  declare getDeletedComponents: HasManyGetAssociationsMixin<Component>;
+  declare countDeletedComponents: HasManyCountAssociationsMixin;
+  declare getComponents: HasManyGetAssociationsMixin<Component>;
+  declare countComponents: HasManyCountAssociationsMixin;
+
+  // Component associations - HasOne
+  declare getCreatedComponent: HasOneGetAssociationMixin<Component>;
+  declare getUpdatedComponent: HasOneGetAssociationMixin<Component>;
+  declare getDeletedComponent: HasOneGetAssociationMixin<Component>;
+  declare getComponent: HasOneGetAssociationMixin<Component>;
 
   static generateHash(password: string): NonAttribute<string> {
     let saltRounds: number | undefined;

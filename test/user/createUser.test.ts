@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-const apiRoute = '/api/users';
+const apiRoute = testHelper.apiRoute('/users');
 const request = testHelper.request;
 
 describe('Create User', () => {

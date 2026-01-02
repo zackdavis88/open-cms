@@ -1,7 +1,7 @@
 import { TestHelper } from '../utils';
 
 const testHelper = new TestHelper();
-const apiRoute = '/api/discovery';
+const apiRoute = testHelper.apiRoute('/discovery');
 const request = testHelper.request;
 
 describe('Discovery', () => {

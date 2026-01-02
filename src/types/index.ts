@@ -1,4 +1,4 @@
-import { type BlueprintField } from 'src/models/blueprint/blueprint';
+import { BlueprintVersion, type BlueprintField } from 'src/models/blueprint/blueprint';
 
 export interface UserData {
   username: string;
@@ -37,6 +37,24 @@ export interface BlueprintData {
   project: Pick<ProjectData, 'id' | 'name'>;
   name: string;
   fields: BlueprintField[];
+  createdOn: Date;
+  createdBy: UserData | null;
+  updatedOn?: Date | null;
+  updatedBy?: UserData | null;
+  deletedOn?: Date | null;
+  deletedBy?: UserData | null;
+}
+
+export interface ComponentData {
+  id: string;
+  project: Pick<ProjectData, 'id' | 'name'>;
+  blueprint: Pick<BlueprintData, 'id' | 'name'>;
+  blueprintVersion?: {
+    id: BlueprintVersion['id'];
+    name: BlueprintVersion['name'];
+  } | null;
+  name: string;
+  content: Record<string, unknown>;
   createdOn: Date;
   createdBy: UserData | null;
   updatedOn?: Date | null;

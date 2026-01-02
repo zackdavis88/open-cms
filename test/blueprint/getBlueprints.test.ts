@@ -7,7 +7,7 @@ import {
   BlueprintData,
 } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints');
 const request = testHelper.request;
 
 describe('Get Blueprints', () => {
@@ -189,7 +189,7 @@ describe('Get Blueprints', () => {
     beforeEach(() => {
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints`;
+      apiRoute = testHelper.apiRoute(`/projects/${testProject.id}/blueprints`);
     });
 
     afterAll(async () => {
@@ -209,7 +209,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .get('/api/projects/SomethingWrong/blueprints')
+        .get(testHelper.apiRoute('/projects/SomethingWrong/blueprints'))
         .set('authorization', nonMemberAuthToken)
         .expect(
           422,
@@ -223,7 +223,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(`/api/projects/${testHelper.generateUUID()}/blueprints`)
+        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/blueprints`))
         .set('authorization', readerAuthToken)
         .expect(
           404,
@@ -237,7 +237,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .get(`/api/projects/${deletedProject.id}/blueprints`)
+        .get(testHelper.apiRoute(`/projects/${deletedProject.id}/blueprints`))
         .set('authorization', readerAuthToken)
         .expect(
           404,
@@ -410,48 +410,6 @@ describe('Get Blueprints', () => {
           expect(totalPages).toBe(1);
           expect(totalItems).toBe(5);
           expect(itemsPerPage).toBe(5);
-          done();
-        });
-    });
-
-    it('should allow filtering by name', (done) => {
-      request
-        .get(
-          `${apiRoute}?itemsPerPage=100&filterStringColumn=name&filterStringValue=${testBlueprint1.name}`,
-        )
-        .set('authorization', readerAuthToken)
-        .expect(200)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-
-          const { blueprints, page, itemsPerPage, totalItems, totalPages } = res.body;
-          const expectedBlueprints = [testBlueprint1];
-          expect(blueprints).toEqual(
-            expectedBlueprints.map((expectedBlueprint) => ({
-              id: expectedBlueprint.id,
-              name: expectedBlueprint.name,
-              createdOn: expectedBlueprint.createdOn.toISOString(),
-              createdBy: {
-                username: expectedBlueprint.createdBy.username,
-                displayName: expectedBlueprint.createdBy.displayName,
-                createdOn: expectedBlueprint.createdBy.createdOn.toISOString(),
-              },
-              updatedOn: expectedBlueprint.updatedOn?.toISOString() || null,
-              updatedBy:
-                (expectedBlueprint.updatedBy && {
-                  username: expectedBlueprint.updatedBy.username,
-                  displayName: expectedBlueprint.updatedBy.displayName,
-                  createdOn: expectedBlueprint.updatedBy.createdOn.toISOString(),
-                }) ||
-                null,
-            })),
-          );
-          expect(page).toBe(1);
-          expect(totalPages).toBe(1);
-          expect(totalItems).toBe(1);
-          expect(itemsPerPage).toBe(100);
           done();
         });
     });

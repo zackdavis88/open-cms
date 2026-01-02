@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import updateBlueprintValidation from './updateBlueprintValidation';
 import { BlueprintData } from 'src/types';
 import { getBlueprintData, getPublicUserData } from 'src/controllers/utils';
+import { Component } from 'src/models';
 
 interface UpdateBlueprintRequestBody {
   name?: unknown;
@@ -24,13 +25,22 @@ const updateBlueprintFlow = async (
       fieldsInput: req.body?.fields,
     });
 
-    await blueprint.createVersion(
+    const newVersion = await blueprint.createVersion(
       {
         name: blueprint.name,
         fields: blueprint.fields,
         createdById: authUser.id,
       },
       { transaction: dbTransaction },
+    );
+
+    // Update all Components that reference this blueprint to point to the new version
+    await Component.update(
+      { blueprintVersionId: newVersion.id },
+      {
+        where: { blueprintId: blueprint.id, isActive: true },
+        transaction: dbTransaction,
+      },
     );
 
     if (name) {

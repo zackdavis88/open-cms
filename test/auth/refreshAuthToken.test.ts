@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-const apiRoute = '/api/auth/refresh';
+const apiRoute = testHelper.apiRoute('/auth/refresh');
 const request = testHelper.request;
 
 describe('Refresh AuthToken', () => {

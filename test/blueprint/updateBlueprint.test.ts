@@ -5,9 +5,10 @@ import {
   Project,
   generateBlueprintField,
   Blueprint,
+  Component,
 } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/blueprints/:blueprintId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/blueprints/:blueprintId');
 const request = testHelper.request;
 
 const generatedBlueprintFields = [
@@ -78,6 +79,9 @@ describe('Update Blueprint', () => {
       name?: unknown;
       fields?: unknown;
     };
+    let testComponent1: Component;
+    let testComponent2: Component;
+    let testComponent3: Component;
 
     beforeAll(async () => {
       adminUser = await testHelper.createTestUser();
@@ -111,6 +115,25 @@ describe('Update Blueprint', () => {
         createdBy: adminUser,
         isActive: false,
       });
+
+      testComponent1 = await testHelper.createTestComponent({
+        project: testProject,
+        createdBy: adminUser,
+        blueprint: testBlueprint,
+      });
+
+      testComponent2 = await testHelper.createTestComponent({
+        project: testProject,
+        createdBy: adminUser,
+        blueprint: testBlueprint,
+      });
+
+      testComponent3 = await testHelper.createTestComponent({
+        project: testProject,
+        createdBy: adminUser,
+        blueprint: testBlueprint,
+        isActive: false,
+      });
     });
 
     beforeEach(() => {
@@ -118,7 +141,9 @@ describe('Update Blueprint', () => {
       writerAuthToken = testHelper.generateAuthToken(writerUser);
       nonMemberAuthToken = testHelper.generateAuthToken(testUser);
       readerAuthToken = testHelper.generateAuthToken(readUser);
-      apiRoute = `/api/projects/${testProject.id}/blueprints/${testBlueprint.id}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/blueprints/${testBlueprint.id}`,
+      );
       requestPayload = {
         name: 'Updated Name',
         fields: generatedBlueprintFields,
@@ -142,7 +167,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .patch(`/api/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/SomethingWrong/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -157,7 +186,9 @@ describe('Update Blueprint', () => {
     it('should reject when project is not found', (done) => {
       request
         .patch(
-          `/api/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+          ),
         )
         .set('authorization', adminAuthToken)
         .expect(
@@ -172,7 +203,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when project is deleted', (done) => {
       request
-        .patch(`/api/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${deletedProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -208,7 +243,7 @@ describe('Update Blueprint', () => {
 
     it('should reject when blueprint id is not a valid uuid', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/blueprints/wrong`)
+        .patch(testHelper.apiRoute(`/projects/${testProject.id}/blueprints/wrong`))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -222,7 +257,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when blueprint is not found', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${crypto.randomUUID()}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -236,7 +275,11 @@ describe('Update Blueprint', () => {
 
     it('should reject when blueprint is deleted', (done) => {
       request
-        .patch(`/api/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`)
+        .patch(
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/blueprints/${deletedBlueprint.id}`,
+          ),
+        )
         .set('authorization', adminAuthToken)
         .expect(
           404,
@@ -555,6 +598,24 @@ describe('Update Blueprint', () => {
           422,
           {
             error: 'root string field regex must be a string',
+            errorType: ERROR_TYPES.VALIDATION,
+          },
+          done,
+        );
+    });
+
+    it('should reject requests when string field regex is not valid', (done) => {
+      requestPayload.fields = [
+        { ...generateBlueprintField({ type: 'string' }), regex: '^test\\' },
+      ];
+      request
+        .patch(apiRoute)
+        .set('authorization', writerAuthToken)
+        .send(requestPayload)
+        .expect(
+          422,
+          {
+            error: 'root string field regex is invalid',
             errorType: ERROR_TYPES.VALIDATION,
           },
           done,
@@ -938,6 +999,17 @@ describe('Update Blueprint', () => {
           expect(pastVersion.createdById).toBe(adminUser.id);
           expect(pastVersion.name).toBe(testBlueprint.name); // testBlueprint.name is the original name.
           expect(pastVersion.fields).toEqual(testBlueprint.fields); // testBlueprint.fields are the original fields.
+
+          await testComponent1.reload();
+          await testComponent2.reload();
+          await testComponent3.reload();
+
+          // component 1 and 2 should be updated with a version id.
+          expect(testComponent1.blueprintVersionId).toBe(pastVersion.id);
+          expect(testComponent2.blueprintVersionId).toBe(pastVersion.id);
+
+          // component 3 should not. It is not active at the time of blueprint update.
+          expect(testComponent3.blueprintVersionId).toBe(null);
           done();
         });
     });

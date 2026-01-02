@@ -3,7 +3,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/discovery:
+ * /discovery:
  *   get:
  *     tags:
  *       - Discovery

@@ -77,7 +77,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects:
+ * /projects:
  *   get:
  *     tags:
  *       - Project

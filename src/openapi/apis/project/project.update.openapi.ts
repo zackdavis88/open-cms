@@ -66,7 +66,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}:
+ * /projects/{projectId}:
  *   patch:
  *     tags:
  *       - Project

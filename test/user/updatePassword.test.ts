@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-const apiRoute = '/api/users/password';
+const apiRoute = testHelper.apiRoute('/users/password');
 const request = testHelper.request;
 
 describe('Update Password', () => {

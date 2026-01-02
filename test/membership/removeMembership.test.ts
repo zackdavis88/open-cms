@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User, Project, Membership } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/projects/:projectId/memberships/:membershipId';
+let apiRoute = testHelper.apiRoute('/projects/:projectId/memberships/:membershipId');
 const request = testHelper.request;
 
 describe('Delete Membership', () => {
@@ -44,7 +44,9 @@ describe('Delete Membership', () => {
     });
 
     beforeEach(() => {
-      apiRoute = `/api/projects/${testProject.id}/memberships/${testMembership.id}`;
+      apiRoute = testHelper.apiRoute(
+        `/projects/${testProject.id}/memberships/${testMembership.id}`,
+      );
     });
 
     afterAll(async () => {
@@ -64,7 +66,11 @@ describe('Delete Membership', () => {
 
     it('should reject when project id is not a valid uuid', (done) => {
       request
-        .delete(`/api/projects/SomethingWrong/memberships/${testHelper.generateUUID()}`)
+        .delete(
+          testHelper.apiRoute(
+            `/projects/SomethingWrong/memberships/${testHelper.generateUUID()}`,
+          ),
+        )
         .set('authorization', nonMemberAuthToken)
         .expect(
           422,
@@ -79,7 +85,9 @@ describe('Delete Membership', () => {
     it('should reject when project is not found', (done) => {
       request
         .delete(
-          `/api/projects/${testHelper.generateUUID()}/memberships/${testHelper.generateUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${testHelper.generateUUID()}/memberships/${testHelper.generateUUID()}`,
+          ),
         )
         .set('authorization', nonMemberAuthToken)
         .expect(
@@ -95,7 +103,9 @@ describe('Delete Membership', () => {
     it('should reject when project is deleted', (done) => {
       request
         .delete(
-          `/api/projects/${deletedProject.id}/memberships/${testHelper.generateUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${deletedProject.id}/memberships/${testHelper.generateUUID()}`,
+          ),
         )
         .set('authorization', nonMemberAuthToken)
         .expect(
@@ -132,7 +142,7 @@ describe('Delete Membership', () => {
 
     it('should reject when membership id is not a valid uuid', (done) => {
       request
-        .delete(`/api/projects/${testProject.id}/memberships/NotAUUID`)
+        .delete(testHelper.apiRoute(`/projects/${testProject.id}/memberships/NotAUUID`))
         .set('authorization', adminAuthToken)
         .expect(
           422,
@@ -147,7 +157,9 @@ describe('Delete Membership', () => {
     it('should reject when membership is not found', (done) => {
       request
         .delete(
-          `/api/projects/${testProject.id}/memberships/${testHelper.generateUUID()}`,
+          testHelper.apiRoute(
+            `/projects/${testProject.id}/memberships/${testHelper.generateUUID()}`,
+          ),
         )
         .set('authorization', adminAuthToken)
         .expect(

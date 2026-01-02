@@ -68,7 +68,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/blueprints:
+ * /projects/{projectId}/blueprints:
  *   post:
  *     tags:
  *       - Blueprint

@@ -54,7 +54,7 @@
  *                     $ref: "#/components/schemas/MinimalProjectData"
  *                   blueprints:
  *                     type: array
- *                     description: Requested blueprint details
+ *                     description: Requested blueprint list details
  *                     items:
  *                       allOf:
  *                         - $ref: "#/components/schemas/MinimalBlueprintData"
@@ -82,7 +82,7 @@
  *******************************************/
 /**
  * @openapi
- * /api/projects/{projectId}/blueprints:
+ * /projects/{projectId}/blueprints:
  *   get:
  *     tags:
  *       - Blueprint

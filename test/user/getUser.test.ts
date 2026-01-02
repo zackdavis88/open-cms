@@ -1,6 +1,6 @@
 import { TestHelper, ERROR_TYPES, User } from '../utils';
 const testHelper = new TestHelper();
-let apiRoute = '/api/users/:username';
+let apiRoute = testHelper.apiRoute('/users/:username');
 const request = testHelper.request;
 
 describe('Get User', () => {
@@ -11,7 +11,7 @@ describe('Get User', () => {
 
     beforeAll(async () => {
       testUser = await testHelper.createTestUser();
-      apiRoute = `/api/users/${testUser.displayName}`;
+      apiRoute = testHelper.apiRoute(`/users/${testUser.displayName}`);
       authToken = testHelper.generateAuthToken(testUser);
       deletedUser = await testHelper.createTestUser({ isActive: false });
     });
@@ -32,25 +32,31 @@ describe('Get User', () => {
     });
 
     it('should reject when user is deleted', (done) => {
-      request.get(`/api/users/${deletedUser.id}`).set('authorization', authToken).expect(
-        404,
-        {
-          error: 'requested user not found',
-          errorType: ERROR_TYPES.NOT_FOUND,
-        },
-        done,
-      );
+      request
+        .get(testHelper.apiRoute(`/users/${deletedUser.id}`))
+        .set('authorization', authToken)
+        .expect(
+          404,
+          {
+            error: 'requested user not found',
+            errorType: ERROR_TYPES.NOT_FOUND,
+          },
+          done,
+        );
     });
 
     it('should reject when user is not found', (done) => {
-      request.get('/api/users/DoesNotExi$t').set('authorization', authToken).expect(
-        404,
-        {
-          error: 'requested user not found',
-          errorType: ERROR_TYPES.NOT_FOUND,
-        },
-        done,
-      );
+      request
+        .get(testHelper.apiRoute('/users/DoesNotExi$t'))
+        .set('authorization', authToken)
+        .expect(
+          404,
+          {
+            error: 'requested user not found',
+            errorType: ERROR_TYPES.NOT_FOUND,
+          },
+          done,
+        );
     });
 
     it('should return user data', (done) => {
