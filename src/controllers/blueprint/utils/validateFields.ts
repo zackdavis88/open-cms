@@ -1,35 +1,12 @@
 import { ValidationError } from 'src/server/utils/errors';
+import { BlueprintField, BlueprintFieldTypeValues } from 'src/types';
 import {
-  ArrayBlueprintField,
-  BlueprintField,
-  NumberBlueprintField,
-  ObjectBlueprintField,
-  StringBlueprintField,
-  BlueprintFieldTypeValues,
-} from 'src/types';
-
-const isRecord = (field: unknown): field is Record<string, unknown> =>
-  typeof field === 'object' && field !== null;
-
-const isStringField = (field: unknown): field is StringBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.STRING;
-
-const isNumberField = (field: unknown): field is NumberBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.NUMBER;
-
-const isArrayField = (field: unknown): field is ArrayBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.ARRAY;
-
-const isObjectField = (field: unknown): field is ObjectBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.OBJECT;
+  isRecord,
+  isStringField,
+  isNumberField,
+  isArrayField,
+  isObjectField,
+} from 'src/controllers/utils';
 
 const depthFirstValidation = (fields: unknown[], parentName = 'root') => {
   const branchNames = fields.map((field) => {

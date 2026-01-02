@@ -1,7 +1,6 @@
 import { Blueprint, BlueprintVersion } from 'src/models';
 import { ValidationError } from 'src/server/utils/errors';
 import {
-  BlueprintFieldTypeValues,
   StringBlueprintField,
   NumberBlueprintField,
   ArrayBlueprintField,
@@ -9,41 +8,15 @@ import {
   BooleanBlueprintField,
   DateBlueprintField,
 } from 'src/types';
-
-// TODO: These is-helpers are copy-pasted from Blueprint validation. If we end up using them, lets move them to
-//       a central location for both endpoints to use.
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null;
-
-const isStringField = (field: unknown): field is StringBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.STRING;
-
-const isNumberField = (field: unknown): field is NumberBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.NUMBER;
-
-const isBooleanField = (field: unknown): field is BooleanBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.BOOLEAN;
-
-const isDateField = (field: unknown): field is DateBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.DATE;
-
-const isArrayField = (field: unknown): field is ArrayBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.ARRAY;
-
-const isObjectField = (field: unknown): field is ObjectBlueprintField =>
-  isRecord(field) &&
-  typeof field.type === 'string' &&
-  field.type.toLowerCase() === BlueprintFieldTypeValues.OBJECT;
+import {
+  isRecord,
+  isStringField,
+  isNumberField,
+  isBooleanField,
+  isDateField,
+  isArrayField,
+  isObjectField,
+} from 'src/controllers/utils';
 
 const validateStringContent = ({
   blueprintField,
