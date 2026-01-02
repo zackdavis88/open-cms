@@ -12,7 +12,7 @@ const configureComponentRoutes = (router: Router) => {
     .route('/projects/:projectId/components/:blueprintId')
     .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .post(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.CREATE), // TODO: Make this authAction more generic so it can be used for blueprints/components/layouts
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.CREATE),
       BlueprintController.getBlueprintMiddleware,
       ComponentController.create,
     );
@@ -21,7 +21,7 @@ const configureComponentRoutes = (router: Router) => {
     .route('/projects/:projectId/components')
     .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .get(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       ComponentController.getComponents,
     );
 
@@ -29,17 +29,17 @@ const configureComponentRoutes = (router: Router) => {
     .route('/projects/:projectId/components/:componentId')
     .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .get(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.READ),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       ComponentController.getComponentMiddleware,
       ComponentController.getComponent,
     )
     .patch(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.UPDATE),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.UPDATE),
       ComponentController.getComponentMiddleware,
       ComponentController.update,
     )
     .delete(
-      AuthController.authorizeBlueprintAction(AuthorizationAction.DELETE),
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.DELETE),
       ComponentController.getComponentMiddleware,
       ComponentController.remove,
     );

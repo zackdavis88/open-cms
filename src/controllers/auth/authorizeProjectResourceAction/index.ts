@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { AuthorizationAction } from 'src/types';
-import authorizeBlueprintWrite from './authorizeBlueprintWrite';
-import authorizeBlueprintRead from './authorizeBlueprintRead';
+import authorizeWritePermission from './authorizeWritePermission';
+import authorizeReadPermission from './authorizeReadPermission';
 
-const authorizeBlueprintActionFlow = (action: AuthorizationAction) => {
+const authorizeProjectResourceActionFlow = (action: AuthorizationAction) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       if (
@@ -11,12 +11,12 @@ const authorizeBlueprintActionFlow = (action: AuthorizationAction) => {
         action === AuthorizationAction.UPDATE ||
         action === AuthorizationAction.DELETE
       ) {
-        authorizeBlueprintWrite(req.project.authUserMembership);
+        authorizeWritePermission(req.project.authUserMembership);
         return next();
       }
 
       if (action === AuthorizationAction.READ) {
-        authorizeBlueprintRead(req.project.authUserMembership);
+        authorizeReadPermission(req.project.authUserMembership);
         return next();
       }
 
@@ -27,4 +27,4 @@ const authorizeBlueprintActionFlow = (action: AuthorizationAction) => {
   };
 };
 
-export default authorizeBlueprintActionFlow;
+export default authorizeProjectResourceActionFlow;
