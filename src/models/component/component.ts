@@ -7,10 +7,25 @@ import {
   DataTypes,
   ForeignKey,
   NonAttribute,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
 } from 'sequelize';
 import User from 'src/models/user/user';
 import Blueprint, { BlueprintVersion } from 'src/models/blueprint/blueprint';
 import Project from 'src/models/project/project';
+
+export class ComponentVersion extends Model<
+  InferAttributes<ComponentVersion>,
+  InferCreationAttributes<ComponentVersion>
+> {
+  declare id: CreationOptional<string>;
+  declare componentId: ForeignKey<Component['id']>;
+  declare name: string;
+  declare content: Record<string, unknown>;
+  declare createdById: ForeignKey<User['id']>;
+  declare createdBy: NonAttribute<User>;
+  declare createdOn: CreationOptional<Date>;
+}
 
 class Component extends Model<
   InferAttributes<Component>,
@@ -41,6 +56,9 @@ class Component extends Model<
   declare deletedById: ForeignKey<User['id']> | null;
   declare deletedBy: NonAttribute<User> | null;
   declare deletedOn: CreationOptional<Date> | null;
+
+  declare createVersion: HasManyCreateAssociationMixin<ComponentVersion>;
+  declare getVersions: HasManyGetAssociationsMixin<ComponentVersion>;
 }
 
 export const initializeComponent = (sequelize: Sequelize) => {
@@ -73,6 +91,27 @@ export const initializeComponent = (sequelize: Sequelize) => {
       },
     },
     { sequelize, tableName: 'components', timestamps: false },
+  );
+
+  ComponentVersion.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      name: {
+        type: DataTypes.STRING,
+      },
+      content: {
+        type: DataTypes.JSON,
+      },
+      createdOn: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+    },
+    { sequelize, tableName: 'component_versions', timestamps: false },
   );
 };
 

@@ -835,6 +835,16 @@ describe('Update Component', () => {
             return done(err);
           }
           const { message, component } = res.body;
+          // Make sure a new version was created, do this before reload()
+          const versions = await testComponent.getVersions();
+          expect(versions.length).toBe(1);
+          const pastVersion = versions[0];
+          expect(pastVersion.id).toBeTruthy();
+          expect(pastVersion.createdOn).toBeTruthy();
+          expect(pastVersion.createdById).toBe(writerUser.id);
+          expect(pastVersion.name).toBe(testComponent.name); // testComponent.name is the original name.
+          expect(pastVersion.content).toEqual(testComponent.content); // testComponent.content is the original content.
+
           await testComponent.reload();
 
           expect(message).toBe('component has been successfully updated');
@@ -864,6 +874,7 @@ describe('Update Component', () => {
             content: requestPayload.content,
             blueprintVersion: null,
           });
+
           done();
         });
     });

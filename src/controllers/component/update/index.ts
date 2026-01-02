@@ -16,6 +16,7 @@ const updateComponentFlow = async (
   req: Request<never, never, UpdateComponentRequestBody>,
   res: Response,
 ) => {
+  const dbTransaction = await req.sequelize.transaction();
   try {
     const { user, project, component } = req;
     const { name, content } = updateComponentValidation({
@@ -25,7 +26,14 @@ const updateComponentFlow = async (
       contentInput: req.body?.content,
     });
 
-    // TODO: Create a new component version here. When those exist.
+    await component.createVersion(
+      {
+        createdById: user.id,
+        name: component.name,
+        content: component.content,
+      },
+      { transaction: dbTransaction },
+    );
 
     if (name) {
       component.name = name;
@@ -37,7 +45,8 @@ const updateComponentFlow = async (
 
     component.updatedOn = new Date();
     component.updatedById = user.id;
-    await component.save();
+    await component.save({ transaction: dbTransaction });
+    await dbTransaction.commit();
 
     const responseBody: UpdateComponentResponseBody = {
       component: {
@@ -58,6 +67,7 @@ const updateComponentFlow = async (
 
     return res.success('component has been successfully updated', responseBody);
   } catch (error) {
+    await dbTransaction.rollback();
     return res.sendError(error);
   }
 };

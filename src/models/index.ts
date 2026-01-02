@@ -3,7 +3,7 @@ import { User, initializeUser } from './user';
 import { Project, initializeProject } from './project';
 import { Membership, initializeMembership } from './membership';
 import { Blueprint, BlueprintVersion, initializeBlueprint } from './blueprint';
-import { Component, initializeComponent } from './component';
+import { Component, ComponentVersion, initializeComponent } from './component';
 
 const synchronizeTables = async (sequelize: Sequelize) => {
   try {
@@ -182,6 +182,25 @@ export const initializeModels = (sequelize: Sequelize) => {
   User.hasMany(Component, { as: 'deletedComponents', foreignKey: 'deletedById' });
   User.hasOne(Component, { as: 'deletedComponent', foreignKey: 'deletedById' });
   Component.belongsTo(User, { as: 'deletedBy' });
+
+  // ComponentVersion -> Component associations: versions
+  Component.hasMany(ComponentVersion, {
+    as: 'versions',
+    foreignKey: 'componentId',
+    onDelete: 'CASCADE',
+  });
+  ComponentVersion.belongsTo(Component, { as: 'component' });
+
+  // ComponentVersion -> User associations: createdBy
+  User.hasMany(ComponentVersion, {
+    as: 'createdComponentVersions',
+    foreignKey: 'createdById',
+  });
+  User.hasOne(ComponentVersion, {
+    as: 'createdComponentVersion',
+    foreignKey: 'createdById',
+  });
+  ComponentVersion.belongsTo(User, { as: 'createdBy' });
 };
 
 export const initializeModelsAndSync = async (sequelize: Sequelize) => {
