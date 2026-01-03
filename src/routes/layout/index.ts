@@ -14,6 +14,15 @@ const configureLayoutRoutes = (router: Router) => {
       AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       LayoutController.getLayouts,
     );
+
+  router
+    .route('/projects/:projectId/layouts/:layoutId')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
+      LayoutController.getLayoutMiddleware,
+      LayoutController.getLayout,
+    );
 };
 
 export default configureLayoutRoutes;
