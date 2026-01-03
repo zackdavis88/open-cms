@@ -63,6 +63,23 @@ export interface ComponentData {
   deletedBy?: UserData | null;
 }
 
+export interface LayoutData {
+  id: string;
+  project: Pick<ProjectData, 'id' | 'name'>;
+  name: string;
+  layoutComponents: {
+    id: ComponentData['id'];
+    name: ComponentData['name'];
+    content: ComponentData['content'];
+  }[];
+  createdOn: Date;
+  createdBy: UserData | null;
+  updatedOn?: Date | null;
+  updatedBy?: UserData | null;
+  deletedOn?: Date | null;
+  deletedBy?: UserData | null;
+}
+
 export enum AuthorizationAction {
   CREATE,
   READ,
