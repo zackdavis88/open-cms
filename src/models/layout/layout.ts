@@ -9,7 +9,7 @@ import {
   NonAttribute,
 } from 'sequelize';
 import User from 'src/models/user/user';
-import Component, { ComponentVersion } from 'src/models/component/component';
+import Component from 'src/models/component/component';
 import Project from 'src/models/project/project';
 
 class Layout extends Model<InferAttributes<Layout>, InferCreationAttributes<Layout>> {
@@ -41,7 +41,6 @@ export class LayoutComponent extends Model<
 > {
   declare layoutId: ForeignKey<Layout['id']>;
   declare componentId: ForeignKey<Component['id']>;
-  declare componentVersionId: ForeignKey<ComponentVersion['id']> | null;
   declare order: number;
 
   declare component: NonAttribute<Component>;

@@ -22,6 +22,11 @@ const configureLayoutRoutes = (router: Router) => {
       AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       LayoutController.getLayoutMiddleware,
       LayoutController.getLayout,
+    )
+    .patch(
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.UPDATE),
+      LayoutController.getLayoutMiddleware,
+      LayoutController.update,
     );
 };
 
