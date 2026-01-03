@@ -87,7 +87,7 @@ describe('Remove Project', () => {
 
     it('should reject requests when the project does not exist', (done) => {
       request
-        .delete(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}`))
+        .delete(testHelper.apiRoute(`/projects/${crypto.randomUUID()}`))
         .set('authorization', adminAuthToken)
         .expect(
           404,

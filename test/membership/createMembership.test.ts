@@ -80,7 +80,7 @@ describe('Create Membership', () => {
       request
         .post(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/memberships/someUsername`,
+            `/projects/${crypto.randomUUID()}/memberships/someUsername`,
           ),
         )
         .set('authorization', adminAuthToken)

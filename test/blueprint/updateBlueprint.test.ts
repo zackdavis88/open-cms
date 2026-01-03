@@ -187,7 +187,7 @@ describe('Update Blueprint', () => {
       request
         .patch(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+            `/projects/${crypto.randomUUID()}/blueprints/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', adminAuthToken)

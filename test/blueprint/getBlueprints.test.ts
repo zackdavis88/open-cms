@@ -223,7 +223,7 @@ describe('Get Blueprints', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/blueprints`))
+        .get(testHelper.apiRoute(`/projects/${crypto.randomUUID()}/blueprints`))
         .set('authorization', readerAuthToken)
         .expect(
           404,

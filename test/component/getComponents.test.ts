@@ -160,7 +160,7 @@ describe('Get Components', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/components`))
+        .get(testHelper.apiRoute(`/projects/${crypto.randomUUID()}/components`))
         .set('authorization', readerAuthToken)
         .expect(
           404,

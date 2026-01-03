@@ -336,7 +336,7 @@ describe('Create Component', () => {
       request
         .post(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/components/${testBlueprint.id}`,
+            `/projects/${crypto.randomUUID()}/components/${testBlueprint.id}`,
           ),
         )
         .set('authorization', adminAuthToken)

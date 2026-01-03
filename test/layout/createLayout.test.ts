@@ -147,7 +147,7 @@ describe('Create Layout', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .post(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/layouts`))
+        .post(testHelper.apiRoute(`/projects/${crypto.randomUUID()}/layouts`))
         .set('authorization', adminAuthToken)
         .expect(
           404,

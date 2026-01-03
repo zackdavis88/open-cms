@@ -234,7 +234,7 @@ describe('Get Layouts', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/layouts`))
+        .get(testHelper.apiRoute(`/projects/${crypto.randomUUID()}/layouts`))
         .set('authorization', readAuthToken)
         .expect(
           404,

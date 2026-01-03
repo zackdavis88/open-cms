@@ -56,7 +56,7 @@ describe('Get Membership', () => {
       request
         .get(
           testHelper.apiRoute(
-            `/projects/SomethingWrong/memberships/${testHelper.generateUUID()}`,
+            `/projects/SomethingWrong/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', authToken)
@@ -74,7 +74,7 @@ describe('Get Membership', () => {
       request
         .get(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/memberships/${testHelper.generateUUID()}`,
+            `/projects/${crypto.randomUUID()}/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', authToken)
@@ -92,7 +92,7 @@ describe('Get Membership', () => {
       request
         .get(
           testHelper.apiRoute(
-            `/projects/${deletedProject.id}/memberships/${testHelper.generateUUID()}`,
+            `/projects/${deletedProject.id}/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', authToken)
@@ -124,7 +124,7 @@ describe('Get Membership', () => {
       request
         .get(
           testHelper.apiRoute(
-            `/projects/${testProject.id}/memberships/${testHelper.generateUUID()}`,
+            `/projects/${testProject.id}/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', authToken)

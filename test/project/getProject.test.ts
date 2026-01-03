@@ -52,7 +52,7 @@ describe('Get Project', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}`))
+        .get(testHelper.apiRoute(`/projects/${crypto.randomUUID()}`))
         .set('authorization', authToken)
         .expect(
           404,

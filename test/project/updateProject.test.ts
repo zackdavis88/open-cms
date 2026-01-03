@@ -89,7 +89,7 @@ describe('Update Project', () => {
 
     it('should reject requests when the project does not exist', (done) => {
       request
-        .patch(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}`))
+        .patch(testHelper.apiRoute(`/projects/${crypto.randomUUID()}`))
         .set('authorization', adminAuthToken)
         .expect(
           404,

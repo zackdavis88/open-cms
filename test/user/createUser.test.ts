@@ -22,7 +22,7 @@ describe('Create User', () => {
 
     beforeEach(() => {
       payload = {
-        username: testHelper.generateUUID().slice(0, 12).toUpperCase(),
+        username: crypto.randomUUID().slice(0, 12).toUpperCase(),
         password: 'Password1',
       };
     });

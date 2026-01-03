@@ -139,7 +139,7 @@ describe('Get Layout', () => {
       request
         .get(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/layouts/${testLayout.id}`,
+            `/projects/${crypto.randomUUID()}/layouts/${testLayout.id}`,
           ),
         )
         .set('authorization', adminAuthToken)

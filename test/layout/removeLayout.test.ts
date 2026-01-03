@@ -141,7 +141,7 @@ describe('Remove Layout', () => {
       request
         .delete(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/layouts/${testLayout.id}`,
+            `/projects/${crypto.randomUUID()}/layouts/${testLayout.id}`,
           ),
         )
         .set('authorization', adminAuthToken)

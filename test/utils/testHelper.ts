@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Sequelize, Utils, UUIDV4 } from 'sequelize';
+import { Sequelize } from 'sequelize';
 import {
   Project,
   User,
@@ -123,10 +123,6 @@ export class TestHelper {
     this.request = request(`http://localhost:${SERVER_PORT}`);
   }
 
-  generateUUID() {
-    return String(Utils.toDefaultValue(UUIDV4()));
-  }
-
   addTestUsername(testUsername: string) {
     this.testUsernames = this.testUsernames.concat(testUsername);
   }
@@ -162,7 +158,7 @@ export class TestHelper {
     createdOn?: Date;
     updatedOn?: Date;
   } = {}) {
-    const uuid = this.generateUUID();
+    const uuid = crypto.randomUUID();
     const displayName = username || uuid.slice(0, 11).toUpperCase();
 
     const testUser = await User.create({
@@ -350,7 +346,7 @@ export class TestHelper {
     updatedOn?: Date;
   }) {
     const testProject = await user.createProject({
-      name: name || this.generateUUID(),
+      name: name || crypto.randomUUID(),
       description: description || null,
       isActive,
       createdOn,

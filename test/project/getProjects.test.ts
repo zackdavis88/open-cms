@@ -22,22 +22,22 @@ describe('Get Projects', () => {
       await testHelper.createTestProject({
         user: user2,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       await testHelper.createTestProject({
         user: user1,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       await testHelper.createTestProject({
         user: user3,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       await testHelper.createTestProject({
         user: user1,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       await testHelper.createTestProject({ user: user1, updatedOn: new Date() });
       await testHelper.createTestProject({ user: user3, updatedOn: new Date() });
@@ -45,25 +45,25 @@ describe('Get Projects', () => {
       await testHelper.createTestProject({
         user: user2,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       await testHelper.createTestProject({ user: user2, updatedOn: new Date() });
       await testHelper.createTestProject({ user: user3, updatedOn: new Date() });
       await testHelper.createTestProject({
         user: user1,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       await testHelper.createTestProject({
         user: user2,
         updatedOn: new Date(),
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
       testProject = await testHelper.createTestProject({
         user: testUser,
         createdOn: createdOnTimestamp,
         updatedOn: updatedOnTimestamp,
-        description: testHelper.generateUUID(),
+        description: crypto.randomUUID(),
       });
     });
 
