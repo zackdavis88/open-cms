@@ -18,4 +18,5 @@ export {
   MembershipData,
   BlueprintData,
   ComponentData,
+  LayoutData,
 } from '../../src/types';

@@ -41,8 +41,13 @@ const validateOrder: ValidateOrder = ({
   //       that all date-related column names end with 'On'. Its always true for now, but be wary.
   let orderItem: OrderItem = [orderColumn, orderBy];
   if (orderColumn.startsWith('__')) {
-    const [associationName, columnName] = orderColumn.replace('__', '').split('_');
-    orderItem = [associationName, columnName, orderBy];
+    const [associationName, associationOrColumn, columName] = orderColumn
+      .replace('__', '')
+      .split('_');
+    orderItem =
+      columName ?
+        [associationName, associationOrColumn, columName, orderBy]
+      : [associationName, associationOrColumn, orderBy];
   } else if (!orderColumn.startsWith('is') && !orderColumn.endsWith('On')) {
     orderItem = [
       fn(

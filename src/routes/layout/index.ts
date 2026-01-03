@@ -9,6 +9,10 @@ const configureLayoutRoutes = (router: Router) => {
     .post(
       AuthController.authorizeProjectResourceAction(AuthorizationAction.CREATE),
       LayoutController.create,
+    )
+    .get(
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
+      LayoutController.getLayouts,
     );
 };
 
