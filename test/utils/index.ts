@@ -9,6 +9,7 @@ export {
   Blueprint,
   BlueprintVersion,
   Component,
+  Layout,
 } from '../../src/models';
 export { swaggerSpec } from '../../src/openapi';
 export {
@@ -17,4 +18,5 @@ export {
   MembershipData,
   BlueprintData,
   ComponentData,
+  LayoutData,
 } from '../../src/types';

@@ -103,7 +103,7 @@ describe('Get Component', () => {
       request
         .get(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/components/${testComponent.id}`,
+            `/projects/${crypto.randomUUID()}/components/${testComponent.id}`,
           ),
         )
         .set('authorization', adminAuthToken)

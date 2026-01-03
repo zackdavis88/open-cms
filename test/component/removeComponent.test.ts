@@ -103,7 +103,7 @@ describe('Remove Component', () => {
       request
         .delete(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/components/${testComponent.id}`,
+            `/projects/${crypto.randomUUID()}/components/${testComponent.id}`,
           ),
         )
         .set('authorization', adminAuthToken)

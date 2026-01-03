@@ -116,7 +116,7 @@ describe('Authenticate Me', () => {
 
     it('should reject requests when authenticating user is not found', (done) => {
       const badToken = testHelper.generateAuthToken(testUser, {
-        apiKey: testHelper.generateUUID(),
+        apiKey: crypto.randomUUID(),
       });
       request.get(apiRoute).set('authorization', badToken).expect(
         401,

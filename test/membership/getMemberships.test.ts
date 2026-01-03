@@ -225,7 +225,7 @@ describe('Get Memberships', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .get(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/memberships`))
+        .get(testHelper.apiRoute(`/projects/${crypto.randomUUID()}/memberships`))
         .set('authorization', authToken)
         .expect(
           404,

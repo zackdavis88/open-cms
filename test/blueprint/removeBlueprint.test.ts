@@ -106,7 +106,7 @@ describe('Delete Blueprint', () => {
       request
         .delete(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/blueprints/${crypto.randomUUID()}`,
+            `/projects/${crypto.randomUUID()}/blueprints/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', adminAuthToken)

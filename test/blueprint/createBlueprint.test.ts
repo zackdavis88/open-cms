@@ -145,7 +145,7 @@ describe('Create Blueprint', () => {
 
     it('should reject when project is not found', (done) => {
       request
-        .post(testHelper.apiRoute(`/projects/${testHelper.generateUUID()}/blueprints`))
+        .post(testHelper.apiRoute(`/projects/${crypto.randomUUID()}/blueprints`))
         .set('authorization', adminAuthToken)
         .expect(
           404,

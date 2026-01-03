@@ -1,10 +1,17 @@
 import 'dotenv/config';
-import { Sequelize, Utils, UUIDV4 } from 'sequelize';
-import { Project, User, initializeModels } from '../../src/models';
+import { Sequelize } from 'sequelize';
+import {
+  Project,
+  User,
+  Blueprint,
+  Component,
+  initializeModels,
+  LayoutComponent,
+} from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import jwt from 'jsonwebtoken';
-import Blueprint, { BlueprintField } from '../../src/models/blueprint/blueprint';
+import { BlueprintField } from '../../src/models/blueprint/blueprint';
 import generateBlueprintField from './generateBlueprintField';
 
 const {
@@ -116,10 +123,6 @@ export class TestHelper {
     this.request = request(`http://localhost:${SERVER_PORT}`);
   }
 
-  generateUUID() {
-    return String(Utils.toDefaultValue(UUIDV4()));
-  }
-
   addTestUsername(testUsername: string) {
     this.testUsernames = this.testUsernames.concat(testUsername);
   }
@@ -155,7 +158,7 @@ export class TestHelper {
     createdOn?: Date;
     updatedOn?: Date;
   } = {}) {
-    const uuid = this.generateUUID();
+    const uuid = crypto.randomUUID();
     const displayName = username || uuid.slice(0, 11).toUpperCase();
 
     const testUser = await User.create({
@@ -281,6 +284,52 @@ export class TestHelper {
     return component;
   }
 
+  async createTestLayout({
+    project,
+    createdBy,
+    layoutComponents,
+    createdOn,
+    updatedOn,
+    updatedBy,
+    isActive,
+    name,
+  }: {
+    project: Project;
+    createdBy: User;
+    layoutComponents: Component[];
+    createdOn?: Date;
+    updatedOn?: Date;
+    updatedBy?: User;
+    isActive?: boolean;
+    name?: string;
+  }) {
+    const layout = await project.createLayout({
+      createdOn,
+      createdById: createdBy.id,
+      updatedById: updatedBy?.id,
+      updatedOn: updatedOn || updatedBy?.id ? new Date() : null,
+      name: name || crypto.randomUUID(),
+      isActive,
+    });
+    layout.project = project;
+    layout.createdBy = createdBy;
+    layout.updatedBy = updatedBy;
+
+    const createdLayoutComponents = await LayoutComponent.bulkCreate(
+      layoutComponents.map((component, index) => ({
+        layoutId: layout.id,
+        componentId: component.id,
+        order: index,
+      })),
+    );
+
+    layout.layoutComponents = createdLayoutComponents.map((createdComponent) => ({
+      ...createdComponent,
+      component: layoutComponents[createdComponent.order],
+    }));
+    return layout;
+  }
+
   async createTestProject({
     user,
     name,
@@ -297,7 +346,7 @@ export class TestHelper {
     updatedOn?: Date;
   }) {
     const testProject = await user.createProject({
-      name: name || this.generateUUID(),
+      name: name || crypto.randomUUID(),
       description: description || null,
       isActive,
       createdOn,

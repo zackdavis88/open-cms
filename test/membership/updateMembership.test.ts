@@ -68,7 +68,7 @@ describe('Update Membership', () => {
       request
         .patch(
           testHelper.apiRoute(
-            `/projects/SomethingWrong/memberships/${testHelper.generateUUID()}`,
+            `/projects/SomethingWrong/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', nonMemberAuthToken)
@@ -86,7 +86,7 @@ describe('Update Membership', () => {
       request
         .patch(
           testHelper.apiRoute(
-            `/projects/${testHelper.generateUUID()}/memberships/${testHelper.generateUUID()}`,
+            `/projects/${crypto.randomUUID()}/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', nonMemberAuthToken)
@@ -104,7 +104,7 @@ describe('Update Membership', () => {
       request
         .patch(
           testHelper.apiRoute(
-            `/projects/${deletedProject.id}/memberships/${testHelper.generateUUID()}`,
+            `/projects/${deletedProject.id}/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', nonMemberAuthToken)
@@ -158,7 +158,7 @@ describe('Update Membership', () => {
       request
         .patch(
           testHelper.apiRoute(
-            `/projects/${testProject.id}/memberships/${testHelper.generateUUID()}`,
+            `/projects/${testProject.id}/memberships/${crypto.randomUUID()}`,
           ),
         )
         .set('authorization', adminAuthToken)

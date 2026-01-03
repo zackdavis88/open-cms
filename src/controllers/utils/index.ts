@@ -3,6 +3,7 @@ export { default as getComponentData } from './getComponentData';
 export { default as getMembershipData } from './getMembershipData';
 export { default as getProjectData } from './getProjectData';
 export { default as getPublicUserData } from './getPublicUserData';
+export { default as getLayoutData } from './getLayoutData';
 
 export { default as isRecord } from './isRecord';
 export { default as isStringField } from './isStringField';

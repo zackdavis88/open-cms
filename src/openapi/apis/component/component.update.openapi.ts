@@ -14,7 +14,7 @@
  *             properties:
  *               name:
  *                 type: string
- *                 description: Updated name of the new component
+ *                 description: Updated name of the component
  *                 examples: ["UpdatedAwesomeComponent"]
  *               content:
  *                 type: object
@@ -103,7 +103,7 @@
  *     tags:
  *       - Component
  *     summary: Update Component
- *     description: Updates a new component
+ *     description: Updates a component
  *     operationId: updateComponent
  *     security:
  *       - bearerAuth: []
