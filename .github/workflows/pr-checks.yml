@@ -1,0 +1,70 @@
+name: PR Checks
+run-name: PR Checks
+on: [pull_request]
+jobs:
+  pr-checks:
+    runs-on: ubuntu-latest
+    # Add postgres service for integration testing
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:16.11
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      # Checkout the code for the branch
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # Install NodeJS
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 25
+
+      # Install node_modules
+      - name: Install module dependencies
+        run: npm ci
+
+      # Ensure linter passes
+      - name: Run linter
+        run: npm run linter
+
+      # Inject configs that are not tracked in git
+      - name: Create config file
+        run: |
+          touch .env && echo "
+          AUTH_SECRET=G!tHub@cti0nRunn3r
+          AUTH_TOKEN_EXPIRATION=36000
+          DATABASE_USERNAME=postgres
+          DATABASE_PASSWORD=postgres
+          DATABASE_HOSTNAME=localhost
+          DATABASE_PORT=5432
+          DATABASE_NAME=postgres
+          DEFAULT_ITEMS_PER_PAGE=10
+          SALT_ROUNDS=10
+          SERVER_PORT=3000
+          " > .env
+
+      # Ensure the app can be built
+      - name: Build app
+        run: npm run build
+
+      # Start the server and wait for it to start listening
+      - name: Start server and wait for it to be listening
+        run: npm run start:prod & timeout 30 sh -c 'until nc -z $0 $1; do sleep 1; done' localhost 3000
+
+      # Run integration tests
+      - name: Run integration tests
+        run: npm run test --passWithNoTests
