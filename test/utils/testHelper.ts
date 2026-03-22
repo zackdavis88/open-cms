@@ -94,9 +94,12 @@ const DEFAULT_CONTENT = {
   },
 };
 
-let BASE_URL = '/api';
-if (typeof process.env.BASE_URL === 'string' && process.env.BASE_URL.startsWith('/')) {
-  BASE_URL = process.env.BASE_URL;
+let BASE_API_URL = '/api';
+if (
+  typeof process.env.BASE_API_URL === 'string' &&
+  process.env.BASE_API_URL.startsWith('/')
+) {
+  BASE_API_URL = process.env.BASE_API_URL;
 }
 
 interface TokenDataOverride {
@@ -387,7 +390,7 @@ export class TestHelper {
   }
 
   apiRoute(path: string) {
-    const url = new URL(`${BASE_URL}${path}`, 'https://open-cms.com');
+    const url = new URL(`${BASE_API_URL}${path}`, 'https://open-cms.com');
     return url.pathname;
   }
 }

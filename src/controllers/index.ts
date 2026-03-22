@@ -5,3 +5,4 @@ export { default as MembershipController } from './membership';
 export { default as BlueprintController } from './blueprint';
 export { default as ComponentController } from './component';
 export { default as LayoutController } from './layout';
+export { default as ImageController } from './image';

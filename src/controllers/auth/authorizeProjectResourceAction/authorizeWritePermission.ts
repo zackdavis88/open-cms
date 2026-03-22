@@ -1,11 +1,11 @@
 import { Project } from 'src/models';
 import { AuthorizationError } from 'src/server/utils/errors';
 
-type AuthorizeBlueprintCreate = (
+type AuthorizeWritePermission = (
   authUserMembership: Project['authUserMembership'],
 ) => void;
 
-const authorizeBlueprintCreate: AuthorizeBlueprintCreate = (authUserMembership) => {
+const authorizeWritePermission: AuthorizeWritePermission = (authUserMembership) => {
   if (
     !authUserMembership ||
     (!authUserMembership.isAdmin && !authUserMembership.isWriter)
@@ -14,4 +14,4 @@ const authorizeBlueprintCreate: AuthorizeBlueprintCreate = (authUserMembership) 
   }
 };
 
-export default authorizeBlueprintCreate;
+export default authorizeWritePermission;
