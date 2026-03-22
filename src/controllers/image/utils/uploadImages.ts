@@ -44,7 +44,7 @@ const storage = multer.diskStorage({
     try {
       await fs.promises.mkdir(desitinationPath, { recursive: true });
     } catch {
-      console.error(`failed to create destination folder: ${desitinationPath}`);
+      callback(new Error(`failed to create destination folder: ${desitinationPath}`), '');
     }
     callback(null, desitinationPath);
   },
@@ -64,7 +64,7 @@ const uploadImages = multer({
     );
     const isValidMimeType = allowedFileTypes.test(file.mimetype);
     if (!isValidExtension || !isValidMimeType) {
-      return callback(new ValidationError('unsupported file type'));
+      return callback(new ValidationError('image files must be jpeg|jpg|png|webp|gif'));
     }
 
     if (file.originalname.length > MAX_FILENAME_LENGTH) {

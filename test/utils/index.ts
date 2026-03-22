@@ -10,6 +10,7 @@ export {
   BlueprintVersion,
   Component,
   Layout,
+  Image,
 } from '../../src/models';
 export { swaggerSpec } from '../../src/openapi';
 export {

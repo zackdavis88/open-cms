@@ -13,6 +13,7 @@ import TestAgent from 'supertest/lib/agent';
 import jwt from 'jsonwebtoken';
 import { BlueprintField } from '../../src/models/blueprint/blueprint';
 import generateBlueprintField from './generateBlueprintField';
+import fs from 'fs';
 
 const {
   AUTH_SECRET,
@@ -134,15 +135,25 @@ export class TestHelper {
     this.testProjectIds = this.testProjectIds.concat(projectId);
   }
 
-  async removeTestData() {
+  async removeTestData(options: { removeStaticFiles?: boolean } = {}): Promise<void> {
+    const removePromises: Promise<unknown>[] = [];
     if (this.testUsernames.length) {
-      await User.destroy({ where: { username: this.testUsernames } });
+      removePromises.push(User.destroy({ where: { username: this.testUsernames } }));
     }
 
     if (this.testProjectIds.length) {
-      await Project.destroy({ where: { id: this.testProjectIds } });
+      removePromises.push(Project.destroy({ where: { id: this.testProjectIds } }));
+
+      if (options.removeStaticFiles) {
+        this.testProjectIds.map((projectId) => {
+          removePromises.push(
+            fs.promises.rm(`public/${projectId}`, { recursive: true, force: true }),
+          );
+        });
+      }
     }
 
+    await Promise.all(removePromises);
     await this.sequelize.close();
     this.testUsernames = [];
     this.testProjectIds = [];

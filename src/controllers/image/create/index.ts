@@ -20,8 +20,8 @@ type CreateImagesResponseBody = {
 // This code's pattern is a little different because of the way Multer works, following
 // the same pattern as other controllers w.r.t validation isnt the very clean to do.
 const createImagesFlow = async (req: Request, res: Response) => {
-  try {
-    uploadImages(req, res, async (err) => {
+  uploadImages(req, res, async (err) => {
+    try {
       const { project, user, host, protocol } = req;
       if (err instanceof MulterError && err.code === 'LIMIT_UNEXPECTED_FILE') {
         throw new ValidationError(`cannot upload more than ${MAX_FILE_COUNT} files`);
@@ -70,10 +70,10 @@ const createImagesFlow = async (req: Request, res: Response) => {
       };
 
       return res.success('images successfully uploaded', responseBody);
-    });
-  } catch (error) {
-    return res.sendError(error);
-  }
+    } catch (error) {
+      res.sendError(error);
+    }
+  });
 };
 
 export default createImagesFlow;
