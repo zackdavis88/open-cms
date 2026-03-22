@@ -24,10 +24,20 @@ if (
   MAX_FILE_SIZE = FIVE_MEGABYTES;
 }
 
+export let MAX_FILENAME_LENGTH = Number(process.env.MAX_FILENAME_LENGTH);
+if (
+  !process.env.MAX_FILENAME_LENGTH ||
+  isNaN(MAX_FILENAME_LENGTH) ||
+  !Number.isInteger(MAX_FILENAME_LENGTH) ||
+  MAX_FILENAME_LENGTH <= 0
+) {
+  MAX_FILENAME_LENGTH = 100;
+}
+
 const storage = multer.diskStorage({
   destination: async function (req, _file, callback) {
     const desitinationPath = path.join(
-      path.resolve(__dirname, '..', '..', '..'),
+      path.resolve(__dirname, '..', '..', '..', '..'),
       'public',
       req.params.projectId,
     );
@@ -49,13 +59,21 @@ const uploadImages = multer({
   limits: { fileSize: MAX_FILE_SIZE },
   fileFilter: function (_req, file, callback) {
     const allowedFileTypes = /jpeg|jpg|png|webp|gif/;
-    const extname = allowedFileTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedFileTypes.test(file.mimetype);
-    if (extname && mimetype) {
-      callback(null, true);
-    } else {
-      callback(new ValidationError('unsupported file type'));
+    const isValidExtension = allowedFileTypes.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
+    const isValidMimeType = allowedFileTypes.test(file.mimetype);
+    if (!isValidExtension || !isValidMimeType) {
+      return callback(new ValidationError('unsupported file type'));
     }
+
+    if (file.originalname.length > MAX_FILENAME_LENGTH) {
+      return callback(
+        new ValidationError(`filename must be ${MAX_FILENAME_LENGTH} characters or less`),
+      );
+    }
+
+    callback(null, true);
   },
 }).array('images', MAX_FILE_COUNT);
 

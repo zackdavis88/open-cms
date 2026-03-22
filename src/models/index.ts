@@ -287,3 +287,4 @@ export { Membership } from './membership';
 export { Blueprint, BlueprintVersion } from './blueprint';
 export { Component } from './component';
 export { Layout, LayoutComponent } from './layout';
+export { Image } from './image';

@@ -81,13 +81,14 @@ export interface LayoutData {
 }
 
 export interface ImageData {
+  id: string;
   originalFileName: string;
-  fileName: string;
+  extension: string;
   url: string;
-  // createdOn: Date;
-  // createdBy: UserData | null;
-  // deletedOn?: Date | null;
-  // deletedBy?: UserData | null;
+  createdOn: Date;
+  createdBy: UserData | null;
+  deletedOn?: Date | null;
+  deletedBy?: UserData | null;
 }
 
 export enum AuthorizationAction {

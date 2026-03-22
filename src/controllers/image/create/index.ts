@@ -1,24 +1,28 @@
 import { Request, Response } from 'express';
 import { ImageData } from 'src/types';
-import { uploadImages, MAX_FILE_COUNT, MAX_FILE_SIZE } from 'src/controllers/image/utils';
+import {
+  uploadImages,
+  MAX_FILE_COUNT,
+  MAX_FILE_SIZE,
+  getImageUrl,
+} from 'src/controllers/image/utils';
 import { MulterError } from 'multer';
 import { ValidationError } from 'src/server/utils/errors';
-
-let BASE_STATIC_URL = '/static';
-if (
-  typeof process.env.BASE_STATIC_URL === 'string' &&
-  process.env.BASE_STATIC_URL.startsWith('/')
-) {
-  BASE_STATIC_URL = process.env.BASE_STATIC_URL;
-}
+import { Image } from 'src/models';
+import path from 'path';
+import { getImageData } from 'src/controllers/utils';
 
 type CreateImagesResponseBody = {
   images: ImageData[];
 };
 
+// Note:
+// This code's pattern is a little different because of the way Multer works, following
+// the same pattern as other controllers w.r.t validation isnt the very clean to do.
 const createImagesFlow = async (req: Request, res: Response) => {
   try {
-    uploadImages(req, res, (err) => {
+    uploadImages(req, res, async (err) => {
+      const { project, user, host, protocol } = req;
       if (err instanceof MulterError && err.code === 'LIMIT_UNEXPECTED_FILE') {
         throw new ValidationError(`cannot upload more than ${MAX_FILE_COUNT} files`);
       } else if (err instanceof MulterError && err.code === 'LIMIT_FILE_SIZE') {
@@ -35,15 +39,34 @@ const createImagesFlow = async (req: Request, res: Response) => {
         throw new Error('failed to upload files');
       }
 
+      const newImages = await Image.bulkCreate(
+        req.files.map(({ originalname, filename }) => {
+          const filePathData = path.parse(filename);
+          return {
+            id: filePathData.name,
+            originalFileName: path.parse(originalname).name,
+            extension: filePathData.ext,
+            projectId: project.id,
+            createdById: user.id,
+          };
+        }),
+      );
+
       const responseBody: CreateImagesResponseBody = {
-        images: req.files?.map(({ originalname, filename }) => ({
-          originalFileName: originalname,
-          fileName: filename,
-          url: new URL(
-            `${BASE_STATIC_URL}/${req.params.projectId}/${filename}`,
-            `${req.protocol}://${req.host}`,
-          ).toString(),
-        })),
+        images: newImages.map((image) =>
+          getImageData(
+            Object.assign(image, {
+              url: getImageUrl({
+                host,
+                image,
+                project,
+                protocol,
+              }),
+              project,
+              createdBy: user,
+            }),
+          ),
+        ),
       };
 
       return res.success('images successfully uploaded', responseBody);
