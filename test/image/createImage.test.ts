@@ -221,7 +221,16 @@ describe('Create Image', () => {
             return done(err);
           }
 
-          const { message, images } = res.body;
+          const { message, images, project, createdBy } = res.body;
+          expect(project).toEqual({
+            id: testProject.id,
+            name: testProject.name,
+          });
+          expect(createdBy).toEqual({
+            username: adminUser.username,
+            displayName: adminUser.displayName,
+            createdOn: adminUser.createdOn.toISOString(),
+          });
           expect(message).toBe('images successfully uploaded');
           expect(Array.isArray(images)).toBe(true);
           images.forEach((image: Image & { url: string }, index: number) => {
@@ -230,15 +239,6 @@ describe('Create Image', () => {
             expect(image.originalFileName).toBe(expectData[index].originalFileName);
             expect(image.extension).toBe(expectData[index].extension);
             expect(image.createdOn).toBeDefined();
-            expect(image.project).toEqual({
-              id: testProject.id,
-              name: testProject.name,
-            });
-            expect(image.createdBy).toEqual({
-              username: adminUser.username,
-              displayName: adminUser.displayName,
-              createdOn: adminUser.createdOn.toISOString(),
-            });
           });
           done();
         });

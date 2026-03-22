@@ -38,6 +38,10 @@
  *                 type: string
  *                 description: Successful message
  *                 examples: ["images successfully uploaded"]
+ *               project:
+ *                 $ref: "#/components/schemas/MinimalProjectData"
+ *               createdBy:
+ *                 $ref: "#/components/schemas/PublicUserData"
  *               images:
  *                 type: array
  *                 description: Uploaded image details
@@ -61,13 +65,9 @@
  *                       type: string
  *                       description: URL to access the uploaded image
  *                       examples: ["https://open-cms.com/static/f8f906f0-9f48-43b4-a900-c39309192538/d5254138-251d-44eb-8b89-2b05f867ab15.gif"]
- *                     project:
- *                       $ref: "#/components/schemas/MinimalProjectData"
  *                     createdOn:
  *                       type: string
  *                       format: date-time
- *                     createdBy:
- *                       $ref: "#/components/schemas/PublicUserData"
  */
 
 /*******************************************

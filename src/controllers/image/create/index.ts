@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ImageData } from 'src/types';
+import { ImageData, ProjectData, UserData } from 'src/types';
 import {
   uploadImages,
   MAX_FILE_COUNT,
@@ -10,10 +10,12 @@ import { MulterError } from 'multer';
 import { ValidationError } from 'src/server/utils/errors';
 import { Image } from 'src/models';
 import path from 'path';
-import { getImageData } from 'src/controllers/utils';
+import { getImageData, getPublicUserData } from 'src/controllers/utils';
 
 type CreateImagesResponseBody = {
-  images: ImageData[];
+  project: Pick<ProjectData, 'id' | 'name'>;
+  createdBy: UserData;
+  images: Omit<ImageData, 'project' | 'createdBy'>[];
 };
 
 // Note:
@@ -39,6 +41,7 @@ const createImagesFlow = async (req: Request, res: Response) => {
         throw new Error('failed to upload files');
       }
 
+      // Save records of the images to the db.
       const newImages = await Image.bulkCreate(
         req.files.map(({ originalname, filename }) => {
           const filePathData = path.parse(filename);
@@ -52,9 +55,9 @@ const createImagesFlow = async (req: Request, res: Response) => {
         }),
       );
 
-      const responseBody: CreateImagesResponseBody = {
-        images: newImages.map((image) =>
-          getImageData(
+      const imagesResponseData = newImages.map((image) => {
+        return {
+          ...getImageData(
             Object.assign(image, {
               url: getImageUrl({
                 host,
@@ -66,7 +69,17 @@ const createImagesFlow = async (req: Request, res: Response) => {
               createdBy: user,
             }),
           ),
-        ),
+          createdBy: undefined,
+          project: undefined,
+        };
+      });
+      const responseBody: CreateImagesResponseBody = {
+        project: {
+          id: project.id,
+          name: project.name,
+        },
+        createdBy: getPublicUserData(user),
+        images: imagesResponseData,
       };
 
       return res.success('images successfully uploaded', responseBody);
