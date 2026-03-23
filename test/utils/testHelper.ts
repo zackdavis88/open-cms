@@ -7,6 +7,7 @@ import {
   Component,
   initializeModels,
   LayoutComponent,
+  Image,
 } from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
@@ -342,6 +343,39 @@ export class TestHelper {
       component: layoutComponents[createdComponent.order],
     }));
     return layout;
+  }
+
+  async createTestImage({
+    project,
+    createdBy,
+    createdOn,
+    isActive,
+    deletedOn,
+    deletedBy,
+    originalFileName,
+    extension,
+  }: {
+    project: Project;
+    createdBy: User;
+    createdOn?: Date;
+    isActive?: boolean;
+    deletedOn?: Date;
+    deletedBy?: User;
+    originalFileName?: string;
+    extension?: string;
+  }) {
+    const testImage = await Image.create({
+      projectId: project.id,
+      createdById: createdBy.id,
+      createdOn: createdOn || new Date(),
+      isActive: typeof isActive === 'boolean' ? isActive : true,
+      deletedOn: deletedOn || null,
+      deletedById: deletedBy?.id || null,
+      originalFileName: originalFileName || crypto.randomUUID(),
+      extension: extension || '.webp',
+    });
+    testImage.createdBy = createdBy;
+    return testImage;
   }
 
   async createTestProject({

@@ -10,6 +10,12 @@ const configureImageRoutes = (router: Router) => {
       ProjectController.getProjectMiddleware,
       AuthController.authorizeProjectResourceAction(AuthorizationAction.CREATE),
       ImageController.create,
+    )
+    .get(
+      AuthController.authenticateAuthToken,
+      ProjectController.getProjectMiddleware,
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
+      ImageController.getImages,
     );
 };
 

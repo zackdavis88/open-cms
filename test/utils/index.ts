@@ -20,4 +20,5 @@ export {
   BlueprintData,
   ComponentData,
   LayoutData,
+  ImageData,
 } from '../../src/types';
