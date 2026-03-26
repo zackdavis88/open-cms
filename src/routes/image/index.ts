@@ -5,17 +5,23 @@ import { AuthorizationAction } from 'src/types';
 const configureImageRoutes = (router: Router) => {
   router
     .route('/projects/:projectId/images')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
     .post(
-      AuthController.authenticateAuthToken,
-      ProjectController.getProjectMiddleware,
       AuthController.authorizeProjectResourceAction(AuthorizationAction.CREATE),
       ImageController.create,
     )
     .get(
-      AuthController.authenticateAuthToken,
-      ProjectController.getProjectMiddleware,
       AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       ImageController.getImages,
+    );
+
+  router
+    .route('/projects/:projectId/images/:imageId')
+    .all(AuthController.authenticateAuthToken, ProjectController.getProjectMiddleware)
+    .get(
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
+      ImageController.getImageMiddleware,
+      ImageController.getImage,
     );
 };
 

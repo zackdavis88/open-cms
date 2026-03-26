@@ -1,6 +1,14 @@
 import 'express-serve-static-core'; // Required for declaration merging
 import { Sequelize } from 'sequelize';
-import { User, Project, Membership, Blueprint, Component, Layout } from 'src/models';
+import {
+  User,
+  Project,
+  Membership,
+  Blueprint,
+  Component,
+  Layout,
+  Image,
+} from 'src/models';
 
 declare module 'express-serve-static-core' {
   interface Request {
@@ -11,6 +19,7 @@ declare module 'express-serve-static-core' {
     blueprint: Blueprint;
     component: Component;
     layout: Layout;
+    image: Image;
   }
   interface Response {
     success: (message: string, data?: Record<string, unknown>) => Response | undefined;

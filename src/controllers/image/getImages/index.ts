@@ -3,7 +3,7 @@ import getImagesValidation from './getImagesValidation';
 import { Project } from 'src/models';
 import { ImageData, PublicPaginationData } from 'src/types';
 import { getImageData } from 'src/controllers/utils';
-import { getImageUrl } from '../utils';
+import { getImageUrl } from 'src/controllers/image/utils';
 
 type GetImagesResponseBody = {
   project: { id: Project['id']; name: Project['name'] };
