@@ -5,6 +5,8 @@ import { Membership, initializeMembership } from './membership';
 import { Blueprint, BlueprintVersion, initializeBlueprint } from './blueprint';
 import { Component, ComponentVersion, initializeComponent } from './component';
 import { Layout, LayoutComponent, initializeLayout } from './layout';
+import { Image, initializeImage } from './image';
+
 const synchronizeTables = async (sequelize: Sequelize) => {
   try {
     await sequelize.sync();
@@ -22,6 +24,7 @@ export const initializeModels = (sequelize: Sequelize) => {
   initializeBlueprint(sequelize);
   initializeComponent(sequelize);
   initializeLayout(sequelize);
+  initializeImage(sequelize);
 
   /*  Sequelize is weird. These associations need to be done outside of the model files
    *  and after model initialization because of our code structure.
@@ -247,6 +250,30 @@ export const initializeModels = (sequelize: Sequelize) => {
     onDelete: 'CASCADE',
   });
   LayoutComponent.belongsTo(Component, { as: 'component' });
+
+  // Image -> Project associations: images
+  Project.hasMany(Image, {
+    as: 'images',
+    foreignKey: 'projectId',
+    onDelete: 'CASCADE',
+  });
+  Project.hasOne(Image, {
+    foreignKey: 'projectId',
+    onDelete: 'CASCADE',
+  });
+  Image.belongsTo(Project, {
+    as: 'project',
+  });
+
+  // Image -> User associations: createdBy
+  User.hasMany(Image, { as: 'createdImages', foreignKey: 'createdById' });
+  User.hasOne(Image, { as: 'createdImage', foreignKey: 'createdById' });
+  Image.belongsTo(User, { as: 'createdBy' });
+
+  // Image -> User associations: deletedBy
+  User.hasMany(Image, { as: 'deletedImages', foreignKey: 'deletedById' });
+  User.hasOne(Image, { as: 'deletedImage', foreignKey: 'deletedById' });
+  Image.belongsTo(User, { as: 'deletedBy' });
 };
 
 export const initializeModelsAndSync = async (sequelize: Sequelize) => {
@@ -260,3 +287,4 @@ export { Membership } from './membership';
 export { Blueprint, BlueprintVersion } from './blueprint';
 export { Component } from './component';
 export { Layout, LayoutComponent } from './layout';
+export { Image } from './image';

@@ -2,9 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import swaggerJsdoc from 'swagger-jsdoc';
 
-let BASE_URL = '/api';
-if (typeof process.env.BASE_URL === 'string' && process.env.BASE_URL.startsWith('/')) {
-  BASE_URL = process.env.BASE_URL;
+let BASE_API_URL = '/api';
+if (
+  typeof process.env.BASE_API_URL === 'string' &&
+  process.env.BASE_API_URL.startsWith('/')
+) {
+  BASE_API_URL = process.env.BASE_API_URL;
 }
 
 const buildComponents = (componentGroup: 'schemas' | 'parameters' | 'responses') => {
@@ -40,11 +43,14 @@ const options = {
     },
     servers: [
       {
-        url: new URL(BASE_URL, 'https://www.open-cms.com').toString(),
+        url: new URL(BASE_API_URL, 'https://www.open-cms.com').toString(),
         description: 'API server',
       },
       {
-        url: new URL(BASE_URL, `http://localhost:${process.env.SERVER_PORT}`).toString(),
+        url: new URL(
+          BASE_API_URL,
+          `http://localhost:${process.env.SERVER_PORT}`,
+        ).toString(),
         description: 'Local development API server',
       },
     ],

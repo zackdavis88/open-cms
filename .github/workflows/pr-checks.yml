@@ -47,12 +47,17 @@ jobs:
           touch .env && echo "
           AUTH_SECRET=G!tHub@cti0nRunn3r
           AUTH_TOKEN_EXPIRATION=36000
+          BASE_API_URL=/api
+          BASE_STATIC_URL=/static
           DATABASE_USERNAME=postgres
           DATABASE_PASSWORD=postgres
           DATABASE_HOSTNAME=localhost
           DATABASE_PORT=5432
           DATABASE_NAME=postgres
           DEFAULT_ITEMS_PER_PAGE=10
+          MAX_FILE_COUNT=5
+          MAX_FILE_SIZE=5242880
+          MAX_FILENAME_LENGTH=100
           SALT_ROUNDS=10
           SERVER_PORT=3000
           " > .env

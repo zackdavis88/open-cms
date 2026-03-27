@@ -33,6 +33,15 @@ app.use(
   }),
 );
 
+let BASE_STATIC_URL = '/static';
+if (
+  typeof process.env.BASE_STATIC_URL === 'string' &&
+  process.env.BASE_STATIC_URL.startsWith('/')
+) {
+  BASE_STATIC_URL = process.env.BASE_STATIC_URL;
+}
+app.use(BASE_STATIC_URL, express.static('public'));
+
 app.use(configureResponseHandlers);
 configureDatabaseConnection(app)
   .then(() => {

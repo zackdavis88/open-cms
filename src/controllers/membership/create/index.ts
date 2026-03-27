@@ -17,7 +17,7 @@ type CreateMembershipResponseBody = {
   membership: MembershipData;
 };
 
-const CreateMembershipFlow = async (
+const createMembershipFlow = async (
   req: Request<
     CreateMembershipRequestParams,
     never,
@@ -54,4 +54,4 @@ const CreateMembershipFlow = async (
   }
 };
 
-export default CreateMembershipFlow;
+export default createMembershipFlow;
