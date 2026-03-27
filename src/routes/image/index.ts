@@ -22,6 +22,11 @@ const configureImageRoutes = (router: Router) => {
       AuthController.authorizeProjectResourceAction(AuthorizationAction.READ),
       ImageController.getImageMiddleware,
       ImageController.getImage,
+    )
+    .delete(
+      AuthController.authorizeProjectResourceAction(AuthorizationAction.DELETE),
+      ImageController.getImageMiddleware,
+      ImageController.remove,
     );
 };
 
