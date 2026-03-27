@@ -1,4 +1,4 @@
-import { TestHelper, ERROR_TYPES, User, Project, Image, ImageData } from '../utils';
+import { TestHelper, ERROR_TYPES, User, Project, Image } from '../utils';
 const testHelper = new TestHelper();
 let apiRoute = testHelper.apiRoute('/projects/:projectId/images/:imageId');
 const request = testHelper.request;
