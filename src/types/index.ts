@@ -80,6 +80,17 @@ export interface LayoutData {
   deletedBy?: UserData | null;
 }
 
+export interface ImageData {
+  id: string;
+  originalFileName: string;
+  extension: string;
+  url: string;
+  createdOn: Date;
+  createdBy: UserData | null;
+  deletedOn?: Date | null;
+  deletedBy?: UserData | null;
+}
+
 export enum AuthorizationAction {
   CREATE,
   READ,

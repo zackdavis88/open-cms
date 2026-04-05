@@ -7,12 +7,14 @@ import {
   Component,
   initializeModels,
   LayoutComponent,
+  Image,
 } from '../../src/models';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import jwt from 'jsonwebtoken';
 import { BlueprintField } from '../../src/models/blueprint/blueprint';
 import generateBlueprintField from './generateBlueprintField';
+import fs from 'fs';
 
 const {
   AUTH_SECRET,
@@ -94,9 +96,12 @@ const DEFAULT_CONTENT = {
   },
 };
 
-let BASE_URL = '/api';
-if (typeof process.env.BASE_URL === 'string' && process.env.BASE_URL.startsWith('/')) {
-  BASE_URL = process.env.BASE_URL;
+let BASE_API_URL = '/api';
+if (
+  typeof process.env.BASE_API_URL === 'string' &&
+  process.env.BASE_API_URL.startsWith('/')
+) {
+  BASE_API_URL = process.env.BASE_API_URL;
 }
 
 interface TokenDataOverride {
@@ -131,15 +136,25 @@ export class TestHelper {
     this.testProjectIds = this.testProjectIds.concat(projectId);
   }
 
-  async removeTestData() {
+  async removeTestData(options: { removeStaticFiles?: boolean } = {}): Promise<void> {
+    const removePromises: Promise<unknown>[] = [];
     if (this.testUsernames.length) {
-      await User.destroy({ where: { username: this.testUsernames } });
+      removePromises.push(User.destroy({ where: { username: this.testUsernames } }));
     }
 
     if (this.testProjectIds.length) {
-      await Project.destroy({ where: { id: this.testProjectIds } });
+      removePromises.push(Project.destroy({ where: { id: this.testProjectIds } }));
+
+      if (options.removeStaticFiles) {
+        this.testProjectIds.map((projectId) => {
+          removePromises.push(
+            fs.promises.rm(`public/${projectId}`, { recursive: true, force: true }),
+          );
+        });
+      }
     }
 
+    await Promise.all(removePromises);
     await this.sequelize.close();
     this.testUsernames = [];
     this.testProjectIds = [];
@@ -330,6 +345,39 @@ export class TestHelper {
     return layout;
   }
 
+  async createTestImage({
+    project,
+    createdBy,
+    createdOn,
+    isActive,
+    deletedOn,
+    deletedBy,
+    originalFileName,
+    extension,
+  }: {
+    project: Project;
+    createdBy: User;
+    createdOn?: Date;
+    isActive?: boolean;
+    deletedOn?: Date;
+    deletedBy?: User;
+    originalFileName?: string;
+    extension?: string;
+  }) {
+    const testImage = await Image.create({
+      projectId: project.id,
+      createdById: createdBy.id,
+      createdOn: createdOn || new Date(),
+      isActive: typeof isActive === 'boolean' ? isActive : true,
+      deletedOn: deletedOn || null,
+      deletedById: deletedBy?.id || null,
+      originalFileName: originalFileName || crypto.randomUUID(),
+      extension: extension || '.webp',
+    });
+    testImage.createdBy = createdBy;
+    return testImage;
+  }
+
   async createTestProject({
     user,
     name,
@@ -387,7 +435,7 @@ export class TestHelper {
   }
 
   apiRoute(path: string) {
-    const url = new URL(`${BASE_URL}${path}`, 'https://open-cms.com');
+    const url = new URL(`${BASE_API_URL}${path}`, 'https://open-cms.com');
     return url.pathname;
   }
 }

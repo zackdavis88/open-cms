@@ -18,6 +18,7 @@ import Membership from 'src/models/membership/membership';
 import Blueprint from 'src/models/blueprint/blueprint';
 import Component from 'src/models/component/component';
 import Layout from 'src/models/layout/layout';
+import Image from 'src/models/image/image';
 
 class Project extends Model<InferAttributes<Project>, InferCreationAttributes<Project>> {
   declare id: CreationOptional<string>;
@@ -74,6 +75,14 @@ class Project extends Model<InferAttributes<Project>, InferCreationAttributes<Pr
 
   // Layout associations - HasOne
   declare getLayout: HasOneGetAssociationMixin<Layout | null>;
+
+  // Image associations - HasMany
+  declare createImage: HasManyCreateAssociationMixin<Image>;
+  declare getImages: HasManyGetAssociationsMixin<Image>;
+  declare countImages: HasManyCountAssociationsMixin;
+
+  // Image associations - HasOne
+  declare getImage: HasOneGetAssociationMixin<Image | null>;
 }
 
 export const initializeProject = (sequelize: Sequelize) => {

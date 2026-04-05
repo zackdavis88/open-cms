@@ -1,12 +1,14 @@
 import { Project } from 'src/models';
 import { AuthorizationError } from 'src/server/utils/errors';
 
-type AuthorizeBlueprintRead = (authUserMembership: Project['authUserMembership']) => void;
+type AuthorizeReadPermission = (
+  authUserMembership: Project['authUserMembership'],
+) => void;
 
-const authorizeBlueprintRead: AuthorizeBlueprintRead = (authUserMembership) => {
+const authorizeReadPermission: AuthorizeReadPermission = (authUserMembership) => {
   if (!authUserMembership) {
     throw new AuthorizationError('you do not have permissions to perform this action');
   }
 };
 
-export default authorizeBlueprintRead;
+export default authorizeReadPermission;
